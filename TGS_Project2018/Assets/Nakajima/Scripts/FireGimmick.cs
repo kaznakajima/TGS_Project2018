@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class FireGimmick : GimmickController
 {
@@ -8,7 +9,8 @@ public class FireGimmick : GimmickController
     public override void GimmickAction()
     {
         Animator gimmickAnim = GetComponent<Animator>();
-        gimmickAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.FOREST.BREAK);
+        gimmickAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.FOREST.FIRE);
+        Destroy(gameObject, 2.0f);
     }
 
     // Ray判定
@@ -27,6 +29,8 @@ public class FireGimmick : GimmickController
                 {
                     gimmickMaxRay = 0.0f;
                     GimmickAction();
+                    // ミラーの消去コルーチン開始
+                    StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation());
                 }
             }
         }

@@ -12,6 +12,12 @@ public class Mirror : StatusController
     // rayの長さ
     [SerializeField]
     float maxRay;
+    // AudioSource
+    [SerializeField]
+    AudioSource mirrorAudio;
+    // AudioClipの配列
+    [SerializeField]
+    AudioClip[] mirrorSE;
 
     // 歪みの強さ
     [SerializeField, Range(150, 500)]
@@ -118,8 +124,10 @@ public class Mirror : StatusController
         statusSr.material.SetFloat("_distortionY", distortionY);
         statusSr.material.SetFloat("_distortionZ", distortionZ);
 
+        mirrorAudio.PlayOneShot(mirrorSE[(int)STATUS.NONE]);
+
         // 処理が終わったら姿を変える
-        statusSr.transform.DOScale(new Vector3(0.0f, 0.0f, 1.0f), 2.0f).OnComplete(() =>
+        transform.DOScale(new Vector3(0.0f, 0.0f, 1.0f), 2.0f).OnComplete(() =>
         {
             FormChangeAfter(player);
         });
@@ -133,14 +141,18 @@ public class Mirror : StatusController
         STATUS playerSt = player.GetComponent<Player>().status;
         StatusChenge(playerSt);
 
+        mirrorAudio.PlayOneShot(mirrorSE[(int)STATUS.NONE]);
+
         // 処理が終わったらシェーダー切り替え
-        statusSr.transform.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 2.0f).OnComplete(() =>
+        transform.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 2.0f).OnComplete(() =>
         {
             // 通常のシェーダーへ
             statusSr.material.shader = statusMaterial[0].shader;
 
             // ステータス更新
             status = playerSt;
+
+            mirrorAudio.PlayOneShot(mirrorSE[(int)status]);
 
             maxRay = 3.0f;
         });
@@ -173,5 +185,16 @@ public class Mirror : StatusController
                 statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.MIRROR.STONE);
                 break;
         }
+    }
+
+    public IEnumerator DestroyAnimation()
+    {
+        yield return new WaitForSeconds(1.0f);
+
+        // 処理が終わったら姿を変える
+        transform.DOScale(new Vector3(0.0f, 0.0f, 1.0f), 3.0f).OnComplete(() =>
+        {
+            Destroy(gameObject);
+        });
     }
 }
