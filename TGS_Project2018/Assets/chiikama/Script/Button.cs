@@ -22,6 +22,7 @@ public class Button : MonoBehaviour
     {
         pauseUI.SetActive(false);
         Pauser.Resume();
+        
     }
 
 
@@ -33,6 +34,14 @@ public class Button : MonoBehaviour
     public void DialogButton()//ダイアログ表示
     {
         dialog.SetActive(true);
+    }
+
+    public void RetryScene()
+    {
+        
+        string sceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(sceneName);
+        Debug.Log("りとらい");
     }
 
     public void Exit()
