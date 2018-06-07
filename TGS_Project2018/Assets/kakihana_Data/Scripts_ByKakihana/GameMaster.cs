@@ -5,18 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class GameMaster : MonoBehaviour {
 
+    MapLoad mapLoad;
+
     public int sketchBookValue; // 残りページ数
-    string stageNo; // ステージ番号
+    //string stageNo; // ステージ番号
     int tempSketchValue; // 差分用一時保存変数
 
 	// Use this for initialization
 	void Start () {
         // 現在のシーンの名前を取得
-        stageNo = SceneManager.GetActiveScene().name;
+        mapLoad = GameObject.Find("StageInit").GetComponent<MapLoad>();
         // ステージによって残りページを設定
-        switch (stageNo)
+        switch (mapLoad.CSVName)
         {
-            case "Stage1":
+            case "1-1":
                 sketchBookValue = 5;
                 break;
             case "Stage2":

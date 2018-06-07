@@ -146,7 +146,7 @@ public class Player : StatusController {
         // 移動値を設定
         // ↓↓以下の行よりキー入力によりキャラクター書き換え処理を行う↓↓
 
-        if (Input.GetKeyDown("joystick button 8") || Input.GetKeyDown(KeyCode.Alpha0)) // SELECTキーでもとに戻る
+        if (Input.GetKeyDown("joystick button 8") || Input.GetKeyDown(KeyCode.Alpha0) && changeFlg == false) // SELECTキーでもとに戻る
         {
             StatusChenge(STATUS.NONE);
         }
@@ -268,10 +268,10 @@ public class Player : StatusController {
         movePos = Vector3.zero;
         changeFlg = true;
         statusSr.material.shader = statusMaterial[0].shader;
-        transform.DOScale(new Vector3(0, 0, 1), 2.0f).OnComplete(() =>
+        transform.DOScale(new Vector3(0, 0, 1), 1.0f).OnComplete(() =>
         {
             statusAnim.SetInteger("BluckAnim", changeNum);
-            transform.DOScale(new Vector3(1, 1, 1), 2.0f).OnComplete(() =>
+            transform.DOScale(new Vector3(1, 1, 1), 1.0f).OnComplete(() =>
             {
                 statusSr.material.shader = statusMaterial[1].shader;
                 status = _status;
