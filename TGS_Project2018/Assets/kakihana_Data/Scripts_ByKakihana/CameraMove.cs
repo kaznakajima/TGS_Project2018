@@ -53,6 +53,7 @@ public class CameraMove : MonoBehaviour {
                 {
                     transform.position = transform.position + velocity; // 上下移動量を元に移動
                     frameCount++; // フレームをカウント
+                    endCount = 0;
                 }
                 else if(frameCount >= frameLimit == endFlg == false)
                 {
