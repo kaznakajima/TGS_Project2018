@@ -5,10 +5,15 @@ using DG.Tweening;
 
 public class RainGimmick : GimmickController
 {
+    // 雨用のパーティクル
+    [SerializeField]
+    GameObject rainObj;
+
     // ギミック処理
     public override void GimmickAction()
     {
-        transform.DOMove(new Vector3(transform.position.x, 3.0f, transform.position.z), 3.0f);
+        rainObj.GetComponent<ParticleSystem>().Stop();
+        transform.DOMove(new Vector3(transform.position.x, -0.5f, transform.position.z), 3.0f);
     }
 
     // Ray判定
@@ -25,7 +30,10 @@ public class RainGimmick : GimmickController
                 rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.WATER)
             {
                 gimmickMaxRay = 0.0f;
+                Instantiate(rainObj, rayHit.collider.gameObject.transform);
                 GimmickAction();
+                // ミラーの消去コルーチン開始
+                StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation(0.0f, 0.0f));
             }
         }
     }
@@ -38,5 +46,5 @@ public class RainGimmick : GimmickController
 	// Update is called once per frame
 	void Update () {
         RayHit(transform.up, "Enemy");
-	}
+    }
 }

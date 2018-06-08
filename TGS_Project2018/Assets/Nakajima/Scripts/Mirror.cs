@@ -12,6 +12,9 @@ public class Mirror : StatusController
     // rayの長さ
     [SerializeField]
     float maxRay;
+    // 雨用のパーティクル
+    [SerializeField]
+    GameObject rainObj;
     // AudioSource
     [SerializeField]
     AudioSource mirrorAudio;
@@ -187,12 +190,12 @@ public class Mirror : StatusController
         }
     }
 
-    public IEnumerator DestroyAnimation()
+    public IEnumerator DestroyAnimation(float x, float y)
     {
         yield return new WaitForSeconds(1.0f);
 
         // 処理が終わったら姿を変える
-        transform.DOScale(new Vector3(0.0f, 0.0f, 1.0f), 3.0f).OnComplete(() =>
+        transform.DOScale(new Vector3(x, y, 1.0f), 3.0f).OnComplete(() =>
         {
             Destroy(gameObject);
         });

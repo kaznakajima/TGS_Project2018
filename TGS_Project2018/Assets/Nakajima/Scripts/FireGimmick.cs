@@ -30,7 +30,7 @@ public class FireGimmick : GimmickController
                     gimmickMaxRay = 0.0f;
                     GimmickAction();
                     // ミラーの消去コルーチン開始
-                    StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation());
+                    StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation(0.0f, 0.0f));
                 }
             }
         }

@@ -9,6 +9,7 @@ public class IceGimmick : GimmickController
     GameObject steam;
 
     // ギミック処理
+    [ContextMenu("Gimmick")]
     public override void GimmickAction()
     {
         GameObject obj = Instantiate(steam) as GameObject;
@@ -39,6 +40,8 @@ public class IceGimmick : GimmickController
             {
                 gimmickMaxRay = 0.0f;
                 GimmickAction();
+                // ミラーの消去コルーチン開始
+                StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation(0.0f, 0.0f));
             }
         }
     }
