@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class MirrorAlphaTest : MonoBehaviour {
 
-    Transform playerTrans,myTrans;
-    [SerializeField] GameObject spriteObj;
-    public SpriteRenderer sr;
-   [SerializeField] float alpha,time,fadeTime = 1.0f;
-    float speed = 0.02f;
+    Transform playerTrans,myTrans; // 自分の座標とプレイヤーの座標を格納
+    [SerializeField] GameObject spriteObj; // マスクするオブジェクト
+    public SpriteRenderer sr; // 参照するSpriteRenderer
+   [SerializeField] float alpha,time,fadeTime = 1.0f; // 現在アルファ値、経過時間、完全に変化するまでの時間
+    float speed = 0.02f; // 変化時間
 
 	// Use this for initialization
 	void Start () {
@@ -24,7 +24,6 @@ public class MirrorAlphaTest : MonoBehaviour {
 	void Update () {
         if (Mathf.Abs(myTrans.position.x - playerTrans.position.x) <= 3)
         {
-            Debug.Log("kenti1");
             time -= Time.deltaTime;
             alpha += speed;
             if (alpha >= 1.0f)
@@ -36,7 +35,6 @@ public class MirrorAlphaTest : MonoBehaviour {
         }
         else if (Mathf.Abs(myTrans.position.x - playerTrans.position.x) >= 3)
         {
-            Debug.Log("kenti2");
             alpha -= speed;
             if (alpha <= -1.0f)
             {
