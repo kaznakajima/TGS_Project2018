@@ -5,21 +5,7 @@ using UnityEngine;
 public class UImanager : MonoBehaviour {
 
     private static UImanager instance;
-    public static UImanager Instance
-    {
-        get
-        {
-            if (instance) return instance;
-
-            instance = FindObjectOfType<UImanager>();
-
-            if (instance) return instance;
-
-            instance = new GameObject("Dialog").AddComponent<UImanager>();
-
-            return instance;
-        }
-    }
+    public static UImanager Instance;
 
     private Dialog dialog;//ダイアログ表示用キャンバス
 
@@ -42,5 +28,6 @@ public class UImanager : MonoBehaviour {
     public void DialogSwich()
     {
         IsActiveDialogWindow = !IsActiveDialogWindow;
+        dialog.gameObject.SetActive(true);
     }
 }

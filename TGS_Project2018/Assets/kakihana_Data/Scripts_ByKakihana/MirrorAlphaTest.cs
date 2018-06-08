@@ -4,39 +4,41 @@ using UnityEngine;
 
 public class MirrorAlphaTest : MonoBehaviour {
 
-    Transform playerTrans,myTrans;
-    SpriteRenderer sr;
-   [SerializeField] float alpha,time,fadeTime = 1.0f;
-    float speed = 0.02f;
+    Transform playerTrans,myTrans; // 自分の座標とプレイヤーの座標を格納
+    [SerializeField] GameObject spriteObj; // マスクするオブジェクト
+    public SpriteRenderer sr; // 参照するSpriteRenderer
+   [SerializeField] float alpha,time,fadeTime = 1.0f; // 現在アルファ値、経過時間、完全に変化するまでの時間
+    float speed = 0.02f; // 変化時間
 
 	// Use this for initialization
 	void Start () {
-        alpha = 1.0f;
+        alpha = 0.0f;
         time = fadeTime;
         playerTrans = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         myTrans = this.gameObject.GetComponent<Transform>();
-        sr = this.gameObject.GetComponent<SpriteRenderer>();
-	}
+        sr = spriteObj.GetComponent<SpriteRenderer>();
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alpha);
+    }
 	
 	// Update is called once per frame
 	void Update () {
         if (Mathf.Abs(myTrans.position.x - playerTrans.position.x) <= 3)
         {
             time -= Time.deltaTime;
-            alpha -= speed;
-            if (alpha <= -1.0f)
+            alpha += speed;
+            if (alpha >= 1.0f)
             {
-                alpha = -1.0f;
+                alpha = 1.0f;
             }
             var color = sr.color;
             sr.color = new Color(sr.color.r,sr.color.g,sr.color.b,alpha);
         }
         else if (Mathf.Abs(myTrans.position.x - playerTrans.position.x) >= 3)
         {
-            alpha += speed;
-            if (alpha >= 1.0f)
+            alpha -= speed;
+            if (alpha <= -1.0f)
             {
-                alpha = 1.0f;
+                alpha = -1.0f;
             }
             var color = sr.color;
             sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alpha);

@@ -4,23 +4,25 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Button : MonoBehaviour
-{ 
+{
+    public GameObject dialog;
+    public GameObject pauseUI;
 
     void Start()
     {
     }
-    public void PauseUI()//ポーズ
+    public void Pause()//ポーズ
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
+        pauseUI.SetActive(true);
+        Pauser.Pause();
+        
+    }
 
-            Pauser.Pause();
-        }
-
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            Pauser.Resume();
-        }
+    public void Resume()
+    {
+        pauseUI.SetActive(false);
+        Pauser.Resume();
+        
     }
 
 
@@ -31,11 +33,23 @@ public class Button : MonoBehaviour
 
     public void DialogButton()//ダイアログ表示
     {
-        UImanager.Instance.DialogSwich();
+        dialog.SetActive(true);
+    }
+
+    public void RetryScene()
+    {
+        
+        string sceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(sceneName);
+        Debug.Log("りとらい");
     }
 
     public void Exit()
     {
         Application.Quit();
+    }
+    public void DialogExit()
+    {
+        dialog.SetActive(false);
     }
 }

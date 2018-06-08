@@ -2,21 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameMaster : MonoBehaviour {
 
+    MapLoad mapLoad; // 残機を参照するステージクラス
+
+    public Image[] bookValue =  new Image[5]; // 残り残機UI
+
     public int sketchBookValue; // 残りページ数
-    string stageNo; // ステージ番号
-    int tempSketchValue; // 差分用一時保存変数
+    //string stageNo; // ステージ番号
+    [SerializeField] int tempSketchValue; // 差分用一時保存変数
 
 	// Use this for initialization
 	void Start () {
         // 現在のシーンの名前を取得
-        stageNo = SceneManager.GetActiveScene().name;
+        mapLoad = GameObject.Find("StageInit").GetComponent<MapLoad>();
         // ステージによって残りページを設定
-        switch (stageNo)
+        switch (mapLoad.CSVName)
         {
-            case "Stage1":
+            case "1-1":
                 sketchBookValue = 5;
                 break;
             case "Stage2":
@@ -27,6 +32,10 @@ public class GameMaster : MonoBehaviour {
                 break;
         }
         tempSketchValue = sketchBookValue; // 差分用変数の値を設定
+        for (int i = 0; i < 5; i++) // 残機UIの初期設定
+        {
+            bookValue[i].enabled = true;
+        }
 	}
 	
 	// Update is called once per frame
@@ -35,6 +44,7 @@ public class GameMaster : MonoBehaviour {
         if (sketchBookValue != tempSketchValue)
         {
             Debug.Log("スケッチブック消費");
+            bookValue[sketchBookValue].enabled = false; // 残機UIを減らす
             tempSketchValue = sketchBookValue; // イベント後、再度値がおなじになるように設定
         }
 	}

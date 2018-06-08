@@ -136,6 +136,12 @@ public class Player : StatusController {
             transform.position = new Vector3(wayPointPos.x, wayPointPos.y, wayPointPos.z);
         }
 
+        if (pageChangeFlg == true && pageChange.pageFlip > -1)
+        {
+            // ページがめくり終わったら残機を減らす
+            SketchDamage();
+        }
+
         // ダメージを受けたら
         if (damageFlg == true)
         {
@@ -146,7 +152,7 @@ public class Player : StatusController {
         // 移動値を設定
         // ↓↓以下の行よりキー入力によりキャラクター書き換え処理を行う↓↓
 
-        if (Input.GetKeyDown("joystick button 8") || Input.GetKeyDown(KeyCode.Alpha0)) // SELECTキーでもとに戻る
+        if (Input.GetKeyDown("joystick button 8") || Input.GetKeyDown(KeyCode.Alpha0) && changeFlg == false) // SELECTキーでもとに戻る
         {
             StatusChenge(STATUS.NONE);
         }
@@ -177,23 +183,33 @@ public class Player : StatusController {
     public override void StatusChenge(STATUS _status)
     {
         SpriteRenderer playerSprite = gameObject.GetComponent<SpriteRenderer>();
-        switch (_status)
+        // 変更先のステータスが現在のステータスと同じなら変身しない
+        // またページがめくり終わるまで変身できない
+        if (status != _status && pageChange.pageFlip < -1)
         {
-            case STATUS.NONE:
-                FormChange((int)ANIM_ENUMS.BLUCK.IDLE, _status);
-                break;
-            case STATUS.FIRE:
-                FormChange((int)ANIM_ENUMS.BLUCK.FIRE, _status);
-                break;
-            case STATUS.WATER:
-                FormChange((int)ANIM_ENUMS.BLUCK.WATER, _status);
-                break;
-            case STATUS.WIND:
-                FormChange((int)ANIM_ENUMS.BLUCK.WIND, _status);
-                break;
-            case STATUS.EARTH:
-                FormChange((int)ANIM_ENUMS.BLUCK.STONE, _status);
-                break;
+            switch (_status)
+            {
+                case STATUS.NONE:
+                    FormChange((int)ANIM_ENUMS.BLUCK.IDLE, _status);
+                    status = STATUS.NONE;
+                    break;
+                case STATUS.FIRE:
+                    FormChange((int)ANIM_ENUMS.BLUCK.FIRE, _status);
+                    status = STATUS.FIRE;
+                    break;
+                case STATUS.WATER:
+                    FormChange((int)ANIM_ENUMS.BLUCK.WATER, _status);
+                    status = STATUS.WATER;
+                    break;
+                case STATUS.WIND:
+                    FormChange((int)ANIM_ENUMS.BLUCK.WIND, _status);
+                    status = STATUS.WIND;
+                    break;
+                case STATUS.EARTH:
+                    FormChange((int)ANIM_ENUMS.BLUCK.STONE, _status);
+                    status = STATUS.EARTH;
+                    break;
+            }
         }
     }
 
@@ -268,10 +284,10 @@ public class Player : StatusController {
         movePos = Vector3.zero;
         changeFlg = true;
         statusSr.material.shader = statusMaterial[0].shader;
-        transform.DOScale(new Vector3(0, 0, 1), 2.0f).OnComplete(() =>
+        transform.DOScale(new Vector3(0, 0, 1), 1.0f).OnComplete(() =>
         {
             statusAnim.SetInteger("BluckAnim", changeNum);
-            transform.DOScale(new Vector3(1, 1, 1), 2.0f).OnComplete(() =>
+            transform.DOScale(new Vector3(1, 1, 1), 1.0f).OnComplete(() =>
             {
                 statusSr.material.shader = statusMaterial[1].shader;
                 status = _status;
@@ -301,11 +317,6 @@ public class Player : StatusController {
             if (pageChange.pageFlip > -1)
             {
                 return false;
-            }
-            else if (pageChangeFlg == true && pageChange.pageFlip < -1)
-            {
-                // ページがめくり終わったら残機を減らす
-                SketchDamage();
             }
             if (status != STATUS.NONE)
             {
