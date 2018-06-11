@@ -34,7 +34,7 @@ public class WindGimmick : GimmickController
 
     // Use this for initialization
     void Start () {
-		
+        transform.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f);
 	}
 	
 	// Update is called once per frame

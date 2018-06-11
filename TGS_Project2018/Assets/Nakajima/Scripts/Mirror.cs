@@ -12,9 +12,6 @@ public class Mirror : StatusController
     // rayの長さ
     [SerializeField]
     float maxRay;
-    // 雨用のパーティクル
-    [SerializeField]
-    GameObject rainObj;
     // AudioSource
     [SerializeField]
     AudioSource mirrorAudio;
@@ -127,7 +124,7 @@ public class Mirror : StatusController
         statusSr.material.SetFloat("_distortionY", distortionY);
         statusSr.material.SetFloat("_distortionZ", distortionZ);
 
-        mirrorAudio.PlayOneShot(mirrorSE[(int)STATUS.NONE]);
+        //mirrorAudio.PlayOneShot(mirrorSE[(int)STATUS.NONE]);
 
         // 処理が終わったら姿を変える
         transform.DOScale(new Vector3(0.0f, 0.0f, 1.0f), 2.0f).OnComplete(() =>
@@ -144,7 +141,7 @@ public class Mirror : StatusController
         STATUS playerSt = player.GetComponent<Player>().status;
         StatusChenge(playerSt);
 
-        mirrorAudio.PlayOneShot(mirrorSE[(int)STATUS.NONE]);
+        //mirrorAudio.PlayOneShot(mirrorSE[(int)STATUS.NONE]);
 
         // 処理が終わったらシェーダー切り替え
         transform.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 2.0f).OnComplete(() =>
@@ -155,7 +152,7 @@ public class Mirror : StatusController
             // ステータス更新
             status = playerSt;
 
-            mirrorAudio.PlayOneShot(mirrorSE[(int)status]);
+            //mirrorAudio.PlayOneShot(mirrorSE[(int)status]);
 
             maxRay = 3.0f;
         });
