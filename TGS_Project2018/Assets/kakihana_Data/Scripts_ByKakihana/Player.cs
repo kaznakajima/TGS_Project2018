@@ -23,9 +23,12 @@ public class Player : StatusController {
     [SerializeField] float playerMinSpeed = -1.5f; // プレイヤーの最小スピード
     [SerializeField] float jumpSpeed = 2.0f; // ジャンプ力
     [SerializeField] float speed; // 移動スピード
+    [SerializeField] float jumpCoolDownCount = 0.0f;
+    [SerializeField] float jumpCoolDownLimit = 0.5f;
     [SerializeField,Range(0,600)] uint climbTimeLimit; // 上下移動完了までの最大フレーム数
     [SerializeField] uint climbFrame; // 上下移動用のフレーム
     [SerializeField] float rayRange = 1.0f; // 接地判定の距離 
+    [SerializeField] float defaultRayRange; // 保存用設置判定の距離
 
     bool jumpFlg = false; // ジャンプ可能か
     [SerializeField] bool isGround; // 接地しているか
@@ -52,6 +55,7 @@ public class Player : StatusController {
         gm = GameObject.Find("Master").GetComponent<GameMaster>(); // ゲームマスターコンポーネント取得
         pageChange = GameObject.Find(changePageName).GetComponent<PageChange>(); // ページ遷移のコンポーネント取得
         myRigidbody = this.gameObject.GetComponent<Rigidbody>(); // RigidBodyコンポーネントを取得
+        defaultRayRange = rayRange;
     }
 	
 	// Update is called once per frame
@@ -93,13 +97,14 @@ public class Player : StatusController {
             {
                 pageChangeFlg = true; // ページめくり判定ON
             }
-            if (Input.GetKeyDown(KeyCode.C)) // スペースキーが押されたら
+            if (Input.GetKeyDown(KeyCode.C) || Input.GetAxis("Vertical") <= -1.0f && jumpCoolDownCount >= jumpCoolDownLimit) // スペースキーが押されたら
             {
                 jumpFlg = true; // ジャンプフラグON
             }
             if (jumpFlg == true) // ジャンプフラグがONなら
             {
                 myRigidbody.velocity = Vector3.up * jumpSpeed; // ジャンプを移動ベクトルに代入
+                jumpCoolDownCount = 0.0f;
                 jumpFlg = false; // ２段ジャンプを防ぐため、再度地面に設置しないとジャンプできないようにする
             }
             if (climbFlg == true) // 登り判定がONなら
@@ -133,7 +138,8 @@ public class Player : StatusController {
         if (pageChangeFlg == true)
         {
             // 保存された中間地点に移動する
-            transform.position = new Vector3(wayPointPos.x, wayPointPos.y, wayPointPos.z);
+            transform.position = gm.GetPosition();
+            StartCoroutine(pageChange.ScreenShot());
         }
 
         if (pageChangeFlg == true && pageChange.pageFlip > -1)
@@ -151,27 +157,35 @@ public class Player : StatusController {
 
         // 移動値を設定
         // ↓↓以下の行よりキー入力によりキャラクター書き換え処理を行う↓↓
-
-        if (Input.GetKeyDown("joystick button 8") || Input.GetKeyDown(KeyCode.Alpha0) && changeFlg == false) // SELECTキーでもとに戻る
+        if (changeFlg == false)
         {
-            StatusChenge(STATUS.NONE);
+            if (Input.GetKeyDown("joystick button 8") || Input.GetKeyDown(KeyCode.Alpha0)) // SELECTキーでもとに戻る
+            {
+                changeFlg = true;
+                StatusChenge(STATUS.NONE);
+            }
+            if (Input.GetKeyDown("joystick button 1") || Input.GetKeyDown(KeyCode.Alpha1)) // ゲームボタン「B」で炎属性に書き換え
+            {
+                changeFlg = true;
+                StatusChenge(STATUS.FIRE);
+            }
+            if (Input.GetKeyDown("joystick button 2") || Input.GetKeyDown(KeyCode.Alpha2)) // ゲームボタン「X」で水属性に書き換え
+            {
+                changeFlg = true;
+                StatusChenge(STATUS.WATER);
+            }
+            if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.Alpha3)) // ゲームボタン「A」で風属性に書き換え
+            {
+                changeFlg = true;
+                StatusChenge(STATUS.WIND);
+            }
+            if (Input.GetKeyDown("joystick button 0") || Input.GetKeyDown(KeyCode.Alpha4)) // ゲームボタン「Y」で土属性に書き換え
+            {
+                changeFlg = true;
+                StatusChenge(STATUS.EARTH);
+            }
         }
-        if (Input.GetKeyDown("joystick button 1") || Input.GetKeyDown(KeyCode.Alpha1) && changeFlg == false) // ゲームボタン「B」で炎属性に書き換え
-        {
-            StatusChenge(STATUS.FIRE);
-        }
-        if (Input.GetKeyDown("joystick button 2") || Input.GetKeyDown(KeyCode.Alpha2) && changeFlg == false) // ゲームボタン「X」で水属性に書き換え
-        {
-            StatusChenge(STATUS.WATER);
-        }
-        if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.Alpha3) && changeFlg == false) // ゲームボタン「A」で風属性に書き換え
-        {
-            StatusChenge(STATUS.WIND);
-        }
-        if (Input.GetKeyDown("joystick button 0") || Input.GetKeyDown(KeyCode.Alpha4) && changeFlg == false) // ゲームボタン「Y」で土属性に書き換え
-        {
-            StatusChenge(STATUS.EARTH);
-        }
+        
 
         // ↑↑キー入力書き換え処理ここまで↑↑
 
@@ -189,27 +203,22 @@ public class Player : StatusController {
         {
             switch (_status)
             {
-                case STATUS.NONE:
-                    FormChange((int)ANIM_ENUMS.BLUCK.IDLE, _status);
-                    status = STATUS.NONE;
-                    break;
                 case STATUS.FIRE:
                     FormChange((int)ANIM_ENUMS.BLUCK.FIRE, _status);
-                    status = STATUS.FIRE;
                     break;
                 case STATUS.WATER:
                     FormChange((int)ANIM_ENUMS.BLUCK.WATER, _status);
-                    status = STATUS.WATER;
                     break;
                 case STATUS.WIND:
                     FormChange((int)ANIM_ENUMS.BLUCK.WIND, _status);
-                    status = STATUS.WIND;
                     break;
                 case STATUS.EARTH:
                     FormChange((int)ANIM_ENUMS.BLUCK.STONE, _status);
-                    status = STATUS.EARTH;
                     break;
             }
+        }else if(status == _status && pageChange.pageFlip < -1)
+        {
+              FormChange((int)ANIM_ENUMS.BLUCK.IDLE, _status);
         }
     }
 
@@ -255,6 +264,7 @@ public class Player : StatusController {
     // 残機処理メソッド
     void SketchDamage() 
     {
+        gm.SavePosition(transform.position);
         gm.sketchBookValue = gm.sketchBookValue - 1; // 残機を減らす
         Debug.LogFormat("残りページ数{0}", gm.sketchBookValue); // デバッグ用
         pageChangeFlg = false; // ページめくり判定OFF
@@ -282,7 +292,6 @@ public class Player : StatusController {
     void FormChange(int changeNum,STATUS _status)
     {
         movePos = Vector3.zero;
-        changeFlg = true;
         statusSr.material.shader = statusMaterial[0].shader;
         transform.DOScale(new Vector3(0, 0, 1), 1.0f).OnComplete(() =>
         {
@@ -326,6 +335,7 @@ public class Player : StatusController {
             {
                 return false;
             }
+            jumpCoolDownCount += Time.deltaTime;
             // デバッグ用Rayを画面に出力
             Debug.DrawRay(transform.position, Vector3.down * rayRange,Color.red); // デバッグ用に画面にRayを出力
             return true; // 接地している

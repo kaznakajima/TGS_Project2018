@@ -13,6 +13,7 @@ public class GameMaster : MonoBehaviour {
     public int sketchBookValue; // 残りページ数
     //string stageNo; // ステージ番号
     [SerializeField] int tempSketchValue; // 差分用一時保存変数
+    public Vector3 savePositon;
 
 	// Use this for initialization
 	void Start () {
@@ -48,6 +49,16 @@ public class GameMaster : MonoBehaviour {
             tempSketchValue = sketchBookValue; // イベント後、再度値がおなじになるように設定
         }
 	}
+
+    public void SavePosition(Vector3 pos)
+    {
+        savePositon = pos;
+    }
+
+    public Vector3 GetPosition()
+    {
+        return savePositon;
+    }
 
 
 }
