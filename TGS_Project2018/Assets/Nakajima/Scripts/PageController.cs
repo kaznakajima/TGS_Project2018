@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PageController : MonoBehaviour
 {
-
     // ページをめくるアニメーション
     public virtual IEnumerator PageAnimation(float flip, float pageSp)
     {

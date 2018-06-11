@@ -39,33 +39,8 @@ public class Mirror : StatusController
 	
 	// Update is called once per frame
 	void Update () {
-
-        if (CameraRangeCheck(transform.position) != true)
-        {
-            //MirrorReset(mirrorTex, mirrorSp);
-        }
-
         // Ray判定
         RayHit(direction, "Character");
-    }
-
-    // カメラ範囲かどうか
-    bool CameraRangeCheck(Vector3 _pos)
-    {
-        // カメラの範囲検出
-        Vector3 viewPos = Camera.main.WorldToViewportPoint(_pos);
-        // カメラ範囲外かチェック
-        if(viewPos.x < -0.1f || viewPos.x > 1.1f ||
-       viewPos.y < -0.1f || viewPos.y > 1.0f)
-        {
-            // 範囲外
-            return false;
-        }
-        else
-        {
-            // 範囲内
-            return true;
-        }
     }
 
     // Rayの判定
@@ -95,25 +70,11 @@ public class Mirror : StatusController
         FormChangeBefore(player);
     }
 
-    void MirrorReset(Texture tex, Sprite sp)
-    {
-        if(statusSr.material.GetTexture("_MainTex") != tex)
-        {
-            statusSr.material.SetTexture("_MainTex", tex);
-            statusSr.material.shader = statusMaterial[0].shader;
-            StatusChenge(STATUS.NONE);
-        }
-        else
-        {
-            return;
-        }
-    }
-
     // 姿を変える準備
     void FormChangeBefore(Player player)
     {
         // ステータスをチェックし、同じだったら return
-        if (status != STATUS.NONE)
+        if (status != STATUS.NONE || status == player.status)
         {
             maxRay = 3.0f;
             return;
@@ -133,7 +94,7 @@ public class Mirror : StatusController
         //mirrorAudio.PlayOneShot(mirrorSE[(int)STATUS.NONE]);
 
         // 処理が終わったら姿を変える
-        transform.DOScale(new Vector3(0.0f, 0.0f, 1.0f), 2.0f).OnComplete(() =>
+        transform.DOScale(new Vector3(0.0f, 0.0f, 1.0f), 1.0f).OnComplete(() =>
         {
             FormChangeAfter(player);
         });
@@ -150,7 +111,7 @@ public class Mirror : StatusController
         //mirrorAudio.PlayOneShot(mirrorSE[(int)STATUS.NONE]);
 
         // 処理が終わったらシェーダー切り替え
-        transform.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 2.0f).OnComplete(() =>
+        transform.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 1.0f).OnComplete(() =>
         {
             // 通常のシェーダーへ
             statusSr.material.shader = statusMaterial[0].shader;

@@ -10,7 +10,6 @@ public class PageChange : PageController
     public float pageFlip;
     
     // ページのRenderer ※スクリーンショット用
-    //[SerializeField]
     MeshRenderer pageRenderer;
 
     // ページが変更中かどうか
@@ -41,12 +40,12 @@ public class PageChange : PageController
         if (pageFlip < -1 && pageChange || pageFlip > 1 && pageChange)
         {
             pageChange = false;
-            //Camera.main.GetComponent<SceneController>().sceneCanvas.SetActive(true);
             yield break;
         }
 
         yield return new WaitForSeconds(0.05f);
 
+        // ページをめくる処理中
         pageChange = true;
 
         // ページを開くか、閉じるか(-1 開く、1 閉じる)
@@ -86,8 +85,7 @@ public class PageChange : PageController
         // シーン変更するならCanvasを不可視状態へ
         if (SceneChange)
         { 
-            //SceneManager.LoadScene("Select");
-            //Camera.main.GetComponent<SceneController>().sceneCanvas.SetActive(false);
+            
         }
 
         yield return new WaitForSeconds(1.0f);

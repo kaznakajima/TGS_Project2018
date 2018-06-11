@@ -9,7 +9,6 @@ public class IceGimmick : GimmickController
     GameObject steam;
 
     // ギミック処理
-    [ContextMenu("Gimmick")]
     public override void GimmickAction()
     {
         GameObject obj = Instantiate(steam) as GameObject;
@@ -48,7 +47,7 @@ public class IceGimmick : GimmickController
 
     // Use this for initialization
     void Start () {
-        //GimmickAction();
+        
 	}
 	
 	// Update is called once per frame
