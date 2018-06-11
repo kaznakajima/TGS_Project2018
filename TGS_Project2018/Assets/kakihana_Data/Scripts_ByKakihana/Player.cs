@@ -93,7 +93,7 @@ public class Player : StatusController {
                 // 歩行アニメーションOFF
                 statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
             }
-            if (Input.GetKeyDown(KeyCode.Space) == true || Input.GetButtonDown("joystick button 6"))
+            if (Input.GetKeyDown(KeyCode.Space) == true || Input.GetKeyDown("joystick button 6"))
             {
                 pageChangeFlg = true; // ページめくり判定ON
                 StartCoroutine(pageChange.ScreenShot());
