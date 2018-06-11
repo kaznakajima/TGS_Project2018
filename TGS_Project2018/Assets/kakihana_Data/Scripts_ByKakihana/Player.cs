@@ -93,9 +93,10 @@ public class Player : StatusController {
                 // 歩行アニメーションOFF
                 statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
             }
-            if (Input.GetKeyDown(KeyCode.Space) == true && Input.GetButtonDown("joystick button 6"))
+            if (Input.GetKeyDown(KeyCode.Space) == true || Input.GetButtonDown("joystick button 6"))
             {
                 pageChangeFlg = true; // ページめくり判定ON
+                StartCoroutine(pageChange.ScreenShot());
             }
             if (Input.GetKeyDown(KeyCode.C) || Input.GetAxis("Vertical") <= -1.0f && jumpCoolDownCount >= jumpCoolDownLimit) // スペースキーが押されたら
             {
@@ -139,7 +140,7 @@ public class Player : StatusController {
         {
             // 保存された中間地点に移動する
             transform.position = gm.GetPosition();
-            StartCoroutine(pageChange.ScreenShot());
+         //   StartCoroutine(pageChange.ScreenShot());
         }
 
         if (pageChangeFlg == true && pageChange.pageFlip > -1)
