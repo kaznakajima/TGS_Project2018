@@ -213,7 +213,8 @@ public class Player : StatusController {
             }
         }else if(status == _status && pageChange.pageFlip < -1)
         {
-              FormChange((int)ANIM_ENUMS.BLUCK.IDLE, _status);
+
+              FormChange((int)ANIM_ENUMS.BLUCK.IDLE, STATUS.NONE);
         }
     }
 
