@@ -692,6 +692,7 @@ MonoBehaviour:
   maxRay: 3
   mirrorAudio: {fileID: 0}
   mirrorSE: []
+  mirrorObj: {fileID: 0}
   distortionX: 500
   distortionY: 150
   distortionZ: 200
@@ -1803,6 +1804,7 @@ MonoBehaviour:
   maxRay: 3
   mirrorAudio: {fileID: 0}
   mirrorSE: []
+  mirrorObj: {fileID: 0}
   distortionX: 500
   distortionY: 150
   distortionZ: 200
@@ -2239,16 +2241,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CSVName: 1-1
   mapObj:
-  - {fileID: 1947116340673232, guid: d65a38be704b9ec4f976e4b4d9f8c145, type: 2}
+  - {fileID: 1594260757835426, guid: c9f4f596d9955314d941576f491b60ef, type: 2}
+  - {fileID: 1504463264066390, guid: 198c57042998f1f43805bfc78a673799, type: 2}
+  - {fileID: 1956373238541394, guid: b6b4c93a7e6e93145ac8ad7ebeb95c7c, type: 2}
+  - {fileID: 1472378384424814, guid: 92763f8d280a01946b2ab5dc50af3a1b, type: 2}
   - {fileID: 1548353422384564, guid: 92e1e4122897a774abea43f3349df8db, type: 2}
-  - {fileID: 1956373238541394, guid: 508ad9fb7a2c4db48b9202912ea32711, type: 2}
-  - {fileID: 1548353422384564, guid: 92e1e4122897a774abea43f3349df8db, type: 2}
-  - {fileID: 1548353422384564, guid: 92e1e4122897a774abea43f3349df8db, type: 2}
-  - {fileID: 1548353422384564, guid: 92e1e4122897a774abea43f3349df8db, type: 2}
-  - {fileID: 1600206983116102, guid: 027efb1480685934585608ad6ba62c0c, type: 2}
+  - {fileID: 1995431537082454, guid: 44906381e1e25844dabbfb531568db34, type: 2}
+  - {fileID: 1316615561819584, guid: 9c43ec6686544ca4c8aa39973c875a4c, type: 2}
   - {fileID: 1548353422384564, guid: 92e1e4122897a774abea43f3349df8db, type: 2}
   - {fileID: 1683814363346094, guid: 661c86c060657f54394f8244c5460580, type: 2}
-  - {fileID: 1316615561819584, guid: 1bf871274e0637d4caf069c3fd064542, type: 2}
+  - {fileID: 1258899994022536, guid: 3729c4356707ddd49bf70b0f7c1739c1, type: 2}
+  - {fileID: 1637453510840102, guid: 26540f55fd9e95649a3099231ec196c3, type: 2}
+  - {fileID: 1302026836025900, guid: bd5c5b9b0bccf1542a9f7b7e36fb1efb, type: 2}
 --- !u!4 &1367077395
 Transform:
   m_ObjectHideFlags: 0
@@ -2365,6 +2369,7 @@ MonoBehaviour:
   maxRay: 3
   mirrorAudio: {fileID: 0}
   mirrorSE: []
+  mirrorObj: {fileID: 0}
   distortionX: 200
   distortionY: 0
   distortionZ: 200
@@ -2544,6 +2549,7 @@ MonoBehaviour:
   maxRay: 3
   mirrorAudio: {fileID: 0}
   mirrorSE: []
+  mirrorObj: {fileID: 0}
   distortionX: 500
   distortionY: 150
   distortionZ: 200

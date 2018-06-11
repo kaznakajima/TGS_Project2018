@@ -93,7 +93,7 @@ public class Player : StatusController {
                 // 歩行アニメーションOFF
                 statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
             }
-            if (Input.GetKeyDown(KeyCode.Space) == true)
+            if (Input.GetKeyDown(KeyCode.Space) == true && Input.GetButtonDown("joystick button 6"))
             {
                 pageChangeFlg = true; // ページめくり判定ON
             }
@@ -159,11 +159,6 @@ public class Player : StatusController {
         // ↓↓以下の行よりキー入力によりキャラクター書き換え処理を行う↓↓
         if (changeFlg == false)
         {
-            if (Input.GetKeyDown("joystick button 8") || Input.GetKeyDown(KeyCode.Alpha0)) // SELECTキーでもとに戻る
-            {
-                changeFlg = true;
-                StatusChenge(STATUS.NONE);
-            }
             if (Input.GetKeyDown("joystick button 1") || Input.GetKeyDown(KeyCode.Alpha1)) // ゲームボタン「B」で炎属性に書き換え
             {
                 changeFlg = true;
@@ -174,12 +169,12 @@ public class Player : StatusController {
                 changeFlg = true;
                 StatusChenge(STATUS.WATER);
             }
-            if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.Alpha3)) // ゲームボタン「A」で風属性に書き換え
+            if (Input.GetKeyDown("joystick button 0") || Input.GetKeyDown(KeyCode.Alpha3)) // ゲームボタン「A」で風属性に書き換え
             {
                 changeFlg = true;
                 StatusChenge(STATUS.WIND);
             }
-            if (Input.GetKeyDown("joystick button 0") || Input.GetKeyDown(KeyCode.Alpha4)) // ゲームボタン「Y」で土属性に書き換え
+            if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.Alpha4)) // ゲームボタン「Y」で土属性に書き換え
             {
                 changeFlg = true;
                 StatusChenge(STATUS.EARTH);
