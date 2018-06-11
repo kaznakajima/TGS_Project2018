@@ -19,6 +19,10 @@ public class Mirror : StatusController
     [SerializeField]
     AudioClip[] mirrorSE;
 
+    // プレイヤーを映すためのオブジェクト(のちのち消す)
+    [SerializeField]
+    GameObject mirrorObj;
+
     // 歪みの強さ
     [SerializeField, Range(150, 500)]
     float distortionX;
@@ -85,9 +89,8 @@ public class Mirror : StatusController
 
     // Rayにヒットしたオブジェクトごとの処理
     void RayObjAction(GameObject gameObj)
-    {
+    { 
         // 姿を変える
-        //Move move = gameObj.GetComponent<Move>();
         Player player = gameObj.GetComponent<Player>();
         FormChangeBefore(player);
     }
@@ -110,11 +113,14 @@ public class Mirror : StatusController
     void FormChangeBefore(Player player)
     {
         // ステータスをチェックし、同じだったら return
-        if (player.status == status)
+        if (status != STATUS.NONE)
         {
             maxRay = 3.0f;
             return;
         }
+
+        GameObject Destroymirror = mirrorObj;
+        Destroy(Destroymirror);
 
         // 歪みシェーダーへ変更
         statusSr.material.shader = statusMaterial[1].shader;

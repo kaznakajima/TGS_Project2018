@@ -31,16 +31,7 @@ public class PageChange : PageController
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SceneChange = true;
-            StartCoroutine(ScreenShot());
-        }
-           
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            StartCoroutine(PageAnimation(pageFlip, 10.0f));
-        }
+
     }
 
     //ページをめくる、閉じるアニメーション
