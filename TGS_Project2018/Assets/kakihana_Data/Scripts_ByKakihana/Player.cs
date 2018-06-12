@@ -140,7 +140,8 @@ public class Player : StatusController {
         if (pageChange.pageChange == true)
         {
             // 保存された中間地点に移動する
-              transform.position = gm.GetPosition();
+            gm.SavePosition(transform.position);
+            transform.position = gm.GetPosition();
          //   StartCoroutine(pageChange.ScreenShot());
         }
 
@@ -262,7 +263,6 @@ public class Player : StatusController {
     // 残機処理メソッド
     void SketchDamage() 
     {
-        gm.SavePosition(transform.position);
         gm.sketchBookValue = gm.sketchBookValue - 1; // 残機を減らす
         Debug.LogFormat("残りページ数{0}", gm.sketchBookValue); // デバッグ用
         //pageChangeFlg = false; // ページめくり判定OFF
