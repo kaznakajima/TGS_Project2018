@@ -91,9 +91,10 @@ public class MapLoad : MonoBehaviour
             {
                 if (arrays[j, i] != -1 && arrays[j, i] <= mapObj.Length)
                 {
-                    Instantiate(mapObj[arrays[j, i]],
-                            transform.position + new Vector3(i, -j, mapObj[arrays[j, i]].transform.position.z),
+                    GameObject stageObj = Instantiate(mapObj[arrays[j, i]],
+                            transform.position + new Vector3(i, -j, 0),
                             Quaternion.identity);
+                    stageObj.transform.parent = transform;
                 }
             }
         }

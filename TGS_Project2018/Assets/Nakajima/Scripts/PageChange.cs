@@ -13,7 +13,7 @@ public class PageChange : PageController
     MeshRenderer pageRenderer;
 
     // ページが変更中かどうか
-    bool pageChange;
+    public bool pageChange;
 
     // シーンが変わるかどうか
     public bool SceneChange;
