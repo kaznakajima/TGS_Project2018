@@ -96,8 +96,8 @@ public class Player : StatusController {
             }
             if (Input.GetKeyDown(KeyCode.Space) == true || Input.GetKeyDown("joystick button 6"))
             {
-                pageChangeFlg = true; // ページめくり判定ON
                 StartCoroutine(pageChange.ScreenShot());
+                //pageChangeFlg = true; // ページめくり判定ON
             }
             if (Input.GetKeyDown(KeyCode.C) || Input.GetAxis("Vertical") <= -1.0f && jumpCoolDownCount >= jumpCoolDownLimit) // スペースキーが押されたら
             {
@@ -137,14 +137,14 @@ public class Player : StatusController {
             }
         }
 
-        if (pageChangeFlg == true)
+        if (pageChange.pageChange == true)
         {
             // 保存された中間地点に移動する
-            transform.position = gm.GetPosition();
+              transform.position = gm.GetPosition();
          //   StartCoroutine(pageChange.ScreenShot());
         }
 
-        if (pageChangeFlg == true && pageChange.pageFlip > -1)
+        if (pageChange.pageChange == true && pageChange.pageFlip > -1)
         {
             // ページがめくり終わったら残機を減らす
             SketchDamage();
@@ -265,7 +265,7 @@ public class Player : StatusController {
         gm.SavePosition(transform.position);
         gm.sketchBookValue = gm.sketchBookValue - 1; // 残機を減らす
         Debug.LogFormat("残りページ数{0}", gm.sketchBookValue); // デバッグ用
-        pageChangeFlg = false; // ページめくり判定OFF
+        //pageChangeFlg = false; // ページめくり判定OFF
         damageFlg = false; // ダメージ受けた判定OFF
         
     }
