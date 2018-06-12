@@ -36,7 +36,7 @@ public class CameraMove : MonoBehaviour {
         // イベントモードでなければ通常通りプレイヤーの移動に応じてカメラが移動
         if (eventFlg)
         {
-            StartCoroutine("EventMove", 1);
+            StartCoroutine("EventMove");
         }
         else
         {
@@ -45,42 +45,42 @@ public class CameraMove : MonoBehaviour {
         
 	}
 
-    // イベントモードカメラ移動
-    IEnumerator EventMove(int stateNum)
+    public void EventCamera(GameObject targetObj)
     {
-        switch (stateNum)
+        targetGimmick = targetObj.GetComponent<Transform>();
+        velocity = MoveSmooth(playerTrans.position, targetGimmick.position, frameLimit);
+        eventFlg = true;
+    }
+
+    // イベントモードカメラ移動
+    IEnumerator EventMove()
+    {
+        if (frameCount < frameLimit && endFlg == false) // 設定された最大フレームになるまで
         {
-            case 1:
-                if (frameCount < frameLimit && endFlg == false) // 設定された最大フレームになるまで
-                {
-                    transform.position = transform.position + velocity; // 上下移動量を元に移動
-                    frameCount++; // フレームをカウント
-                    endCount = 0;
-                }
-                // 復路カメラ移動初期設定
-                else if(frameCount >= frameLimit == endFlg == false)
-                {
-                    yield return new WaitForSeconds(2.0f); // 2秒待つ
-                    endFlg = true;
-                    returnVelocity = -velocity; // 移動量を負に変える
-                    frameCount = 0;
-                }
-                // 復路カメラ移動
-                if (endCount < frameLimit && endFlg == true)
-                {
-                    transform.position = transform.position + returnVelocity;
-                    endCount++;
-                }
-                else if(endCount >= frameLimit && endFlg == true)
-                {
-                    eventFlg = false;
-                    endFlg = false;
-                }
-                break;
-            default:
-                break;
+            transform.position = transform.position + velocity; // 上下移動量を元に移動
+            frameCount++; // フレームをカウント
+            endCount = 0;
         }
-        
+        // 復路カメラ移動初期設定
+        else if (frameCount >= frameLimit == endFlg == false)
+        {
+            yield return new WaitForSeconds(2.0f); // 2秒待つ
+            endFlg = true;
+            returnVelocity = -velocity; // 移動量を負に変える
+            frameCount = 0;
+        }
+        // 復路カメラ移動
+        if (endCount < frameLimit && endFlg == true)
+        {
+            transform.position = transform.position + returnVelocity;
+            endCount++;
+        }
+        else if (endCount >= frameLimit && endFlg == true)
+        {
+            eventFlg = false;
+            endFlg = false;
+        }
+
     }
 
     static Vector3 MoveSmooth(Vector3 startPos, Vector3 endPos, uint frame)

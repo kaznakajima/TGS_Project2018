@@ -1178,6 +1178,11 @@ MonoBehaviour:
   changeFlg: 0
   pageChangeFlg: 0
   changePageName: 
+  myElement:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   movePos: {x: 0, y: 0, z: 0}
   endPos: {x: 0, y: 0, z: 0}
   climbPos: {x: 0, y: 0, z: 0}
@@ -1474,6 +1479,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteObj: {fileID: 1243743359}
   sr: {fileID: 0}
+  elementList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   alpha: 0
   time: 0
   fadeTime: 1
@@ -2626,9 +2636,49 @@ Prefab:
       propertyPath: jumpCoolDownLimit
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 114580633831012054, guid: 562d8c337580d5c45b0ae3e9d055728d,
+        type: 2}
+      propertyPath: myElement.Array.data[0]
+      value: 
+      objectReference: {fileID: 1427674977}
+    - target: {fileID: 114580633831012054, guid: 562d8c337580d5c45b0ae3e9d055728d,
+        type: 2}
+      propertyPath: myElement.Array.data[1]
+      value: 
+      objectReference: {fileID: 1427674976}
+    - target: {fileID: 114580633831012054, guid: 562d8c337580d5c45b0ae3e9d055728d,
+        type: 2}
+      propertyPath: myElement.Array.data[2]
+      value: 
+      objectReference: {fileID: 1427674975}
+    - target: {fileID: 114580633831012054, guid: 562d8c337580d5c45b0ae3e9d055728d,
+        type: 2}
+      propertyPath: myElement.Array.data[3]
+      value: 
+      objectReference: {fileID: 1427674974}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 562d8c337580d5c45b0ae3e9d055728d, type: 2}
   m_IsPrefabParent: 0
+--- !u!212 &1427674974 stripped
+SpriteRenderer:
+  m_PrefabParentObject: {fileID: 212745519925127478, guid: 562d8c337580d5c45b0ae3e9d055728d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1427674973}
+--- !u!212 &1427674975 stripped
+SpriteRenderer:
+  m_PrefabParentObject: {fileID: 212673119682579770, guid: 562d8c337580d5c45b0ae3e9d055728d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1427674973}
+--- !u!212 &1427674976 stripped
+SpriteRenderer:
+  m_PrefabParentObject: {fileID: 212921714084882768, guid: 562d8c337580d5c45b0ae3e9d055728d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1427674973}
+--- !u!212 &1427674977 stripped
+SpriteRenderer:
+  m_PrefabParentObject: {fileID: 212276010182061620, guid: 562d8c337580d5c45b0ae3e9d055728d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1427674973}
 --- !u!1 &1569535211
 GameObject:
   m_ObjectHideFlags: 0

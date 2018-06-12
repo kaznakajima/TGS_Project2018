@@ -41,6 +41,7 @@ public class Player : StatusController {
 
     CharacterController myCc; // キャラクターコントローラー
     Rigidbody myRigidbody; // 自分のRigidbody
+    public SpriteRenderer[] myElement = new SpriteRenderer[4];
 
     [SerializeField] Vector3 movePos; // 移動用変数
     [SerializeField] Vector3 endPos; // 上下移動末端の座標を格納
@@ -115,7 +116,7 @@ public class Player : StatusController {
                 // 上下移動量を取得
                 climbPos = Climb(this.transform.position, endPos+offset, climbTimeLimit);
                 // Qキーが押されたら
-                if (Input.GetKey(KeyCode.Q)==true)
+                if (Input.GetKey(KeyCode.Q)==true || Input.GetAxis("Horizontal") <= 1.0f)
                 {
                     myRigidbody.useGravity = false; // 重力OFF
                     if (climbFrame < climbTimeLimit) // 設定された最大フレームになるまで
