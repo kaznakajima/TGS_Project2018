@@ -42,6 +42,7 @@ public class Button : MonoBehaviour
         string sceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(sceneName);
         Debug.Log("りとらい");
+        Pauser.Clear();
     }
 
     public void Exit()
