@@ -7,18 +7,22 @@ using UnityEngine.UI;
 public class GameMaster : MonoBehaviour {
 
     MapLoad mapLoad; // 残機を参照するステージクラス
+    PageChange pc;
 
     public Image[] bookValue =  new Image[5]; // 残り残機UI
 
     public int sketchBookValue; // 残りページ数
     //string stageNo; // ステージ番号
-    [SerializeField] int tempSketchValue; // 差分用一時保存変数
+    public int tempSketchValue; // 差分用一時保存変数
     public Vector3 savePositon;
+
+    [SerializeField] string changePageName;
 
 	// Use this for initialization
 	void Start () {
         // 現在のシーンの名前を取得
         mapLoad = GameObject.Find("StageInit").GetComponent<MapLoad>();
+        pc = GameObject.Find(changePageName).GetComponent<PageChange>(); // ページ遷移のコンポーネント取得
         // ステージによって残りページを設定
         switch (mapLoad.CSVName)
         {
@@ -42,7 +46,7 @@ public class GameMaster : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         // 現在の残りページと差分が異なれば残りページが減ったとみなす
-        if (sketchBookValue != tempSketchValue)
+        if (sketchBookValue != tempSketchValue && pc.pageChange == true)
         {
             Debug.Log("スケッチブック消費");
             bookValue[sketchBookValue].enabled = false; // 残機UIを減らす

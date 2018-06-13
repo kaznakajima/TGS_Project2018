@@ -38,26 +38,18 @@ public class MirrorAlphaTest : MonoBehaviour {
         pos = playerObj.transform.position;
         alphaJudge = Mathf.Abs(myTrans.position.x - pos.x);
         playerTrans = playerObj.GetComponent<Transform>();
-        if (alphaFlg == true)
-        {
-            StartAlpha();
-        }
-        else
+        if (alphaJudge > 3.0f && alpha != -1)
         {
             EndAlpha();
         }
-        // 自分とキャラクター間座標の差の絶対値が３以下だったら
-        if (Mathf.Abs(alphaJudge/*playerTrans.position.x*/) <= 3)
+        else if(alphaJudge < 3.0f)
         {
-
-        }// 自分とキャラクター間座標の差の絶対値が３以上だったら
-        else if (Mathf.Abs(alphaJudge/*playerTrans.position.x*/) >= 3)
-        {
-
+            StartAlpha();
         }
 	}
     public void StartAlpha()
     {
+        Debug.Log("kenti2");
         // フェード実行、Srを非表示に
         time -= Time.deltaTime;
         alpha += speed;
@@ -84,8 +76,15 @@ public class MirrorAlphaTest : MonoBehaviour {
         }
         var color = sr.color;
         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alpha);
+        Hoge();
+    }
+
+    void Hoge()
+    {
+        Debug.Log("hoge");
         foreach (var icon in elementList)
         {
+            var color = icon.color;
             icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, alpha);
         }
     }

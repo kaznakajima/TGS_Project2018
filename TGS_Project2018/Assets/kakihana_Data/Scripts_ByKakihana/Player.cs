@@ -97,7 +97,7 @@ public class Player : StatusController {
             if (Input.GetKeyDown(KeyCode.Space) == true || Input.GetKeyDown("joystick button 6"))
             {
                 StartCoroutine(pageChange.ScreenShot());
-                //pageChangeFlg = true; // ページめくり判定ON
+                gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
             }
             if (Input.GetKeyDown(KeyCode.C) || Input.GetAxis("Vertical") <= -1.0f && jumpCoolDownCount >= jumpCoolDownLimit) // スペースキーが押されたら
             {
@@ -111,6 +111,7 @@ public class Player : StatusController {
             }
             if (climbFlg == true) // 登り判定がONなら
             {
+                //ClimbJudgeMent();
                 Vector3 offset = new Vector3(0.0f, 3.0f, 0.0f); // 移動調整用ベクトル
                 endPos = ClimbDistanceCalc(); // 登り末端点を取得
                 // 上下移動量を取得
@@ -119,15 +120,34 @@ public class Player : StatusController {
                 if (Input.GetKey(KeyCode.Q)==true || Input.GetAxis("Horizontal") <= 1.0f)
                 {
                     myRigidbody.useGravity = false; // 重力OFF
-                    if (climbFrame < climbTimeLimit) // 設定された最大フレームになるまで
+                    if (Input.GetAxisRaw("Vertical") > 0.0f)
                     {
-                        transform.position = transform.position + climbPos; // 上下移動量を元に移動
-                        climbFrame++; // フレームをカウント
-                    }
-                    else
+                        movePos.y += speed;
+                        if (movePos.y >= playerMaxSpeed)// 移動ベクトルが最小スピードを下回ったら
+                        {
+                            movePos.y = playerMaxSpeed;// 移動スピードは最小スピード固定
+                        }
+                    }else if (Input.GetAxisRaw("Vertical") < 0.0f)
                     {
-                        climbFrame = 0; // 登りきったら再度登れるようにフレームをリセット
+                        movePos.y += -speed;
+                        if (movePos.y <= playerMinSpeed)// 移動ベクトルが最小スピードを下回ったら
+                        {
+                            movePos.y = playerMinSpeed;// 移動スピードは最小スピード固定
+                        }
                     }
+                    else if (Input.GetAxisRaw("Vertical") == 0 && changeFlg == false && status == STATUS.NONE)
+                    {
+                        movePos.y = 0; // 移動量は０に
+                    }
+                    //if (climbFrame < climbTimeLimit) // 設定された最大フレームになるまで
+                    //{
+                    //    transform.position = transform.position + climbPos; // 上下移動量を元に移動
+                    //    climbFrame++; // フレームをカウント
+                    //}
+                    //else
+                    //{
+                    //    climbFrame = 0; // 登りきったら再度登れるようにフレームをリセット
+                    //}
                 }
 
             }
@@ -142,20 +162,13 @@ public class Player : StatusController {
             // 保存された中間地点に移動する
             gm.SavePosition(transform.position);
             transform.position = gm.GetPosition();
-         //   StartCoroutine(pageChange.ScreenShot());
+            
         }
 
-        if (pageChange.pageChange == true && pageChange.pageFlip > -1)
+        if (pageChange.pageChange == true && pageChange.pageFlip > -1 && gm.sketchBookValue == gm.tempSketchValue)
         {
             // ページがめくり終わったら残機を減らす
-            SketchDamage();
-        }
-
-        // ダメージを受けたら
-        if (damageFlg == true)
-        {
-            gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
-            damageFlg = false; // 連続して残機が減らないようにする
+            //damageFlg = true;
         }
 
         // 移動値を設定
@@ -183,13 +196,13 @@ public class Player : StatusController {
                 StatusChenge(STATUS.EARTH);
             }
         }
-        
+
 
         // ↑↑キー入力書き換え処理ここまで↑↑
 
         // 移動値が入っている場合のみ移動を行う
         CharactorMove(movePos);
-	}
+    }
 
     // キャラクター描き換えメソッド
     public override void StatusChenge(STATUS _status)
@@ -214,17 +227,18 @@ public class Player : StatusController {
                     FormChange((int)ANIM_ENUMS.BLUCK.STONE, _status);
                     break;
             }
-        }else if(status == _status && pageChange.pageFlip < -1)
+        }
+        else if (status == _status && pageChange.pageFlip < -1)
         {
 
-              FormChange((int)ANIM_ENUMS.BLUCK.IDLE, STATUS.NONE);
+            FormChange((int)ANIM_ENUMS.BLUCK.IDLE, STATUS.NONE);
         }
     }
 
-    /*キャラクター移動メソッド*/
+    //キャラクター移動メソッド
     void CharactorMove(Vector3 pos)
     {
-        // キャラクター移動
+        //キャラクター移動
         transform.position += movePos * Time.deltaTime;
     }
 
@@ -257,17 +271,9 @@ public class Player : StatusController {
         if (hit.gameObject.tag == "Climb") 
         {
             climbFlg = false; // 登り判定OFF
+            myRigidbody.useGravity = true;
         }
 
-    }
-    // 残機処理メソッド
-    void SketchDamage() 
-    {
-        gm.sketchBookValue = gm.sketchBookValue - 1; // 残機を減らす
-        Debug.LogFormat("残りページ数{0}", gm.sketchBookValue); // デバッグ用
-        //pageChangeFlg = false; // ページめくり判定OFF
-        damageFlg = false; // ダメージ受けた判定OFF
-        
     }
 
     /* 登り末端点を取得するメソッド */
@@ -333,6 +339,10 @@ public class Player : StatusController {
             {
                 return false;
             }
+            if (hit.collider.tag == "Climb")
+            {
+                return false;
+            }
             jumpCoolDownCount += Time.deltaTime;
             // デバッグ用Rayを画面に出力
             Debug.DrawRay(transform.position, Vector3.down * rayRange,Color.red); // デバッグ用に画面にRayを出力
@@ -344,4 +354,5 @@ public class Player : StatusController {
             return false; // 接地していない
         }
     }
+
 }
