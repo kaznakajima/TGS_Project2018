@@ -18,14 +18,24 @@ public class PageChange : PageController
     // シーンが変わるかどうか
     public bool SceneChange;
 
+    void Awake()
+    {
+
+    }
+
     // Use this for initialization
     void Start()
     {
         // Rendererの取得
         pageRenderer = GetComponent<MeshRenderer>();
 
+        pageRenderer.material.SetTexture("_MainTex", SingletonMonoBehaviour<ScreenShot>.Instance.tex2D);
+
+        // スクリーンショットを最前面へ
         pageFlip = 1;
-        StartCoroutine(ScreenShot());
+        pageRenderer.material.SetFloat("_Flip", pageFlip);
+
+        StartCoroutine(PageAnimation(pageFlip, 5.0f));
     }
 	
 	// Update is called once per frame
@@ -57,12 +67,6 @@ public class PageChange : PageController
         pageRenderer.material.SetFloat("_Flip", pageFlip);
 
         StartCoroutine(PageAnimation(flip, pageSp));
-    }
-
-    public void SelectScene()//セレクトシーンに移動
-    {
-        SceneChange = true;
-        StartCoroutine(ScreenShot());
     }
 
     // 現在のスクリーンショットを撮る
