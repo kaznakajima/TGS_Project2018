@@ -31,23 +31,25 @@ public class Select : MonoBehaviour {
 
     float cameraRotate;
 
-   
-
     float alfa;
 
     [SerializeField,Header("FadeOut")]
-    Image imageColor;
+    GameObject fadeImage;
+
+    bool fadeFlg;
     // Use this for initialization
     void Start () {
-        imageColor = GetComponent<Image>();
+        //alfa = GetComponent<Image>().color.a;
+
+        maincamera = GetComponent<Camera>();
 	}
 
     // Update is called once per frame
     void Update()
     {
-       /// imageColor.color = new Color(0, 0, 0, alfa);
+        fadeImage.GetComponent<Image>().color = new Color(0, 0, 0, alfa);
 
-       // bool fadeFlg = false;
+        
 
         switch (StageNum)
         {
@@ -86,10 +88,19 @@ public class Select : MonoBehaviour {
         //}
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Scene(stageName);
+            fadeFlg = true;
         }
 
+        if (fadeFlg)
+        {
+            alfa += 0.5f * Time.deltaTime;
+            Camera_Select.flg = true;
 
+            if (alfa >= 1)
+            {
+                Scene(stageName);
+            }
+        }
        
     }
     public void Right()
