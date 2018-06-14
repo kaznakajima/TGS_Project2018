@@ -6,23 +6,33 @@ public class UVScroll : MonoBehaviour
 {
     // スクロールの大きさ
     [SerializeField]
-    public float scrollSpeedX = 0.1f;
+    public float scrollSpeedX = 1.0f;
 
     void Start()
     {
-        // SpriteRendererを取得
-        GetComponent<SpriteRenderer>().sharedMaterial.SetTextureOffset("_MainTex", Vector2.zero);
+       
     }
     void Update()
     {
-        if(scrollSpeedX == 0)
-        {
-            return;
-        }
+        transform.Translate(scrollSpeedX * Time.deltaTime, 0, 0);
+        CheckCameraOut(transform.position, scrollSpeedX);
+    }
 
-        // 背景のスクロール
-        float x = Mathf.Repeat(Time.time * scrollSpeedX, 1);
-        Vector2 offset = new Vector2(x, 0);
-        GetComponent<SpriteRenderer>().sharedMaterial.SetTextureOffset("_MainTex", offset);
+    // カメラ範囲内判定
+    void CheckCameraOut(Vector3 _pos, float moveX)
+    {
+        // カメラ範囲内座標 (0.0f ～ 1.0f)
+        Vector3 view_pos = Camera.main.WorldToViewportPoint(_pos);
+
+        // カメラの右端
+        if (moveX > 0 && view_pos.x > 1.5f)
+        {
+            transform.position = new Vector2(transform.parent.position.x - 13.34f, transform.parent.position.y);
+        }
+        // カメラの左端
+        else if (moveX < 0 && view_pos.x < -0.5f)
+        {
+            transform.position = new Vector2(transform.parent.position.x + 13.34f, transform.parent.position.y);
+        }
     }
 }
