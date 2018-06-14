@@ -27,6 +27,10 @@ public class StatusController : MonoBehaviour
     // 変化用のマテリアル
     public Material[] statusMaterial;
 
+    // alphaステータス(透過用)
+    [HideInInspector]
+    public float statusAlpha;
+
     // ステータスに応じて姿を変えるメソッド
     // 使い方(継承先)　public override void StatusChange(STATUS 引数名)
     //                         {

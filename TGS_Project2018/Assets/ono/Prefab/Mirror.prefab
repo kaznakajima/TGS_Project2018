@@ -312,7 +312,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1316615561819584}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.7754335, y: -1.4507864, z: 0}
+  m_LocalPosition: {x: -2.959599, y: -5.5947323, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 4243812994990344}
@@ -380,34 +380,33 @@ MonoBehaviour:
   statusMaterial:
   - {fileID: 2100000, guid: 33c1bede640dc794992b59c7a0e87f5d, type: 2}
   - {fileID: 2100000, guid: 17a6def4a3aa66f458794fde41904001, type: 2}
+  statusAlpha: 0
   maxRay: 3
-  mirrorAudio: {fileID: 0}
-  mirrorSE: []
   mirrorObj: {fileID: 1300603614295460}
-  distortionX: 0
-  distortionY: 0
-  distortionZ: 0
 --- !u!114 &114405516823977166
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1300603614295460}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9d367fff720d264a8a49bdd673c9c41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   spriteObj: {fileID: 1300603614295460}
   sr: {fileID: 212504022537630244}
+  elementList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   alpha: -1
   time: 1
   fadeTime: 1
-  playerIcon:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  alphaJudge: 0
+  alphaFlg: 0
+  pos: {x: 0, y: 0, z: 0}
 --- !u!198 &198125607147610244
 ParticleSystem:
   m_ObjectHideFlags: 1

@@ -6,30 +6,16 @@ using DG.Tweening;
 
 public class Mirror : StatusController
 {
-
     // rayの方向
     Vector3 direction;
     // rayの長さ
     [SerializeField]
     float maxRay;
-    // AudioSource
-    [SerializeField]
-    AudioSource mirrorAudio;
-    // AudioClipの配列
-    [SerializeField]
-    AudioClip[] mirrorSE;
+    // 透明度
+    float mirrorAlpha;
 
     // プレイヤーを映すためのオブジェクト(のちのち消す)
-    [SerializeField]
-    GameObject mirrorObj;
-
-    // 歪みの強さ
-    [SerializeField, Range(150, 500)]
-    float distortionX;
-    [SerializeField, Range(150, 500)]
-    float distortionY;
-    [SerializeField, Range(150, 500)]
-    float distortionZ;
+    public GameObject mirrorObj;
 
     // Use this for initialization
     void Start () {
@@ -56,7 +42,6 @@ public class Mirror : StatusController
         {
             if (rayHit.collider.name == objName)
             {
-                maxRay = 0.0f;
                 RayObjAction(rayHit.collider.gameObject);
             }
         }
@@ -64,32 +49,26 @@ public class Mirror : StatusController
 
     // Rayにヒットしたオブジェクトごとの処理
     void RayObjAction(GameObject gameObj)
-    { 
-        // 姿を変える
+    {
+        // ステータスをチェックし、変化できないなら return
         Player player = gameObj.GetComponent<Player>();
+        if (status != STATUS.NONE || status == player.status)
+        {
+            return;
+        }
+
+        // 姿を変える
         FormChangeBefore(player);
     }
 
     // 姿を変える準備
     void FormChangeBefore(Player player)
     {
-        // ステータスをチェックし、同じだったら return
-        if (status != STATUS.NONE || status == player.status)
-        {
-            maxRay = 3.0f;
-            return;
-        }
-
         GameObject Destroymirror = mirrorObj;
         Destroy(Destroymirror);
 
         // 歪みシェーダーへ変更
         statusSr.material.shader = statusMaterial[1].shader;
-
-        // 歪みの強さ
-        statusSr.material.SetFloat("_distortionX", distortionX);
-        statusSr.material.SetFloat("_distortionY", distortionY);
-        statusSr.material.SetFloat("_distortionZ", distortionZ);
 
         //mirrorAudio.PlayOneShot(mirrorSE[(int)STATUS.NONE]);
 

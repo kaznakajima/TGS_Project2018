@@ -28,8 +28,8 @@
 		void vert(inout appdata_full v, out Input o) {
 			UNITY_INITIALIZE_OUTPUT(Input, o);
 			// 歪ませる
-			float ampX = 0.1 * sin(_Time * 500 * v.vertex.x + _distortionX);
-			float ampY = 0.1 * sin(_Time * 150 * v.vertex.y + _distortionY);
+			float ampX = 0.1 * sin(_Time * 500 * v.vertex.x + 150.0f);
+			float ampY = 0.1 * sin(_Time * 150 * v.vertex.y + 150.0f);
 			v.vertex.xyz = float3(v.vertex.x + ampX, v.vertex.y + ampY, v.vertex.z);
 		}
 
