@@ -7,6 +7,10 @@ public class Pauser : MonoBehaviour
 {
     static List<Pauser> targets = new List<Pauser>();   // ポーズ対象のスクリプト
     Behaviour[] pauseBehavs = null; // ポーズ対象のコンポーネント
+    public static void Clear()
+    {
+        targets.Clear();
+    }
     
 
     // 初期化
