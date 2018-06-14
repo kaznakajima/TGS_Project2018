@@ -33,7 +33,7 @@ public class GameMaster : MonoBehaviour {
                 sketchBookValue = 10;
                 break;
             default:
-                sketchBookValue = 20;
+                sketchBookValue = 5;
                 break;
         }
         tempSketchValue = sketchBookValue; // 差分用変数の値を設定
