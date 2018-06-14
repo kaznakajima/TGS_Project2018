@@ -17,16 +17,15 @@ public class Player : StatusController {
 
     PageChange pageChange; // ページ遷移クラス
     GameMaster gm; // ゲームマスタークラス
+    UVScroll uvScroll;
 
     [SerializeField] float playerSpeed = 1.0f; // キャラクターのスピード
     [SerializeField] float playerMaxSpeed = 1.5f; // プレイヤーの最大スピード
     [SerializeField] float playerMinSpeed = -1.5f; // プレイヤーの最小スピード
     [SerializeField] float jumpSpeed = 2.0f; // ジャンプ力
     [SerializeField] float speed; // 移動スピード
-    [SerializeField] float jumpCoolDownCount = 0.0f;
-    [SerializeField] float jumpCoolDownLimit = 0.5f;
-    [SerializeField,Range(0,600)] uint climbTimeLimit; // 上下移動完了までの最大フレーム数
-    [SerializeField] uint climbFrame; // 上下移動用のフレーム
+    [SerializeField] float jumpCoolDownCount = 0.0f; // ジャンプのクールダウンカウント
+    [SerializeField] float jumpCoolDownLimit = 0.5f; // ジャンプ再使用までの時間
     [SerializeField] float rayRange = 1.0f; // 接地判定の距離 
     [SerializeField] float defaultRayRange; // 保存用設置判定の距離
 
@@ -35,7 +34,7 @@ public class Player : StatusController {
     [SerializeField] bool climbFlg = false; // 上下移動可能か
     [SerializeField] bool shipFlg = false; // 船に乗っているか
     [SerializeField] bool damageFlg = false; // ダメージを受けているか
-    [SerializeField] bool changeFlg = false; // 変身しているか
+    public bool changeFlg = false; // 変身しているか
     [SerializeField] bool pageChangeFlg = false; //ページがめくり終わったか
     [SerializeField] string changePageName; // ページ遷移クラスオブジェクトを取得するために必要な文字列型変数
 
@@ -54,6 +53,8 @@ public class Player : StatusController {
     void Start () {
         statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE); // アニメーションの初期設定
         gm = GameObject.Find("Master").GetComponent<GameMaster>(); // ゲームマスターコンポーネント取得
+        uvScroll = FindObjectOfType<UVScroll>().GetComponent<UVScroll>();
+        uvScroll.scrollSpeedX = 0.0f;
         pageChange = GameObject.Find(changePageName).GetComponent<PageChange>(); // ページ遷移のコンポーネント取得
         myRigidbody = this.gameObject.GetComponent<Rigidbody>(); // RigidBodyコンポーネントを取得
         defaultRayRange = rayRange;
@@ -67,7 +68,6 @@ public class Player : StatusController {
             // なめらかに移動させる
             movePos = Vector3.Lerp(oldVelocity, movePos, playerSpeed * Time.deltaTime);
             oldVelocity = movePos; // なめらかに移動させるために必要な一時保存用ベクトルを保存
-
             // スティックが右方向に倒れたら
             if (Input.GetAxisRaw("Horizontal") > 0)
             {
@@ -99,7 +99,7 @@ public class Player : StatusController {
                 StartCoroutine(pageChange.ScreenShot());
                 gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
             }
-            if (Input.GetKeyDown(KeyCode.C) || Input.GetAxis("Vertical") <= -1.0f && jumpCoolDownCount >= jumpCoolDownLimit) // スペースキーが押されたら
+            if (Input.GetKeyDown(KeyCode.C) || Input.GetAxis("Vertical") <= -1.0f && jumpCoolDownCount >= jumpCoolDownLimit && climbFlg == false) // スペースキーが押されたら
             {
                 jumpFlg = true; // ジャンプフラグON
             }
@@ -111,45 +111,27 @@ public class Player : StatusController {
             }
             if (climbFlg == true) // 登り判定がONなら
             {
-                //ClimbJudgeMent();
-                Vector3 offset = new Vector3(0.0f, 3.0f, 0.0f); // 移動調整用ベクトル
-                endPos = ClimbDistanceCalc(); // 登り末端点を取得
-                // 上下移動量を取得
-                climbPos = Climb(this.transform.position, endPos+offset, climbTimeLimit);
-                // Qキーが押されたら
-                if (Input.GetKey(KeyCode.Q)==true || Input.GetAxis("Horizontal") <= 1.0f)
+                myRigidbody.useGravity = false; // 重力OFF
+                if (Input.GetAxisRaw("Vertical") > 0.0f)
                 {
-                    myRigidbody.useGravity = false; // 重力OFF
-                    if (Input.GetAxisRaw("Vertical") > 0.0f)
+                    movePos.y += speed;
+                    if (movePos.y >= playerMaxSpeed)// 移動ベクトルが最小スピードを下回ったら
                     {
-                        movePos.y += speed;
-                        if (movePos.y >= playerMaxSpeed)// 移動ベクトルが最小スピードを下回ったら
-                        {
-                            movePos.y = playerMaxSpeed;// 移動スピードは最小スピード固定
-                        }
-                    }else if (Input.GetAxisRaw("Vertical") < 0.0f)
-                    {
-                        movePos.y += -speed;
-                        if (movePos.y <= playerMinSpeed)// 移動ベクトルが最小スピードを下回ったら
-                        {
-                            movePos.y = playerMinSpeed;// 移動スピードは最小スピード固定
-                        }
+                        movePos.y = playerMaxSpeed;// 移動スピードは最小スピード固定
                     }
-                    else if (Input.GetAxisRaw("Vertical") == 0 && changeFlg == false && status == STATUS.NONE)
-                    {
-                        movePos.y = 0; // 移動量は０に
-                    }
-                    //if (climbFrame < climbTimeLimit) // 設定された最大フレームになるまで
-                    //{
-                    //    transform.position = transform.position + climbPos; // 上下移動量を元に移動
-                    //    climbFrame++; // フレームをカウント
-                    //}
-                    //else
-                    //{
-                    //    climbFrame = 0; // 登りきったら再度登れるようにフレームをリセット
-                    //}
                 }
-
+                else if (Input.GetAxisRaw("Vertical") < 0.0f)
+                {
+                    movePos.y += -speed;
+                    if (movePos.y <= playerMinSpeed)// 移動ベクトルが最小スピードを下回ったら
+                    {
+                        movePos.y = playerMinSpeed;// 移動スピードは最小スピード固定
+                    }
+                }
+                else if (Input.GetAxisRaw("Vertical") == 0 && changeFlg == false && status == STATUS.NONE)
+                {
+                    movePos.y = 0; // 移動量は０に
+                }
             }
             else
             {
@@ -157,12 +139,30 @@ public class Player : StatusController {
             }
         }
 
-        if (pageChange.pageChange == true)
+        if (movePos.x > 0)
+        {
+            uvScroll.scrollSpeedX = 0.1f;
+        }
+        else if (movePos.x < 0)
+        {
+            uvScroll.scrollSpeedX = -0.1f;
+        }
+        else if (movePos.x == 0)
+        {
+            uvScroll.scrollSpeedX = 0.0f;
+        }
+
+        if (pageChange.pageChange == true && damageFlg == true)
         {
             // 保存された中間地点に移動する
             gm.SavePosition(transform.position);
             transform.position = gm.GetPosition();
-            
+            damageFlg = false;
+        }
+        else
+        {
+            gm.SavePosition(transform.position);
+            transform.position = gm.GetPosition();
         }
 
         if (pageChange.pageChange == true && pageChange.pageFlip > -1 && gm.sketchBookValue == gm.tempSketchValue)
@@ -250,7 +250,7 @@ public class Player : StatusController {
             shipFlg = true;
         }
         // ダメージオブジェクトに接触したら
-        if (hit.gameObject.tag == "Needle")
+        if (hit.gameObject.name == "Needle")
         {
             Debug.Log("ダメージを受けた");
             damageFlg = true;
@@ -275,23 +275,6 @@ public class Player : StatusController {
         }
 
     }
-
-    /* 登り末端点を取得するメソッド */
-    Vector3 ClimbDistanceCalc() 
-    {
-        GameObject endObj;
-        endObj = GameObject.FindGameObjectWithTag("ClimbEnd");
-        endPos = endObj.GetComponent<Transform>().transform.position;
-        return endPos;
-    }
-
-    /* 1フレームあたりの上下移動を取得するメソッド*/
-    static Vector3 Climb(Vector3 startPos, Vector3 endPos, uint frame)
-    {
-        return new Vector3((endPos.x - startPos.x) / (float)frame,
-            (endPos.y - startPos.y) / (float)frame,
-            (endPos.z - startPos.z) / (float)frame);
-    } 
 
     void FormChange(int changeNum,STATUS _status)
     {
