@@ -1172,8 +1172,6 @@ MonoBehaviour:
   speed: 1
   jumpCoolDownCount: 0
   jumpCoolDownLimit: 1
-  climbTimeLimit: 120
-  climbFrame: 0
   rayRange: 1
   defaultRayRange: 0
   isGround: 0
@@ -1490,11 +1488,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   alpha: 0
-  time: 0
-  fadeTime: 1
   alphaJudge: 0
-  alphaFlg: 0
-  pos: {x: 0, y: 0, z: 0}
+  oldJudge: 0
+  playerPos: {x: 0, y: 0, z: 0}
+  actionMode: 0
+  changed: 0
 --- !u!1 &969789577
 GameObject:
   m_ObjectHideFlags: 0
@@ -2038,7 +2036,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTrans: {fileID: 1733158252}
   targetGimmick: {fileID: 0}
-  offset: {x: 0, y: 3, z: -10}
+  offset: {x: 0, y: 1, z: -10}
   frameLimit: 120
   frameCount: 0
   endCount: 0
@@ -3700,7 +3698,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2023793629
 RectTransform:
   m_ObjectHideFlags: 0
