@@ -15,14 +15,12 @@ public class Button : MonoBehaviour
     {
         pauseUI.SetActive(true);
         Pauser.Pause();
-        
     }
 
     public void Resume()
     {
         pauseUI.SetActive(false);
         Pauser.Resume();
-        
     }
 
 
@@ -38,8 +36,8 @@ public class Button : MonoBehaviour
 
     public void RetryScene()
     {
-        
         string sceneName = SceneManager.GetActiveScene().name;
+        Resume();
         SceneManager.LoadScene(sceneName);
         Debug.Log("りとらい");
         Pauser.Clear();

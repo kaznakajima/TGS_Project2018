@@ -67,6 +67,8 @@ public class Mirror : StatusController
         GameObject Destroymirror = mirrorObj;
         Destroy(Destroymirror);
 
+        maxRay = 0.0f;
+
         // 歪みシェーダーへ変更
         statusSr.material.shader = statusMaterial[1].shader;
 

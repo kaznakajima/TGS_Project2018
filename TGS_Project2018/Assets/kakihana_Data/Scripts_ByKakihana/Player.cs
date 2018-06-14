@@ -17,7 +17,7 @@ public class Player : StatusController {
 
     PageChange pageChange; // ページ遷移クラス
     GameMaster gm; // ゲームマスタークラス
-    UVScroll uvScroll;
+    UVScroll[] uvScroll = new UVScroll[2];
 
     [SerializeField] float playerSpeed = 1.0f; // キャラクターのスピード
     [SerializeField] float playerMaxSpeed = 1.5f; // プレイヤーの最大スピード
@@ -53,8 +53,11 @@ public class Player : StatusController {
     void Start () {
         statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE); // アニメーションの初期設定
         gm = GameObject.Find("Master").GetComponent<GameMaster>(); // ゲームマスターコンポーネント取得
-        uvScroll = FindObjectOfType<UVScroll>().GetComponent<UVScroll>();
-        uvScroll.scrollSpeedX = 0.0f;
+        uvScroll = FindObjectsOfType<UVScroll>();
+        foreach (var item in uvScroll)
+        {
+            item.scrollSpeedX = 0.0f;
+        }
         pageChange = GameObject.Find(changePageName).GetComponent<PageChange>(); // ページ遷移のコンポーネント取得
         myRigidbody = this.gameObject.GetComponent<Rigidbody>(); // RigidBodyコンポーネントを取得
         defaultRayRange = rayRange;
@@ -141,15 +144,24 @@ public class Player : StatusController {
 
         if (movePos.x > 0)
         {
-            uvScroll.scrollSpeedX = 0.1f;
+            foreach (var item in uvScroll)
+            {
+                item.scrollSpeedX = 1.0f;
+            }
         }
         else if (movePos.x < 0)
         {
-            uvScroll.scrollSpeedX = -0.1f;
+            foreach (var item in uvScroll)
+            {
+                item.scrollSpeedX = -1.0f;
+            }
         }
         else if (movePos.x == 0)
         {
-            uvScroll.scrollSpeedX = 0.0f;
+            foreach (var item in uvScroll)
+            {
+                item.scrollSpeedX = 0.0f;
+            }
         }
 
         if (pageChange.pageChange == true && damageFlg == true)

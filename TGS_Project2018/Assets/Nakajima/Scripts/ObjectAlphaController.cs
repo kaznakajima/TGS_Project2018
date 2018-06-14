@@ -11,13 +11,13 @@ public class ObjectAlphaController : MonoBehaviour
     // Objectのアルファ値
     float objAlpha = 0.0f;
 
-    // Playerの参照
+    // Playerを取得
     public Player[] GetPlayer()
     {
         return FindObjectsOfType<Player>().ToArray(); 
     }
 
-    // Mirrorの参照
+    // Mirrorを取得
     public Mirror[] GetMirror()
     {
         return map.GetComponentsInChildren<Mirror>().ToArray();
@@ -25,6 +25,7 @@ public class ObjectAlphaController : MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
+        // アイコンを隠す
         foreach (var player in GetPlayer())
         {
             foreach (var playerSr in player.myElement)
@@ -47,7 +48,14 @@ public class ObjectAlphaController : MonoBehaviour
     // 距離を見てアルファの調整
     void DistanceCheck()
     {
-        foreach(var player in GetPlayer())
+        // 鏡がいなければリターン
+        if(GetMirror().Length == 0)
+        {
+            return;
+        }
+
+        // プレイヤーが変化中はアイコンを出さない
+        foreach (var player in GetPlayer())
         {
           if(player.changeFlg || (int)player.status != 0)
             {
@@ -56,11 +64,13 @@ public class ObjectAlphaController : MonoBehaviour
             }
         }
 
+        // プレイヤーと鏡が近づいたらアイコン表示
         if(GetPlayer().Min(playerPos => GetMirror().Min(mirrorPos => 
             Mathf.Abs(playerPos.transform.position.x - mirrorPos.transform.position.x))) <= 3)
         {
             AlphaChange(0.75f);
         }
+        // 離れたらアイコンを隠す
         else if(GetPlayer().Min(playerPos => GetMirror().Min(mirrorPos =>
             Mathf.Abs(playerPos.transform.position.x - mirrorPos.transform.position.x))) > 3)
         {
@@ -75,26 +85,28 @@ public class ObjectAlphaController : MonoBehaviour
         if (objAlpha == 0.0f && nextAlpha == 0.0f ||
             objAlpha == 0.75f && nextAlpha == 0.75f)
         {
-            Debug.Log("とおった");
             return;
         }
 
         // 次のアルファの値に設定
         objAlpha = Mathf.Lerp(objAlpha, nextAlpha, 10.0f * Time.deltaTime);
 
-        foreach(var player in GetPlayer())
+        foreach (var mirror in GetMirror())
+        {
+            if (mirror.mirrorObj == null)
+            {
+                return;
+            }
+
+            mirror.mirrorObj.GetComponent<SpriteRenderer>().color = new Color(mirror.mirrorObj.GetComponent<SpriteRenderer>().color.r,
+                mirror.mirrorObj.GetComponent<SpriteRenderer>().color.g, mirror.mirrorObj.GetComponent<SpriteRenderer>().color.b, objAlpha);
+        }
+        foreach (var player in GetPlayer())
         {
             foreach (var playerSr in player.myElement)
             {
                 playerSr.color = new Color(playerSr.color.r, playerSr.color.g, playerSr.color.b, objAlpha);
             }
         }
-        foreach(var mirror in GetMirror())
-        {
-            mirror.mirrorObj.GetComponent<SpriteRenderer>().color = new Color(mirror.mirrorObj.GetComponent<SpriteRenderer>().color.r, 
-                mirror.mirrorObj.GetComponent<SpriteRenderer>().color.g, mirror.mirrorObj.GetComponent<SpriteRenderer>().color.b, objAlpha);
-        }
-
-        
     }
 }

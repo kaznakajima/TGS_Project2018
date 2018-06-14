@@ -64,11 +64,18 @@ public class Pauser : MonoBehaviour
     // ポーズ
     public static void Pause()
     {
-        foreach (var obj in targets)
+        foreach (Pauser obj in GameObject.FindObjectsOfType<Pauser>())
         {
-            obj.OnPause();
-
+            if (obj != null)
+            {
+                obj.OnPause();
+            }
         }
+        //foreach (var obj in targets)
+        //{
+        //    obj.OnPause();
+
+        //}
     }
 
     // ポーズ解除

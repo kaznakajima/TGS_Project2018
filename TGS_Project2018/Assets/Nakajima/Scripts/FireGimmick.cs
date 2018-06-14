@@ -32,8 +32,34 @@ public class FireGimmick : GimmickController
                     // ミラーの消去コルーチン開始
                     StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation(0.0f, 0.0f));
                 }
+                if(rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.WIND)
+                {
+                    gimmickMaxRay = 0.0f;
+                    ForestBreak();
+                    // ミラーの消去コルーチン開始
+                    StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation(0.0f, 0.0f));
+                }
             }
         }
+    }
+
+    // 風できるアニメーション
+    void ForestBreak()
+    {
+        Animator gimmickAnim = GetComponent<Animator>();
+        gimmickAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.FOREST.BREAK);
+        GameObject childTree = GetComponentInChildren<BoxCollider>().gameObject;
+
+        StartCoroutine(BreakForest(childTree));
+    }
+
+    IEnumerator BreakForest(GameObject childTree)
+    {
+        yield return new WaitForSeconds(2.25f);
+
+        childTree.transform.parent = null;
+        childTree.AddComponent<Rigidbody>();
+        Destroy(gameObject);
     }
 
     // Use this for initialization
