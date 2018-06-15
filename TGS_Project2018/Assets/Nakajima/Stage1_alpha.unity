@@ -351,6 +351,11 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114634046656737070, guid: 2b2072589fc39d54387431c033102fb0,
+        type: 2}
+      propertyPath: changePageName
+      value: Page
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2b2072589fc39d54387431c033102fb0, type: 2}
   m_IsPrefabParent: 0
@@ -876,7 +881,7 @@ MonoBehaviour:
   - {fileID: 1594260757835426, guid: c9f4f596d9955314d941576f491b60ef, type: 2}
   - {fileID: 1504463264066390, guid: 198c57042998f1f43805bfc78a673799, type: 2}
   - {fileID: 1956373238541394, guid: b6b4c93a7e6e93145ac8ad7ebeb95c7c, type: 2}
-  - {fileID: 1472378384424814, guid: 92763f8d280a01946b2ab5dc50af3a1b, type: 2}
+  - {fileID: 1456967744725320, guid: 92763f8d280a01946b2ab5dc50af3a1b, type: 2}
   - {fileID: 1548353422384564, guid: 92e1e4122897a774abea43f3349df8db, type: 2}
   - {fileID: 1995431537082454, guid: 44906381e1e25844dabbfb531568db34, type: 2}
   - {fileID: 1316615561819584, guid: 9c43ec6686544ca4c8aa39973c875a4c, type: 2}
@@ -885,6 +890,8 @@ MonoBehaviour:
   - {fileID: 1258899994022536, guid: 3729c4356707ddd49bf70b0f7c1739c1, type: 2}
   - {fileID: 1637453510840102, guid: 26540f55fd9e95649a3099231ec196c3, type: 2}
   - {fileID: 1302026836025900, guid: bd5c5b9b0bccf1542a9f7b7e36fb1efb, type: 2}
+  height: 0
+  width: 0
 --- !u!4 &1367077395
 Transform:
   m_ObjectHideFlags: 0

@@ -27,7 +27,7 @@ public class Button : MonoBehaviour
     public void SelectScene()//セレクトシーンに移動
     {
         StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-        SceneManager.LoadScene("Stage1_alpha");
+        SceneManager.LoadScene("SelectTest");
     }
 
     public void DialogButton()//ダイアログ表示

@@ -98,14 +98,8 @@ GameObject:
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-<<<<<<< HEAD
-  - component: {fileID: 4609044787582746}
-  - component: {fileID: 212791823266742254}
-  - component: {fileID: 65990232985885412}
-=======
   - component: {fileID: 4536145376850050}
   - component: {fileID: 212317748374326042}
->>>>>>> ono
   m_Layer: 0
   m_Name: Forest_1
   m_TagString: Untagged
@@ -146,7 +140,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1456967744725320}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.24, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4922710824183748}
@@ -158,15 +152,9 @@ Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-<<<<<<< HEAD
-  m_GameObject: {fileID: 1472378384424814}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.542863, y: -11.349373, z: 0}
-=======
   m_GameObject: {fileID: 1846900131972642}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.100999996, y: -0.8, z: 0}
->>>>>>> ono
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4922710824183748}
@@ -202,23 +190,7 @@ Transform:
   m_Father: {fileID: 4583324626225084}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< HEAD
---- !u!65 &65990232985885412
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1700354091871790}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.3, y: 0.95, z: 0.2}
-  m_Center: {x: 0.1, y: 0, z: 0}
---- !u!95 &95164050451501866
-=======
 --- !u!95 &95439441478336848
->>>>>>> ono
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
@@ -240,23 +212,14 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-<<<<<<< HEAD
-  m_GameObject: {fileID: 1201231140510886}
-=======
   m_GameObject: {fileID: 1369994006774562}
->>>>>>> ono
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7aeb831ce0994c341a87b454680c2a35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
-  gimmickMaxRay: 2
---- !u!212 &212415478800843348
-=======
   gimmickMaxRay: 3
 --- !u!212 &212140372881670548
->>>>>>> ono
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

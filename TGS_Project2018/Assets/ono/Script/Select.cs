@@ -36,57 +36,40 @@ public class Select : MonoBehaviour {
     [SerializeField,Header("FadeOut")]
     GameObject fadeImage;
 
+    // ボタン入力
+    float speed = 1.0f;
+
     bool fadeFlg;
     // Use this for initialization
     void Start () {
+        SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "Test";
+
         //alfa = GetComponent<Image>().color.a;
 
-        maincamera = GetComponent<Camera>();
-	}
+        //maincamera = GetComponent<Camera>();
+    }
 
     // Update is called once per frame
     void Update()
     {
-        fadeImage.GetComponent<Image>().color = new Color(0, 0, 0, alfa);
+        //fadeImage.GetComponent<Image>().color = new Color(0, 0, 0, alfa);
 
-        
+        // ボタン入力
+        float selectX = Input.GetAxisRaw("Horizontal") * speed;
 
-        switch (StageNum)
+        if(selectX > 0)
         {
-            //ステージ１
-            case 0:
-                leftStage = SelectStage[2];
-                rightStage = SelectStage[1];
-
-                cameraRotate = 0;
-                break;
-            //ステージ２
-            case 1:
-                leftStage = SelectStage[0];
-                rightStage = SelectStage[2];
-                cameraRotate = 118.0f;
-                break;
-            //ステージ３
-            case 2:
-                leftStage = SelectStage[1];
-                rightStage = SelectStage[0];
-                cameraRotate = -118.0f;
-                break;
-
-            //case 3:
-            //    StageNum = 2;
-            //    break;
-
-            //case -1:
-            //    StageNum = 0;
-            //    break;
+            Right();
+        }else if(selectX < 0)
+        {
+            Left();
         }
 
         //if (flg == false)
         //{
         //    Scroll(scrollObject, cameraRotate);
         //}
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetButtonDown("Click"))
         {
             fadeFlg = true;
         }
@@ -98,6 +81,7 @@ public class Select : MonoBehaviour {
 
             if (alfa >= 1)
             {
+                StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                 Scene(stageName);
             }
         }
@@ -110,13 +94,47 @@ public class Select : MonoBehaviour {
             return;
         }
 
+        // ボタン入力を遮断
+        speed = 0.0f;
+
         int a = SelectStage.Length / 2;
         Debug.Log(StageNum);
        
         if(StageNum < SelectStage.Length - 1)
         {
 
-            StageNum++;
+            StageNum += 1;
+
+            switch (StageNum)
+            {
+                //ステージ１
+                case 0:
+                    leftStage = SelectStage[2];
+                    rightStage = SelectStage[1];
+
+                    cameraRotate = 0;
+
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "Test";
+                    break;
+                //ステージ２
+                case 1:
+                    leftStage = SelectStage[0];
+                    rightStage = SelectStage[2];
+
+                    cameraRotate = 120.0f;
+
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "Test_2";
+                    break;
+                //ステージ３
+                case 2:
+                    leftStage = SelectStage[1];
+                    rightStage = SelectStage[0];
+
+                    cameraRotate = -120.0f;
+
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "1-1";
+                    break;
+            }
 
             scrollObject = rightStage;
 
@@ -132,13 +150,39 @@ public class Select : MonoBehaviour {
             return;
         }
 
+        // ボタン入力を遮断
+        speed = 0.0f;
+
         int a = SelectStage.Length / 2;
 
         Debug.Log(StageNum);
 
        if(StageNum > 0)
         {
-            StageNum--;
+            StageNum -= 1;
+
+            switch (StageNum)
+            {
+                //ステージ１
+                case 0:
+                    leftStage = SelectStage[2];
+                    rightStage = SelectStage[1];
+
+                    cameraRotate = 0;
+                    break;
+                //ステージ２
+                case 1:
+                    leftStage = SelectStage[0];
+                    rightStage = SelectStage[2];
+                    cameraRotate = 120.0f;
+                    break;
+                //ステージ３
+                case 2:
+                    leftStage = SelectStage[1];
+                    rightStage = SelectStage[0];
+                    cameraRotate = -120.0f;
+                    break;
+            }
 
             scrollObject = leftStage;
 
@@ -153,12 +197,11 @@ public class Select : MonoBehaviour {
         flg = true;
         //Quaternion target = Quaternion.LookRotation(gameObject.transform.position - maincamera.transform.position);
         //maincamera.transform.rotation = Quaternion.RotateTowards(maincamera.transform.rotation, target, rollSpeed * Time.deltaTime);
-        //maincamera.transform.DORotate(new Vector3(maincamera.transform.rotation.x, cameraRotate, maincamera.transform.rotation.z), 0.5f).OnComplete(()=>
-        //{
-        //    flg = false;
-        //});
-
-
+        maincamera.transform.DORotate(new Vector3(maincamera.transform.rotation.x, cameraRotate, maincamera.transform.rotation.z), 0.5f).OnComplete(() =>
+        {
+            speed = 1.0f;
+            flg = false;
+        });
     }
 
     private IEnumerator TimeStand()
@@ -169,7 +212,6 @@ public class Select : MonoBehaviour {
 
     void Scene(string StageName)
     {
-
         SceneManager.LoadScene(StageName);
     }
 }
