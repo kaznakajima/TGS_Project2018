@@ -146,14 +146,14 @@ public class Player : StatusController {
         {
             foreach (var item in uvScroll)
             {
-                item.scrollSpeedX = 1.0f;
+                item.scrollSpeedX = -1.0f;
             }
         }
         else if (movePos.x < 0)
         {
             foreach (var item in uvScroll)
             {
-                item.scrollSpeedX = -1.0f;
+                item.scrollSpeedX = 1.0f;
             }
         }
         else if (movePos.x == 0)
