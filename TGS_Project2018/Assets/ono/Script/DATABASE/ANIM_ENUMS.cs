@@ -43,5 +43,9 @@ public class ANIM_ENUMS : MonoBehaviour {
         RESET,
     }
 
-
+    public enum STAGECHANGE
+    {
+        RIGHT=1,
+        LEFT=2
+    }
 }
