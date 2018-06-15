@@ -39,17 +39,13 @@ public class Select : MonoBehaviour {
     bool fadeFlg;
     // Use this for initialization
     void Start () {
-        //alfa = GetComponent<Image>().color.a;
-
-        maincamera = GetComponent<Camera>();
+        //maincamera = GetComponent<Camera>();
 	}
 
     // Update is called once per frame
     void Update()
     {
         fadeImage.GetComponent<Image>().color = new Color(0, 0, 0, alfa);
-
-        
 
         switch (StageNum)
         {
@@ -112,17 +108,17 @@ public class Select : MonoBehaviour {
 
         int a = SelectStage.Length / 2;
         Debug.Log(StageNum);
-       
+        StageNum++;
+
+            scrollObject = rightStage;
         if(StageNum < SelectStage.Length - 1)
         {
 
-            StageNum++;
-
-            scrollObject = rightStage;
+           
 
             //flg = true;
         }
-        Scroll(scrollObject, cameraRotate);
+        Scroll(scrollObject);
     }
 
     public void Left()
@@ -144,16 +140,16 @@ public class Select : MonoBehaviour {
 
             //flg = true;
         }
-        Scroll(scrollObject, cameraRotate);
+        Scroll(scrollObject);
 
     }
 
-    void Scroll(GameObject gameObject, float cameraRotate)
+    void Scroll(GameObject gameObject)
     {
         flg = true;
-        //Quaternion target = Quaternion.LookRotation(gameObject.transform.position - maincamera.transform.position);
-        //maincamera.transform.rotation = Quaternion.RotateTowards(maincamera.transform.rotation, target, rollSpeed * Time.deltaTime);
-        //maincamera.transform.DORotate(new Vector3(maincamera.transform.rotation.x, cameraRotate, maincamera.transform.rotation.z), 0.5f).OnComplete(()=>
+        Quaternion target = Quaternion.LookRotation(gameObject.transform.position - maincamera.transform.position);
+        maincamera.transform.rotation = Quaternion.RotateTowards(maincamera.transform.rotation, target, rollSpeed * Time.deltaTime);
+        //maincamera.transform.DORotate(new Vector3(maincamera.transform.rotation.x, cameraRotate, maincamera.transform.rotation.z), 0.5f).OnComplete(() =>
         //{
         //    flg = false;
         //});
@@ -169,7 +165,6 @@ public class Select : MonoBehaviour {
 
     void Scene(string StageName)
     {
-
         SceneManager.LoadScene(StageName);
     }
 }
