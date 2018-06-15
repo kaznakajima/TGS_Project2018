@@ -58,7 +58,8 @@ public class FireGimmick : GimmickController
         yield return new WaitForSeconds(2.25f);
 
         childTree.transform.parent = null;
-        childTree.AddComponent<Rigidbody>();
+        childTree.AddComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationY;
+        childTree.GetComponent<Rigidbody>().velocity = Vector2.zero;
         Destroy(gameObject);
     }
 
