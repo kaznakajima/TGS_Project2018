@@ -369,8 +369,10 @@ MonoBehaviour:
   - {fileID: 1419756809884646}
   - {fileID: 1468163783043208}
   - {fileID: 1879196459068372}
+  stageName: 
   StageNum: 0
   rollSpeed: 100
+  fadeImage: {fileID: 0}
 --- !u!114 &114304428076831866
 MonoBehaviour:
   m_ObjectHideFlags: 1
