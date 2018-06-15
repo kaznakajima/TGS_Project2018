@@ -42,6 +42,8 @@ public class Select : MonoBehaviour {
     bool fadeFlg;
     // Use this for initialization
     void Start () {
+        fadeFlg = false;
+        Camera_Select.flg = false;
         SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "Test";
 
         //alfa = GetComponent<Image>().color.a;

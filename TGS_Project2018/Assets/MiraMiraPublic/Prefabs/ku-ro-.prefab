@@ -54,6 +54,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4349074507640622}
+  - component: {fileID: 114207300373308088}
   m_Layer: 0
   m_Name: ku-ro-
   m_TagString: Untagged
@@ -235,7 +236,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 122
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!95 &95312382492536908
 Animator:
@@ -254,6 +255,17 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114207300373308088
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1216996513949806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9555112adbe16664185ddd09de85e2c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114580633831012054
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -271,6 +283,7 @@ MonoBehaviour:
   statusMaterial:
   - {fileID: 2100000, guid: 17a6def4a3aa66f458794fde41904001, type: 2}
   - {fileID: 2100000, guid: f77dc4132c6c99847bd146c99d92933f, type: 2}
+  statusAlpha: 0
   playerSpeed: 1
   playerMaxSpeed: 1.5
   playerMinSpeed: -1.5
@@ -278,8 +291,6 @@ MonoBehaviour:
   speed: 20
   jumpCoolDownCount: 0
   jumpCoolDownLimit: 0.5
-  climbTimeLimit: 120
-  climbFrame: 0
   rayRange: 2
   defaultRayRange: 0
   isGround: 0

@@ -8,6 +8,13 @@ public class IceGimmick : GimmickController
     [SerializeField]
     GameObject steam;
 
+    // 接触しているか
+    bool isContact;
+
+    // 滑らせるためのオブジェクト
+    Rigidbody playerRig;
+    Vector3 playerVec;
+
     // ギミック処理
     public override void GimmickAction()
     {
@@ -34,7 +41,7 @@ public class IceGimmick : GimmickController
         if (Physics.Raycast(ray, out rayHit, gimmickMaxRay))
         {
             // 鏡の属性が炎だったらギミック作動
-            if (rayHit.collider.name == objName && 
+            if (rayHit.collider.name == objName &&
                 rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.FIRE)
             {
                 gimmickMaxRay = 0.0f;
@@ -46,12 +53,54 @@ public class IceGimmick : GimmickController
     }
 
     // Use this for initialization
-    void Start () {
-        
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        RayHit(transform.up,"Enemy");
-	}
+    void Start() {
+
+    }
+
+    // Update is called once per frame
+    void Update() {
+        RayHit(transform.up, "Enemy");
+
+        if (isContact)
+            SlideMove(playerRig, playerVec);
+    }
+
+    void SlideMove(Rigidbody playerRig, Vector3 playerVec)
+    {
+        playerRig.AddForce(playerVec * 5.0f);
+    }
+
+    void OnCollisionEnter(Collision c)
+    {
+        if (c.gameObject.name == "Character")
+        {
+            isContact = true;
+            playerRig = c.gameObject.GetComponent<Rigidbody>();
+
+            if (c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 1)
+            {
+                playerVec = transform.right;
+            }
+            if (c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 2)
+            {
+                playerVec = -transform.right;
+            }
+            if (c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 0)
+            {
+                playerVec = transform.right;
+            }
+        }
+    }
+
+    void OnCollisionExit(Collision c)
+    {
+        if (c.gameObject.name == "Character")
+        {
+            isContact = false;
+            if(playerRig != null)
+            {
+                playerRig.velocity = Vector2.zero;
+            }
+        }
+    }
 }
