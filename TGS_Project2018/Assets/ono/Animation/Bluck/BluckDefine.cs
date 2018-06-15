@@ -8,6 +8,7 @@
 		,Bluck_Water = 5
 		,Bluck_Wind = 6
 		,Bluck_Stone = 7
-		,SIZE = 8
+		,Clime = 8
+		,SIZE = 9
 	}
 }
