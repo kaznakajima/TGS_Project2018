@@ -19,7 +19,8 @@ public class ANIM_ENUMS : MonoBehaviour {
         FIRE=4,
         WATER=5,
         WIND=6,
-        STONE=7
+        STONE=7,
+        CLIME=8,
     }
 
     public enum MIRROR
