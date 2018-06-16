@@ -177,7 +177,7 @@ Prefab:
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1690526498}
     - target: {fileID: 223660829705588208, guid: e9f831f6b3e564c48bb7e4f4232fa54f,
         type: 2}
       propertyPath: m_Camera
@@ -198,7 +198,27 @@ Prefab:
       propertyPath: fadeImage
       value: 
       objectReference: {fileID: 773863376}
-    m_RemovedComponents: []
+    - target: {fileID: 224402170664453706, guid: e9f831f6b3e564c48bb7e4f4232fa54f,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224323569512251092, guid: e9f831f6b3e564c48bb7e4f4232fa54f,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720559914595354, guid: e9f831f6b3e564c48bb7e4f4232fa54f,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Right
+      objectReference: {fileID: 0}
+    - target: {fileID: 1452765305577758, guid: e9f831f6b3e564c48bb7e4f4232fa54f, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 95797596060109154, guid: e9f831f6b3e564c48bb7e4f4232fa54f, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: e9f831f6b3e564c48bb7e4f4232fa54f, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1281905108
@@ -356,3 +376,9 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1690526498 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114156703485434680, guid: e9f831f6b3e564c48bb7e4f4232fa54f,
+    type: 2}
+  m_PrefabInternal: {fileID: 1235402226}
+  m_Script: {fileID: 11500000, guid: df96fe3b10f3c904ebbaf9ffe0c84d26, type: 3}

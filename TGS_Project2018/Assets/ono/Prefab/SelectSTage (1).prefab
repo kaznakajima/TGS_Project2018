@@ -386,6 +386,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maincamera: {fileID: 0}
+  SelectStage: []
+  stageName: 
+  StageNum: 0
+  rollSpeed: 0
+  fadeImage: {fileID: 0}
 --- !u!222 &222252328929981160
 CanvasRenderer:
   m_ObjectHideFlags: 1
