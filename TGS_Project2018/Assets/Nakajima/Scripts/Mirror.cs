@@ -137,10 +137,10 @@ public class Mirror : StatusController
 
     public IEnumerator DestroyAnimation(float x, float y)
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
 
         // 処理が終わったら姿を変える
-        transform.DOScale(new Vector3(x, y, 1.0f), 3.0f).OnComplete(() =>
+        transform.DOScale(new Vector3(x, y, 1.0f), 2.0f).OnComplete(() =>
         {
             Destroy(gameObject);
         });

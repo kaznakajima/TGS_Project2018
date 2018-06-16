@@ -42,9 +42,8 @@ public class Select : MonoBehaviour {
     bool fadeFlg;
     // Use this for initialization
     void Start () {
-        fadeFlg = false;
         Camera_Select.flg = false;
-        SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "Test";
+        SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "1-1";
 
         //alfa = GetComponent<Image>().color.a;
 
@@ -59,10 +58,10 @@ public class Select : MonoBehaviour {
         // ボタン入力
         float selectX = Input.GetAxisRaw("Horizontal") * speed;
 
-        if(selectX > 0)
+        if(selectX > 0 && !fadeFlg)
         {
             Right();
-        }else if(selectX < 0)
+        }else if(selectX < 0 && !fadeFlg)
         {
             Left();
         }
@@ -71,7 +70,7 @@ public class Select : MonoBehaviour {
         //{
         //    Scroll(scrollObject, cameraRotate);
         //}
-        if (Input.GetButtonDown("Click"))
+        if (Input.GetButtonDown("Click") && !flg)
         {
             fadeFlg = true;
         }
@@ -98,9 +97,6 @@ public class Select : MonoBehaviour {
 
         // ボタン入力を遮断
         speed = 0.0f;
-
-        int a = SelectStage.Length / 2;
-        Debug.Log(StageNum);
        
         if(StageNum < SelectStage.Length - 1)
         {
@@ -134,7 +130,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = -120.0f;
 
-                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "1-1";
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "1-2_2";
                     break;
             }
 
@@ -154,10 +150,6 @@ public class Select : MonoBehaviour {
 
         // ボタン入力を遮断
         speed = 0.0f;
-
-        int a = SelectStage.Length / 2;
-
-        Debug.Log(StageNum);
 
        if(StageNum > 0)
         {
