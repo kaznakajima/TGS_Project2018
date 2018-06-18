@@ -24,8 +24,15 @@ public class StatusController : MonoBehaviour
     // 自分のAnimator
     public Animator statusAnim;
 
+    // プレイヤーアイコン用SpriteRenderer ※Mirrorでは使わない
+    public SpriteRenderer[] playerIcons;
+
     // 変化用のマテリアル
     public Material[] statusMaterial;
+
+    // alphaステータス(透過用)
+    [HideInInspector]
+    public float statusAlpha;
 
     // ステータスに応じて姿を変えるメソッド
     // 使い方(継承先)　public override void StatusChange(STATUS 引数名)

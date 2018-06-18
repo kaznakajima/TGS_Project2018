@@ -7,6 +7,10 @@ public class Pauser : MonoBehaviour
 {
     static List<Pauser> targets = new List<Pauser>();   // ポーズ対象のスクリプト
     Behaviour[] pauseBehavs = null; // ポーズ対象のコンポーネント
+    public static void Clear()
+    {
+        targets.Clear();
+    }
     
 
     // 初期化
@@ -60,11 +64,18 @@ public class Pauser : MonoBehaviour
     // ポーズ
     public static void Pause()
     {
-        foreach (var obj in targets)
+        foreach (Pauser obj in GameObject.FindObjectsOfType<Pauser>())
         {
-            obj.OnPause();
-
+            if (obj != null)
+            {
+                obj.OnPause();
+            }
         }
+        //foreach (var obj in targets)
+        //{
+        //    obj.OnPause();
+
+        //}
     }
 
     // ポーズ解除

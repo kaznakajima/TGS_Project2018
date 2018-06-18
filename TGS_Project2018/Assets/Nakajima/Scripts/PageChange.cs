@@ -10,14 +10,21 @@ public class PageChange : PageController
     public float pageFlip;
     
     // ページのRenderer ※スクリーンショット用
-    //[SerializeField]
     MeshRenderer pageRenderer;
 
     // ページが変更中かどうか
-    bool pageChange;
+    public bool pageChange;
 
     // シーンが変わるかどうか
     public bool SceneChange;
+
+    // 現在のキャンバス
+    GameObject currentCanvas;
+
+    void Awake()
+    {
+
+    }
 
     // Use this for initialization
     void Start()
@@ -25,22 +32,25 @@ public class PageChange : PageController
         // Rendererの取得
         pageRenderer = GetComponent<MeshRenderer>();
 
+        pageRenderer.material.SetTexture("_MainTex", SingletonMonoBehaviour<ScreenShot>.Instance.tex2D);
+
+        // スクリーンショットを最前面へ
         pageFlip = 1;
-        StartCoroutine(ScreenShot());
+        pageRenderer.material.SetFloat("_Flip", pageFlip);
+
+        // キャンバスを不可視に
+        if(SceneManager.GetActiveScene().name == "Stage1_alpha")
+        {
+            currentCanvas = GameObject.FindObjectOfType<Button>().gameObject;
+            currentCanvas.SetActive(false);
+        }
+
+        StartCoroutine(PageAnimation(pageFlip, 5.0f));
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SceneChange = true;
-            StartCoroutine(ScreenShot());
-        }
-           
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            StartCoroutine(PageAnimation(pageFlip, 10.0f));
-        }
+
     }
 
     //ページをめくる、閉じるアニメーション
@@ -49,13 +59,18 @@ public class PageChange : PageController
         // ページが開いた、閉じた状態で変更中ならbreak
         if (pageFlip < -1 && pageChange || pageFlip > 1 && pageChange)
         {
+            // キャンバスを可視に
+            if (SceneManager.GetActiveScene().name == "Stage1_alpha")
+            {
+                currentCanvas.SetActive(true);
+            }
             pageChange = false;
-            //Camera.main.GetComponent<SceneController>().sceneCanvas.SetActive(true);
             yield break;
         }
 
         yield return new WaitForSeconds(0.05f);
 
+        // ページをめくる処理中
         pageChange = true;
 
         // ページを開くか、閉じるか(-1 開く、1 閉じる)
@@ -67,12 +82,6 @@ public class PageChange : PageController
         pageRenderer.material.SetFloat("_Flip", pageFlip);
 
         StartCoroutine(PageAnimation(flip, pageSp));
-    }
-
-    public void SelectScene()//セレクトシーンに移動
-    {
-        SceneChange = true;
-        StartCoroutine(ScreenShot());
     }
 
     // 現在のスクリーンショットを撮る
@@ -91,13 +100,6 @@ public class PageChange : PageController
         // スクリーンショットを最前面へ
         pageFlip = 1;
         pageRenderer.material.SetFloat("_Flip", pageFlip);
-
-        // シーン変更するならCanvasを不可視状態へ
-        if (SceneChange)
-        { 
-            //SceneManager.LoadScene("Select");
-            //Camera.main.GetComponent<SceneController>().sceneCanvas.SetActive(false);
-        }
 
         yield return new WaitForSeconds(1.0f);
 

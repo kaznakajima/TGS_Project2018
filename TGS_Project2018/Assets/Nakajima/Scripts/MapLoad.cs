@@ -7,6 +7,7 @@ using System;
 public class MapLoad : MonoBehaviour
 {
     // CSVファイル名
+    [HideInInspector]
     public string CSVName;
     // マップに配置するオブジェクト
     public GameObject[] mapObj;
@@ -16,14 +17,17 @@ public class MapLoad : MonoBehaviour
     // 読み込んだデータの二次元配列
     string[,] stageMapArray;
 
-    // 読み込んだデータの行数、列数
-    int height = 0, width = 0;
+    // 読み込んだデータの行数、
+    [HideInInspector]
+    public int height = 0, width = 0;
 
     // 読み込むデータ
     TextAsset CSV_txt;
 
     void Awake()
     {
+        CSVName = SingletonMonoBehaviour<ScreenShot>.Instance.csvName;
+
         CSV_txt = Resources.Load(CSVName) as TextAsset;
 
         // readCSVDataでCSVファイルをString型の配列に書き込み、convert2DArrayTypeでそれをint型に変換する
@@ -91,10 +95,10 @@ public class MapLoad : MonoBehaviour
             {
                 if (arrays[j, i] != -1 && arrays[j, i] <= mapObj.Length)
                 {
-
-                    Instantiate(mapObj[arrays[j, i]], 
+                    GameObject stageObj = Instantiate(mapObj[arrays[j, i]],
                             transform.position + new Vector3(i, -j, 0),
-                            new Quaternion(0.0f, 90.0f, 0.0f, 0.0f));
+                            Quaternion.identity);
+                    stageObj.transform.parent = transform;
                 }
             }
         }
