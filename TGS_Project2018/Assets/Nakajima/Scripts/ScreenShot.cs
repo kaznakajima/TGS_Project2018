@@ -22,7 +22,7 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
 
     // ステージ名のデータ
     [HideInInspector]
-    public string[] csvData = { "1-1", "Test_2", "1 - 2_2" };
+    public string[] csvData = { "1-1", "Test_2", "1-2_2" };
 
     // 現在のシーンのキャンバス
     [HideInInspector]

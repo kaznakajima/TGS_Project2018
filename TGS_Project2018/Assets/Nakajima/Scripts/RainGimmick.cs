@@ -17,10 +17,7 @@ public class RainGimmick : GimmickController
     public override void GimmickAction()
     {
         rainObj.GetComponent<ParticleSystem>().Stop();
-        transform.DOMove(new Vector3(transform.position.x, transform.position.y + 10.18f, transform.position.z), 2.0f).OnComplete(() =>
-        {
-            isMirror = false;
-        });
+        transform.DOMove(new Vector3(transform.position.x, transform.position.y + 10.18f, transform.position.z), 2.0f);
     }
 
     // Ray判定
@@ -41,6 +38,7 @@ public class RainGimmick : GimmickController
 
                 gimmickMaxRay = 0.0f;
                 Instantiate(rainObj, rayHit.collider.gameObject.transform);
+                GimmickAction();
                 // 重力を無視する
                 rayHit.collider.gameObject.GetComponent<Rigidbody>().useGravity = false;
                 // ミラーの消去コルーチン開始
@@ -59,9 +57,9 @@ public class RainGimmick : GimmickController
 	void Update () {
         RayHit(transform.up, "Enemy");
 
-        if(isMirror && mirrorObj == null)
-        {
-            GimmickAction();
-        }
+        //if(isMirror && mirrorObj == null)
+        //{
+        //    GimmickAction();
+        //}
     }
 }

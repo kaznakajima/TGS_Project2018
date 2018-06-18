@@ -44,6 +44,12 @@ public class PageChange : PageController
             currentCanvas = GameObject.FindObjectOfType<Button>().gameObject;
             currentCanvas.SetActive(false);
         }
+        // キャンバスを不可視に
+        if (SceneManager.GetActiveScene().name == "GameOverScene")
+        {
+            currentCanvas = GameObject.FindObjectOfType<ClearCon>().gameObject;
+            currentCanvas.SetActive(true);
+        }
 
         StartCoroutine(PageAnimation(pageFlip, 5.0f));
     }
@@ -61,6 +67,11 @@ public class PageChange : PageController
         {
             // キャンバスを可視に
             if (SceneManager.GetActiveScene().name == "Stage1_alpha")
+            {
+                currentCanvas.SetActive(true);
+            }
+            // キャンバスを可視に
+            if (SceneManager.GetActiveScene().name == "GameOverScene")
             {
                 currentCanvas.SetActive(true);
             }
