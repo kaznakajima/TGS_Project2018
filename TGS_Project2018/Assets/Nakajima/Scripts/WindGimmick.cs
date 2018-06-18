@@ -27,7 +27,7 @@ public class WindGimmick : GimmickController
                 gimmickMaxRay = 0.0f;
                 GimmickAction();
                 // ミラーの消去コルーチン開始
-                StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation(0.0f, 1.0f));
+                StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation(0.0f, 1.0f, 1.0f));
             }
         }
     }

@@ -36,15 +36,18 @@ public class Select : MonoBehaviour {
     [SerializeField,Header("FadeOut")]
     GameObject fadeImage;
 
+    // 自身のAudioSource
+    AudioSource myAudio;
+
     // ボタン入力
     float speed = 1.0f;
 
     bool fadeFlg;
     // Use this for initialization
     void Start () {
-        fadeFlg = false;
+        myAudio = GameObject.Find("Audio").gameObject.GetComponent<AudioSource>();
         Camera_Select.flg = false;
-        SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "Test";
+        SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[0];
 
         //alfa = GetComponent<Image>().color.a;
 
@@ -59,10 +62,10 @@ public class Select : MonoBehaviour {
         // ボタン入力
         float selectX = Input.GetAxisRaw("Horizontal") * speed;
 
-        if(selectX > 0)
+        if(selectX > 0 && !fadeFlg)
         {
             Right();
-        }else if(selectX < 0)
+        }else if(selectX < 0 && !fadeFlg)
         {
             Left();
         }
@@ -71,17 +74,18 @@ public class Select : MonoBehaviour {
         //{
         //    Scroll(scrollObject, cameraRotate);
         //}
-        if (Input.GetButtonDown("Click"))
+        if (Input.GetButtonDown("Click") && !flg)
         {
+            myAudio.PlayOneShot(myAudio.clip);
             fadeFlg = true;
         }
 
         if (fadeFlg)
         {
-            alfa += 0.5f * Time.deltaTime;
+            alfa += 1.0f * Time.deltaTime;
             Camera_Select.flg = true;
 
-            if (alfa >= 1)
+            if (alfa >= 2)
             {
                 StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                 Scene(stageName);
@@ -98,14 +102,12 @@ public class Select : MonoBehaviour {
 
         // ボタン入力を遮断
         speed = 0.0f;
-
-        int a = SelectStage.Length / 2;
-        Debug.Log(StageNum);
        
         if(StageNum < SelectStage.Length - 1)
         {
 
             StageNum += 1;
+            SingletonMonoBehaviour<ScreenShot>.Instance.stageNum = StageNum;
 
             switch (StageNum)
             {
@@ -116,7 +118,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = 0;
 
-                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "Test";
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[0];
                     break;
                 //ステージ２
                 case 1:
@@ -125,7 +127,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = 120.0f;
 
-                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "Test_2";
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[1];
                     break;
                 //ステージ３
                 case 2:
@@ -134,7 +136,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = -120.0f;
 
-                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "1-1";
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[2];
                     break;
             }
 
@@ -155,13 +157,10 @@ public class Select : MonoBehaviour {
         // ボタン入力を遮断
         speed = 0.0f;
 
-        int a = SelectStage.Length / 2;
-
-        Debug.Log(StageNum);
-
        if(StageNum > 0)
         {
             StageNum -= 1;
+            SingletonMonoBehaviour<ScreenShot>.Instance.stageNum = StageNum;
 
             switch (StageNum)
             {

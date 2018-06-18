@@ -24,6 +24,9 @@ public class StatusController : MonoBehaviour
     // 自分のAnimator
     public Animator statusAnim;
 
+    // プレイヤーアイコン用SpriteRenderer ※Mirrorでは使わない
+    public SpriteRenderer[] playerIcons;
+
     // 変化用のマテリアル
     public Material[] statusMaterial;
 

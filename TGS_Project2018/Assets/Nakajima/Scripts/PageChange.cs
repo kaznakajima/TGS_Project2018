@@ -18,6 +18,9 @@ public class PageChange : PageController
     // シーンが変わるかどうか
     public bool SceneChange;
 
+    // 現在のキャンバス
+    GameObject currentCanvas;
+
     void Awake()
     {
 
@@ -35,6 +38,13 @@ public class PageChange : PageController
         pageFlip = 1;
         pageRenderer.material.SetFloat("_Flip", pageFlip);
 
+        // キャンバスを不可視に
+        if(SceneManager.GetActiveScene().name == "Stage1_alpha")
+        {
+            currentCanvas = GameObject.FindObjectOfType<Button>().gameObject;
+            currentCanvas.SetActive(false);
+        }
+
         StartCoroutine(PageAnimation(pageFlip, 5.0f));
     }
 	
@@ -49,6 +59,11 @@ public class PageChange : PageController
         // ページが開いた、閉じた状態で変更中ならbreak
         if (pageFlip < -1 && pageChange || pageFlip > 1 && pageChange)
         {
+            // キャンバスを可視に
+            if (SceneManager.GetActiveScene().name == "Stage1_alpha")
+            {
+                currentCanvas.SetActive(true);
+            }
             pageChange = false;
             yield break;
         }
@@ -85,12 +100,6 @@ public class PageChange : PageController
         // スクリーンショットを最前面へ
         pageFlip = 1;
         pageRenderer.material.SetFloat("_Flip", pageFlip);
-
-        // シーン変更するならCanvasを不可視状態へ
-        if (SceneChange)
-        { 
-            
-        }
 
         yield return new WaitForSeconds(1.0f);
 
