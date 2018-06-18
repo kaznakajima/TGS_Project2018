@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CameraMove : MonoBehaviour {
@@ -8,24 +9,47 @@ public class CameraMove : MonoBehaviour {
      【カメラ移動クラス】
      位置はMainCameraオブジェクトのInspector上にあるoffsetにて変更可能
     */
+    MapLoad mapLoad;
+    Player player;
 
     public Transform playerTrans; // 追従する対象
     public Transform targetGimmick; // イベント時に追従する対象
+
     public Vector3 offset;  // カメラ位置の微調整用
+
     [SerializeField, Range(0, 600)] uint frameLimit; // ターゲットまでの所要移動時間（フレーム）
     [SerializeField] uint frameCount,endCount; // 現在の経過フレーム数
     [SerializeField] bool endFlg = false; // イベントカメラ移動の復路判定
-
+    [SerializeField] bool cameraEndFlg;
     public bool eventFlg = false; // イベントが発生しているか
 
     [SerializeField] Vector3 velocity,returnVelocity; // イベント時のカメラ移動量
+    [SerializeField] Vector3 topLeft;
+    [SerializeField] Vector3 buttomRight;
+    [SerializeField] Vector3 cameraMovePos;
 
-	// Use this for initialization
+    [SerializeField] float mapStartX,mapEndX;
+    [SerializeField] float edgeStartX, edgeEndX;
+    // Use this for initialization
 	void Start () {
+        mapLoad = FindObjectOfType<MapLoad>();
+        player = FindObjectOfType<Player>();
+        topLeft = GetTopLeft();
+        buttomRight = GetButtomRight();
+        mapStartX = 0;
+        mapEndX = Mathf.Max(mapLoad.width);
+        this.transform.position = new Vector3(mapStartX + edgeStartX, playerTrans.position.y + offset.y, playerTrans.position.z + offset.z);
+
     }
 	
 	// UpDateメソッド終了後に呼び出し
 	void LateUpdate () {
+        //if (Goal.clearFlg)
+        //{
+        //    return;
+        //}
+        topLeft = GetTopLeft();
+        buttomRight = GetButtomRight();
         // デバッグ用、F1キーが押されたらイベントカメラに切り替え
         if (Input.GetKeyDown(KeyCode.F1))
         {
@@ -38,13 +62,18 @@ public class CameraMove : MonoBehaviour {
         {
             StartCoroutine("EventMove");
         }
-        else
-        {
-            this.transform.position = playerTrans.position + offset;
-        }
-        
-	}
 
+        cameraMovePos = playerTrans.position;
+
+        cameraMovePos.x = Mathf.Clamp(cameraMovePos.x, mapStartX + edgeStartX, mapEndX - edgeEndX);
+        cameraMovePos.y = cameraMovePos.y + offset.y;
+        cameraMovePos.z = cameraMovePos.z + offset.z;
+
+        this.transform.position = cameraMovePos;
+
+    }
+
+    // イベントカメラ初期設定メソッド、目標地点のGameObjectを引数として使う
     public void EventCamera(GameObject targetObj)
     {
         targetGimmick = targetObj.GetComponent<Transform>();
@@ -83,6 +112,9 @@ public class CameraMove : MonoBehaviour {
 
     }
 
+    // イベントカメラモードの距離を計算するメソッド
+    // スタート地点から目標地点まで何秒で移動するかを計算
+    // MoveSmooth（第一引数：移動開始座標点、第二引数：移動終了座標点、第三引数：移動時間（単位：フレーム））
     static Vector3 MoveSmooth(Vector3 startPos, Vector3 endPos, uint frame)
     {
         return new Vector3((endPos.x - startPos.x) / (float)frame,
@@ -90,4 +122,17 @@ public class CameraMove : MonoBehaviour {
             (endPos.z - startPos.z) / (float)frame);
     }
 
+    private Vector3 GetTopLeft()
+    {
+        topLeft = Camera.main.ScreenToWorldPoint(Vector3.zero);
+        topLeft.Scale(new Vector3(1.0f, -1.0f, 1.0f));
+        return topLeft;
+    }
+
+    private Vector3 GetButtomRight()
+    {
+        buttomRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width,Screen.height,0));
+        buttomRight.Scale(new Vector3(1.0f, -1.0f, 1.0f));
+        return buttomRight;
+    }
 }
