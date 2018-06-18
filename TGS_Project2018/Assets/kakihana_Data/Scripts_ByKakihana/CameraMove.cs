@@ -24,12 +24,13 @@ public class CameraMove : MonoBehaviour {
     public bool eventFlg = false; // イベントが発生しているか
 
     [SerializeField] Vector3 velocity,returnVelocity; // イベント時のカメラ移動量
-    [SerializeField] Vector3 topLeft;
-    [SerializeField] Vector3 buttomRight;
+    public Vector3 topLeft;
+    public Vector3 buttomRight;
     [SerializeField] Vector3 cameraMovePos;
 
     [SerializeField] float mapStartX,mapEndX;
     [SerializeField] float edgeStartX, edgeEndX;
+    [SerializeField] float height,cameraHeight,heightOffset;
     // Use this for initialization
 	void Start () {
         mapLoad = FindObjectOfType<MapLoad>();
@@ -37,9 +38,11 @@ public class CameraMove : MonoBehaviour {
         topLeft = GetTopLeft();
         buttomRight = GetButtomRight();
         mapStartX = 0;
+        height = mapLoad.height;
+        cameraHeight = (Screen.height / 10);
+        heightOffset = Mathf.Abs((height - cameraHeight) / 2) + 1.0f ;
         mapEndX = Mathf.Max(mapLoad.width);
         this.transform.position = new Vector3(mapStartX + edgeStartX, playerTrans.position.y + offset.y, playerTrans.position.z + offset.z);
-
     }
 	
 	// UpDateメソッド終了後に呼び出し
@@ -66,7 +69,7 @@ public class CameraMove : MonoBehaviour {
         cameraMovePos = playerTrans.position;
 
         cameraMovePos.x = Mathf.Clamp(cameraMovePos.x, mapStartX + edgeStartX, mapEndX - edgeEndX);
-        cameraMovePos.y = cameraMovePos.y + offset.y;
+        cameraMovePos.y = Mathf.Clamp(cameraMovePos.y,-height + heightOffset,0);
         cameraMovePos.z = cameraMovePos.z + offset.z;
 
         this.transform.position = cameraMovePos;
