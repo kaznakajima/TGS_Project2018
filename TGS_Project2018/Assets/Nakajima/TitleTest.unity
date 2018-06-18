@@ -811,6 +811,7 @@ MonoBehaviour:
   tex2D: {fileID: 0}
   csvName: 
   currentCnavas: {fileID: 0}
+  stageNum: 0
 --- !u!4 &1122391582
 Transform:
   m_ObjectHideFlags: 0

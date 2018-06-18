@@ -43,7 +43,7 @@ public class Select : MonoBehaviour {
     // Use this for initialization
     void Start () {
         Camera_Select.flg = false;
-        SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "1-1";
+        SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[0];
 
         //alfa = GetComponent<Image>().color.a;
 
@@ -102,6 +102,7 @@ public class Select : MonoBehaviour {
         {
 
             StageNum += 1;
+            SingletonMonoBehaviour<ScreenShot>.Instance.stageNum = StageNum;
 
             switch (StageNum)
             {
@@ -112,7 +113,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = 0;
 
-                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "Test";
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[0];
                     break;
                 //ステージ２
                 case 1:
@@ -121,7 +122,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = 120.0f;
 
-                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "Test_2";
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[1];
                     break;
                 //ステージ３
                 case 2:
@@ -130,7 +131,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = -120.0f;
 
-                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "1-2_2";
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[2];
                     break;
             }
 
@@ -154,6 +155,7 @@ public class Select : MonoBehaviour {
        if(StageNum > 0)
         {
             StageNum -= 1;
+            SingletonMonoBehaviour<ScreenShot>.Instance.stageNum = StageNum;
 
             switch (StageNum)
             {

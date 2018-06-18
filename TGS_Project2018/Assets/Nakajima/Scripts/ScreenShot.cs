@@ -2,19 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// ----------------スクリーンショットをとるクラス-----------------------------------
+// ※参照の仕方
+// SingletonMonoBehaviour<ScreenShot>.Instance.変数名(またはメソッド)
+//----------------------------------------------------------------------------------------
+
+// どのシーンでも必要なのでシーンを変えても残るようにしてある。
+// どのシーン内でもいるためステージの名前などを変数として持たせてある。
 public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
 {
     // スクリーンショット
     [HideInInspector]
     public Texture2D tex2D;
 
-    // ステージ名
+    // 現在のステージ名
     [HideInInspector]
     public string csvName;
+
+    // ステージ名のデータ
+    [HideInInspector]
+    public string[] csvData = { "1-1", "Test_2", "1 - 2_2" };
 
     // 現在のシーンのキャンバス
     [HideInInspector]
     public GameObject currentCnavas;
+
+    // 現在のステージ数の取得
+    [HideInInspector]
+    public int stageNum;
 
     void Start()
     {

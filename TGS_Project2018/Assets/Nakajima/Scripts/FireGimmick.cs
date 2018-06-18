@@ -48,7 +48,7 @@ public class FireGimmick : GimmickController
     {
         Animator gimmickAnim = GetComponent<Animator>();
         gimmickAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.FOREST.BREAK);
-        GameObject childTree = GetComponentInChildren<BoxCollider>().gameObject;
+        GameObject childTree = GetComponentInChildren<CapsuleCollider>().gameObject;
 
         StartCoroutine(BreakForest(childTree));
     }
@@ -58,7 +58,7 @@ public class FireGimmick : GimmickController
         yield return new WaitForSeconds(2.25f);
 
         childTree.transform.parent = null;
-        childTree.AddComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationY;
+        childTree.AddComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX |  RigidbodyConstraints.FreezePositionZ;
         childTree.GetComponent<Rigidbody>().velocity = Vector2.zero;
         Destroy(gameObject);
     }

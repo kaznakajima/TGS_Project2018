@@ -353,4 +353,21 @@ public class PlayerCon : StatusController
         }
     }
 
+    void OnCollisionStay(Collision c)
+    {
+        if(c.gameObject.name == "GroundSlope")
+        {
+            if(statusAnim.GetInteger("BluckAnim") == 0)
+            {
+                myRigidbody.constraints = RigidbodyConstraints.FreezePositionX;
+            }
+            else
+            {
+                myRigidbody.constraints = RigidbodyConstraints.None;
+                myRigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
+                    RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+            }
+        }
+    }
+
 }
