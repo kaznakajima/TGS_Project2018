@@ -32,8 +32,12 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
     [HideInInspector]
     public int stageNum;
 
+    // 自身のAudioSource
+    AudioSource myAudio;
+
     void Start()
     {
+        myAudio = GetComponent<AudioSource>();
         DontDestroyOnLoad(this);
     }
 
@@ -51,5 +55,7 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
         tex2D = new Texture2D(Screen.width, Screen.height);
         tex2D.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
         tex2D.Apply();
+
+        myAudio.PlayOneShot(myAudio.clip);
     }
 }

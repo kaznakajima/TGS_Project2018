@@ -312,7 +312,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1316615561819584}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.959599, y: -5.5947323, z: 0}
+  m_LocalPosition: {x: 58.852486, y: -3.2893476, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 4243812994990344}
@@ -377,6 +377,7 @@ MonoBehaviour:
   status: 0
   statusSr: {fileID: 212314069910519096}
   statusAnim: {fileID: 95299774898352500}
+  playerIcons: []
   statusMaterial:
   - {fileID: 2100000, guid: 33c1bede640dc794992b59c7a0e87f5d, type: 2}
   - {fileID: 2100000, guid: 17a6def4a3aa66f458794fde41904001, type: 2}
@@ -402,11 +403,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   alpha: -1
-  time: 1
-  fadeTime: 1
   alphaJudge: 0
-  alphaFlg: 0
-  pos: {x: 0, y: 0, z: 0}
+  oldJudge: 0
+  playerPos: {x: 0, y: 0, z: 0}
+  actionMode: 0
+  changed: 0
 --- !u!198 &198125607147610244
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -20930,7 +20931,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 2484625d30ddfa0498107edf6bccd29b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

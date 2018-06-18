@@ -18,8 +18,13 @@ public class Button : MonoBehaviour
     int buttonState;
     float speed = 1.0f;
 
+    // 自身のAudioSource
+    AudioSource myAudio;
+
     void Start()
     {
+        myAudio = GameObject.Find("Audio").gameObject.GetComponent<AudioSource>();
+
         switch (SceneManager.GetActiveScene().name)
         {
             case "TitleTest":
@@ -38,6 +43,7 @@ public class Button : MonoBehaviour
         {
             if (Input.GetButtonDown("Pause"))
             {
+                myAudio.PlayOneShot(myAudio.clip);
                 Resume();
             }
 
@@ -78,6 +84,7 @@ public class Button : MonoBehaviour
                                 SelectScene();
                                 break;
                             case 1:
+                                myAudio.PlayOneShot(myAudio.clip);
                                 Exit();
                                 break;
                         }
@@ -88,14 +95,14 @@ public class Button : MonoBehaviour
                     if (inputY > 0.0f && buttonState > 0)
                     {
                         buttonState -= 1;
-                        selectObj.anchoredPosition += new Vector2(0, 120);
+                        selectObj.anchoredPosition += new Vector2(0, 90);
                         // 連続入力防止
                         speed = 0.0f;
                     }
                     else if (inputY < 0.0f && buttonState < 2)
                     {
                         buttonState += 1;
-                        selectObj.anchoredPosition -= new Vector2(0, 120);
+                        selectObj.anchoredPosition -= new Vector2(0, 90);
                         // 連続入力防止
                         speed = 0.0f;
                     }
@@ -110,6 +117,7 @@ public class Button : MonoBehaviour
                         switch (buttonState)
                         {
                             case 0:
+                                myAudio.PlayOneShot(myAudio.clip);
                                 Resume();
                                 break;
                             case 1:
@@ -127,6 +135,7 @@ public class Button : MonoBehaviour
         {
             if (Input.GetButtonDown("Pause"))
             {
+                myAudio.PlayOneShot(myAudio.clip);
                 Pause();
             }
         }

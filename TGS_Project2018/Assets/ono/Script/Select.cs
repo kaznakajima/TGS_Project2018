@@ -36,12 +36,16 @@ public class Select : MonoBehaviour {
     [SerializeField,Header("FadeOut")]
     GameObject fadeImage;
 
+    // 自身のAudioSource
+    AudioSource myAudio;
+
     // ボタン入力
     float speed = 1.0f;
 
     bool fadeFlg;
     // Use this for initialization
     void Start () {
+        myAudio = GameObject.Find("Audio").gameObject.GetComponent<AudioSource>();
         Camera_Select.flg = false;
         SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[0];
 
@@ -72,15 +76,16 @@ public class Select : MonoBehaviour {
         //}
         if (Input.GetButtonDown("Click") && !flg)
         {
+            myAudio.PlayOneShot(myAudio.clip);
             fadeFlg = true;
         }
 
         if (fadeFlg)
         {
-            alfa += 0.5f * Time.deltaTime;
+            alfa += 1.0f * Time.deltaTime;
             Camera_Select.flg = true;
 
-            if (alfa >= 1)
+            if (alfa >= 2)
             {
                 StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                 Scene(stageName);
