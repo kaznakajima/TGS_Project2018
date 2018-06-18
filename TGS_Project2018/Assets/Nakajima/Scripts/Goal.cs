@@ -8,11 +8,16 @@ public class Goal : MonoBehaviour
     // クリア判定
     public static bool clearFlg;
 
+    // クリア表示
+    GameObject clearObj;
+
     // クリア判定用オブジェクト
     GameObject player;
 
 	// Use this for initialization
 	void Start () {
+        clearObj = GameObject.Find("GameClear_Canvas").gameObject;
+        clearObj.SetActive(false);
         clearFlg = false;
 	}
 	
@@ -57,7 +62,11 @@ public class Goal : MonoBehaviour
         }
 
         // カメラ外に移動し終わったらシーン移動
-        StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-        SceneManager.LoadScene("GameClear");
+        if (clearFlg)
+        {
+            clearObj.SetActive(true);
+        }
+        //StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+        //SceneManager.LoadScene("GameClear");
     }
 }

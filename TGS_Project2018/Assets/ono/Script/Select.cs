@@ -62,10 +62,11 @@ public class Select : MonoBehaviour {
         // ボタン入力
         float selectX = Input.GetAxisRaw("Horizontal") * speed;
 
-        if(selectX > 0 && !fadeFlg)
+        if (selectX > 0 && !fadeFlg)
         {
             Right();
-        }else if(selectX < 0 && !fadeFlg)
+        }
+        else if (selectX < 0 && !fadeFlg)
         {
             Left();
         }
@@ -91,7 +92,7 @@ public class Select : MonoBehaviour {
                 Scene(stageName);
             }
         }
-       
+
     }
     public void Right()
     {
