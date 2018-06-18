@@ -8,6 +8,7 @@ public class GameMaster : MonoBehaviour {
 
     MapLoad mapLoad; // 残機を参照するステージクラス
     PageChange pc;
+    Player player;
 
     public Image[] bookValue =  new Image[5]; // 残り残機UI
 
@@ -20,6 +21,7 @@ public class GameMaster : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        player = FindObjectOfType<Player>();
         // 現在のシーンの名前を取得
         mapLoad = GameObject.Find("StageInit").GetComponent<MapLoad>();
         pc = GameObject.Find(changePageName).GetComponent<PageChange>(); // ページ遷移のコンポーネント取得
@@ -29,17 +31,20 @@ public class GameMaster : MonoBehaviour {
             case "1-1":
                 sketchBookValue = 5;
                 break;
-            case "Stage2":
-                sketchBookValue = 10;
+            case "Test":
+                sketchBookValue = 3;
+                break;
+            case "Test_2":
+                sketchBookValue = 3;
                 break;
             default:
                 sketchBookValue = 5;
                 break;
         }
         tempSketchValue = sketchBookValue; // 差分用変数の値を設定
-        for (int i = 0; i < 5; i++) // 残機UIの初期設定
+        for (int i = bookValue.Length ; i <bookValue.Length - sketchBookValue; i--) // 残機UIの初期設定
         {
-            bookValue[i].enabled = true;
+            bookValue[i].enabled = false;
         }
 	}
 	
@@ -51,6 +56,11 @@ public class GameMaster : MonoBehaviour {
             Debug.Log("スケッチブック消費");
             bookValue[sketchBookValue].enabled = false; // 残機UIを減らす
             tempSketchValue = sketchBookValue; // イベント後、再度値がおなじになるように設定
+        }
+        else if (sketchBookValue == -1 && pc.pageChange == false)
+        {
+            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+            SceneManager.LoadScene("GameOverScene");
         }
 	}
 

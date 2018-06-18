@@ -33,7 +33,7 @@ public class Player : StatusController {
     [SerializeField] bool isGround; // 接地しているか
     [SerializeField] bool climbFlg = false; // 上下移動可能か
     [SerializeField] bool shipFlg = false; // 船に乗っているか
-    [SerializeField] bool damageFlg = false; // ダメージを受けているか
+    public bool damageFlg = false; // ダメージを受けているか
     public bool changeFlg = false; // 変身しているか
     [SerializeField] bool pageChangeFlg = false; //ページがめくり終わったか
     [SerializeField] string changePageName; // ページ遷移クラスオブジェクトを取得するために必要な文字列型変数
@@ -42,9 +42,7 @@ public class Player : StatusController {
     Rigidbody myRigidbody; // 自分のRigidbody
     public SpriteRenderer[] myElement = new SpriteRenderer[4];
 
-    [SerializeField] Vector3 movePos; // 移動用変数
-    [SerializeField] Vector3 endPos; // 上下移動末端の座標を格納
-    [SerializeField] Vector3 climbPos; // 上下移動用ベクトル
+    public Vector3 movePos; // 移動用変数
     [SerializeField] Vector3 wayPointPos; // リスポーン地点保存用変数
     Vector3 startPos; // 上下移動開始点の座標を格納
     Vector3 oldVelocity; // なめらかに移動させるために必要な一時保存用ベクトル
@@ -53,9 +51,10 @@ public class Player : StatusController {
     void Start () {
         statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE); // アニメーションの初期設定
         gm = GameObject.Find("Master").GetComponent<GameMaster>(); // ゲームマスターコンポーネント取得
-        uvScroll = FindObjectsOfType<UVScroll>();
+        uvScroll = FindObjectsOfType<UVScroll>(); // スクロールクラスのコンポーネントを取得
         foreach (var item in uvScroll)
         {
+            // スクロール移動の初期設定は0に
             item.scrollSpeedX = 0.0f;
         }
         pageChange = GameObject.Find(changePageName).GetComponent<PageChange>(); // ページ遷移のコンポーネント取得
@@ -97,11 +96,6 @@ public class Player : StatusController {
                 // 歩行アニメーションOFF
                 statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
             }
-            if (Input.GetKeyDown(KeyCode.Space) == true || Input.GetKeyDown("joystick button 6"))
-            {
-                StartCoroutine(pageChange.ScreenShot());
-                gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
-            }
             if (Input.GetKeyDown(KeyCode.C) || Input.GetAxis("Vertical") <= -1.0f && jumpCoolDownCount >= jumpCoolDownLimit && climbFlg == false) // スペースキーが押されたら
             {
                 jumpFlg = true; // ジャンプフラグON
@@ -109,7 +103,7 @@ public class Player : StatusController {
             if (jumpFlg == true) // ジャンプフラグがONなら
             {
                 myRigidbody.velocity = Vector3.up * jumpSpeed; // ジャンプを移動ベクトルに代入
-                jumpCoolDownCount = 0.0f;
+                jumpCoolDownCount = 0.0f; // ジャンプクールダウンカウント初期化
                 jumpFlg = false; // ２段ジャンプを防ぐため、再度地面に設置しないとジャンプできないようにする
             }
             if (climbFlg == true) // 登り判定がONなら
@@ -142,45 +136,49 @@ public class Player : StatusController {
             }
         }
 
+        // キャラクターが右方向に移動していたら
         if (movePos.x > 0)
         {
             foreach (var item in uvScroll)
             {
+                // 左方向にスクロール
                 item.scrollSpeedX = -1.0f;
             }
         }
-        else if (movePos.x < 0)
+        else if (movePos.x < 0) // キャラクターが左方向に移動していたら
         {
             foreach (var item in uvScroll)
             {
+                // 右方向にスクロール
                 item.scrollSpeedX = 1.0f;
             }
         }
-        else if (movePos.x == 0)
+        else if (movePos.x == 0) // キャラクターが静止していたら
         {
             foreach (var item in uvScroll)
             {
+                // スクロールの移動量は０
                 item.scrollSpeedX = 0.0f;
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.Space) == true || Input.GetKeyDown("joystick button 6"))
+        {
+            StartCoroutine(pageChange.ScreenShot());
+            gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
+        }
+        // ダメージオブジェクトに接触した状態でページをめくられた場合
         if (pageChange.pageChange == true && damageFlg == true)
         {
-            // 保存された中間地点に移動する
-            gm.SavePosition(transform.position);
-            transform.position = gm.GetPosition();
-            damageFlg = false;
+            // アニメーションリセット
+            statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
+            transform.position = wayPointPos; // 保存された中間地点に移動する
+            damageFlg = false; // ダメージフラグOFF
         }
         else
         {
             gm.SavePosition(transform.position);
             transform.position = gm.GetPosition();
-        }
-
-        if (pageChange.pageChange == true && pageChange.pageFlip > -1 && gm.sketchBookValue == gm.tempSketchValue)
-        {
-            // ページがめくり終わったら残機を減らす
-            //damageFlg = true;
         }
 
         // 移動値を設定
@@ -208,8 +206,6 @@ public class Player : StatusController {
                 StatusChenge(STATUS.EARTH);
             }
         }
-
-
         // ↑↑キー入力書き換え処理ここまで↑↑
 
         // 移動値が入っている場合のみ移動を行う
@@ -220,26 +216,25 @@ public class Player : StatusController {
     public override void StatusChenge(STATUS _status)
     {
         SpriteRenderer playerSprite = gameObject.GetComponent<SpriteRenderer>();
-        // 変更先のステータスが現在のステータスと同じなら変身しない
-        // またページがめくり終わるまで変身できない
+        // ページがめくり終わるまで変身できない
         if (status != _status && pageChange.pageFlip < -1)
         {
             switch (_status)
             {
-                case STATUS.FIRE:
+                case STATUS.FIRE: // 炎属性に変身
                     FormChange((int)ANIM_ENUMS.BLUCK.FIRE, _status);
                     break;
-                case STATUS.WATER:
+                case STATUS.WATER: // 水属性に変身
                     FormChange((int)ANIM_ENUMS.BLUCK.WATER, _status);
                     break;
-                case STATUS.WIND:
+                case STATUS.WIND: // 風属性に変身
                     FormChange((int)ANIM_ENUMS.BLUCK.WIND, _status);
                     break;
-                case STATUS.EARTH:
+                case STATUS.EARTH: // 土属性に変身
                     FormChange((int)ANIM_ENUMS.BLUCK.STONE, _status);
                     break;
             }
-        }
+        }// 変更先のステータスが現在のステータスと同じなら元のキャラクターに戻る
         else if (status == _status && pageChange.pageFlip < -1)
         {
 
@@ -262,10 +257,33 @@ public class Player : StatusController {
             shipFlg = true;
         }
         // ダメージオブジェクトに接触したら
-        if (hit.gameObject.name == "Needle")
+        if (hit.gameObject.tag == "Needle")
         {
-            Debug.Log("ダメージを受けた");
-            damageFlg = true;
+            // ダメージアニメーション再生
+            statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.DAMAGE);
+            // デバッグ用最後の中間地点の座標を設定
+            wayPointPos = new Vector3(1.5f, 4.0f, 0.0f);
+            damageFlg = true; // ダメージフラグON
+        }
+    }
+
+    // プレイヤーが坂の上に立ったら
+    void OnCollisionStay(Collision c)
+    {
+        if (c.gameObject.name == "GroundSlope")
+        {
+            // 止まっているなら滑る
+            if (statusAnim.GetInteger("BluckAnim") == 0)
+            {
+                myRigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
+                    RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+            }
+            // 歩いているなら滑らない
+            else
+            {
+                myRigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
+                    RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+            }
         }
     }
 
@@ -279,11 +297,11 @@ public class Player : StatusController {
     }
     void OnTriggerExit(Collider hit)
     {
-        // 上り末端点から離れたら
+        // 登るオブジェクトから離れたら
         if (hit.gameObject.tag == "Climb") 
         {
             climbFlg = false; // 登り判定OFF
-            myRigidbody.useGravity = true;
+            myRigidbody.useGravity = true; // 重力ON
         }
 
     }
@@ -326,19 +344,22 @@ public class Player : StatusController {
             {
                 return false;
             }
+            // 何らかの属性に変身していたらキャラクターは動かない
             if (status != STATUS.NONE)
             {
                 return false;
             }
+            // ダメージオブジェクトに当たったらキャラクターは動かない
             if (damageFlg == true)
             {
                 return false;
             }
+            // ツタオブジェクトに当たったら一時的に接地判定無効化
             if (hit.collider.tag == "Climb")
             {
                 return false;
             }
-            jumpCoolDownCount += Time.deltaTime;
+            jumpCoolDownCount += Time.deltaTime; // 連続ジャンプ防止用のインターバルをカウント
             // デバッグ用Rayを画面に出力
             Debug.DrawRay(transform.position, Vector3.down * rayRange,Color.red); // デバッグ用に画面にRayを出力
             return true; // 接地している
