@@ -430,6 +430,7 @@ MonoBehaviour:
   status: 0
   statusSr: {fileID: 0}
   statusAnim: {fileID: 1569535212}
+  playerIcons: []
   statusMaterial: []
   statusAlpha: 0
   maxRay: 3
@@ -650,6 +651,7 @@ MonoBehaviour:
   status: 0
   statusSr: {fileID: 0}
   statusAnim: {fileID: 0}
+  playerIcons: []
   statusMaterial: []
   statusAlpha: 0
   playerSpeed: 1
@@ -674,8 +676,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   movePos: {x: 0, y: 0, z: 0}
-  endPos: {x: 0, y: 0, z: 0}
-  climbPos: {x: 0, y: 0, z: 0}
   wayPointPos: {x: 0, y: 0, z: 0}
 --- !u!212 &830920864
 SpriteRenderer:
@@ -1230,6 +1230,7 @@ MonoBehaviour:
   status: 0
   statusSr: {fileID: 1211820769}
   statusAnim: {fileID: 703988727}
+  playerIcons: []
   statusMaterial:
   - {fileID: 2100000, guid: 33c1bede640dc794992b59c7a0e87f5d, type: 2}
   - {fileID: 2100000, guid: 17a6def4a3aa66f458794fde41904001, type: 2}
@@ -1458,9 +1459,17 @@ MonoBehaviour:
   frameCount: 0
   endCount: 0
   endFlg: 0
+  cameraEndFlg: 0
   eventFlg: 0
   velocity: {x: 0, y: 0, z: 0}
   returnVelocity: {x: 0, y: 0, z: 0}
+  topLeft: {x: 0, y: 0, z: 0}
+  buttomRight: {x: 0, y: 0, z: 0}
+  cameraMovePos: {x: 0, y: 0, z: 0}
+  mapStartX: 0
+  mapEndX: 0
+  edgeStartX: 0
+  edgeEndX: 0
 --- !u!1 &1243743359
 GameObject:
   m_ObjectHideFlags: 0
@@ -1571,6 +1580,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  height: 0
+  width: 0
 --- !u!4 &1326317749
 Transform:
   m_ObjectHideFlags: 0
@@ -1678,15 +1689,17 @@ MonoBehaviour:
   - {fileID: 1594260757835426, guid: c9f4f596d9955314d941576f491b60ef, type: 2}
   - {fileID: 1504463264066390, guid: 198c57042998f1f43805bfc78a673799, type: 2}
   - {fileID: 1956373238541394, guid: 508ad9fb7a2c4db48b9202912ea32711, type: 2}
-  - {fileID: 1472378384424814, guid: 92763f8d280a01946b2ab5dc50af3a1b, type: 2}
+  - {fileID: 0}
   - {fileID: 1548353422384564, guid: 92e1e4122897a774abea43f3349df8db, type: 2}
-  - {fileID: 1995431537082454, guid: 44906381e1e25844dabbfb531568db34, type: 2}
+  - {fileID: 0}
   - {fileID: 1316615561819584, guid: 9c43ec6686544ca4c8aa39973c875a4c, type: 2}
   - {fileID: 1548353422384564, guid: 92e1e4122897a774abea43f3349df8db, type: 2}
   - {fileID: 1683814363346094, guid: 661c86c060657f54394f8244c5460580, type: 2}
   - {fileID: 1258899994022536, guid: 3729c4356707ddd49bf70b0f7c1739c1, type: 2}
   - {fileID: 1637453510840102, guid: 26540f55fd9e95649a3099231ec196c3, type: 2}
   - {fileID: 1302026836025900, guid: bd5c5b9b0bccf1542a9f7b7e36fb1efb, type: 2}
+  height: 0
+  width: 0
 --- !u!4 &1367077395
 Transform:
   m_ObjectHideFlags: 0
@@ -1779,7 +1792,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4349074507640622, guid: 562d8c337580d5c45b0ae3e9d055728d, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 1.5
+      value: 64.6
       objectReference: {fileID: 0}
     - target: {fileID: 4349074507640622, guid: 562d8c337580d5c45b0ae3e9d055728d, type: 2}
       propertyPath: m_LocalPosition.y
@@ -2116,7 +2129,7 @@ SpriteRenderer:
   m_Size: {x: 12.8, y: 9.6}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
 --- !u!1001 &1651879954
 Prefab:
@@ -2565,6 +2578,7 @@ MonoBehaviour:
   status: 1
   statusSr: {fileID: 0}
   statusAnim: {fileID: 0}
+  playerIcons: []
   statusMaterial: []
   statusAlpha: 0
   speed: 3
@@ -2792,7 +2806,7 @@ SpriteRenderer:
   m_Size: {x: 12.8, y: 9.6}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
 --- !u!1 &2088184003
 GameObject:
