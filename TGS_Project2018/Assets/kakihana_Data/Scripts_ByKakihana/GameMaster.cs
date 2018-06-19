@@ -10,12 +10,13 @@ public class GameMaster : MonoBehaviour {
     PageChange pc;
     Player player;
 
+    const int BOOK_MAX_SIZE = 5;
     public Image[] bookValue =  new Image[5]; // 残り残機UI
+    public GameObject[] bookValueObj = new GameObject[BOOK_MAX_SIZE];
 
     public int sketchBookValue; // 残りページ数
-    //string stageNo; // ステージ番号
     public int tempSketchValue; // 差分用一時保存変数
-    public Vector3 savePositon;
+    public Vector3 savePositon; // リスポーン用の座標を格納
 
     [SerializeField] string changePageName;
 
@@ -32,21 +33,21 @@ public class GameMaster : MonoBehaviour {
                 sketchBookValue = 5;
                 break;
             case "Test":
-                sketchBookValue = 3;
+                sketchBookValue = 5;
                 break;
             case "Test_2":
-                sketchBookValue = 3;
+                sketchBookValue = 5;
                 break;
             default:
                 sketchBookValue = 5;
                 break;
         }
         tempSketchValue = sketchBookValue; // 差分用変数の値を設定
-        for (int i = bookValue.Length ; i <bookValue.Length - sketchBookValue; i--) // 残機UIの初期設定
+        for (int i = bookValueObj.Length; i > bookValueObj.Length; i++) // 残機UIの初期設定
         {
-            bookValue[i].enabled = false;
+            bookValueObj[i].GetComponent<GameObject>();
         }
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -54,7 +55,7 @@ public class GameMaster : MonoBehaviour {
         if (sketchBookValue != tempSketchValue && pc.pageChange == true)
         {
             Debug.Log("スケッチブック消費");
-            bookValue[sketchBookValue].enabled = false; // 残機UIを減らす
+            bookValueObj[sketchBookValue].SetActive(false); // 残機UIを減らす
             tempSketchValue = sketchBookValue; // イベント後、再度値がおなじになるように設定
         }
         else if (sketchBookValue == -1 && pc.pageChange == false)
