@@ -9,15 +9,13 @@ public class Goal : MonoBehaviour
     public static bool clearFlg;
 
     // クリア表示
-    GameObject clearObj;
+    public static GameObject clearObj;
 
     // クリア判定用オブジェクト
     GameObject player;
 
 	// Use this for initialization
 	void Start () {
-        clearObj = GameObject.Find("GameClear_Canvas").gameObject;
-        clearObj.SetActive(false);
         clearFlg = false;
 	}
 	

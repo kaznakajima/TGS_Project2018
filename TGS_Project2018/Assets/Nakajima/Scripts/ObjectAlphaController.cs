@@ -82,7 +82,10 @@ public class ObjectAlphaController : MonoBehaviour
         if(GetPlayer().Min(playerPos => GetMirror().Min(mirrorPos => 
             Mathf.Abs(playerPos.transform.position.x - mirrorPos.transform.position.x))) <= 3)
         {
-            AlphaChange(0.75f);
+            if(GetMirror().Min(mirrorStatus => (int)mirrorStatus.status == 0))
+            {
+                AlphaChange(0.75f);
+            }
         }
         // 離れたらアイコンを隠す
         else if(GetPlayer().Min(playerPos => GetMirror().Min(mirrorPos =>
@@ -158,12 +161,7 @@ public class ObjectAlphaController : MonoBehaviour
 
             foreach (var player in GetPlayer())
             {
-                // 距離を再度確認
-                if(Mathf.Abs(mirror.gameObject.transform.position.x - player.gameObject.transform.position.x) > 3)
-                {
-                    return;
-                }
-
+                
                 foreach (var playerSr in player.myElement)
                 {
                     playerSr.color = new Color(playerSr.color.r, playerSr.color.g, playerSr.color.b, objAlpha);
