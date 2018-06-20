@@ -39,7 +39,7 @@ public class RainGimmick : GimmickController
 
                 gimmickMaxRay = 0.0f;
                 Instantiate(rainObj, rayHit.collider.gameObject.transform);
-                GimmickAction();
+                //GimmickAction();
                 // 重力を無視する
                 rayHit.collider.gameObject.GetComponent<Rigidbody>().useGravity = false;
                 // ミラーの消去コルーチン開始
