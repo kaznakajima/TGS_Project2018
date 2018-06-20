@@ -24,10 +24,13 @@ public class WindGimmick : GimmickController
             if (rayHit.collider.name == objName &&
                 rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.WIND)
             {
+                Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
+                // ギミックが作動するためリセットをできなくする
+                mirror.canReset = false;
                 gimmickMaxRay = 0.0f;
                 GimmickAction();
                 // ミラーの消去コルーチン開始
-                StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation(0.0f, 1.0f, 1.0f));
+                StartCoroutine(mirror.DestroyAnimation(0.0f, 1.0f, 1.0f));
             }
         }
     }
