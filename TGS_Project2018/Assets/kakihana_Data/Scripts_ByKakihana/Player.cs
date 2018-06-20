@@ -17,6 +17,7 @@ public class Player : StatusController {
 
     PageChange pageChange; // ページ遷移クラス
     GameMaster gm; // ゲームマスタークラス
+    CameraMove cameraMove;
     UVScroll[] uvScroll = new UVScroll[2];
 
     [SerializeField] float playerSpeed = 1.0f; // キャラクターのスピード
@@ -55,6 +56,7 @@ public class Player : StatusController {
         statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE); // アニメーションの初期設定
         gm = GameObject.Find("Master").GetComponent<GameMaster>(); // ゲームマスターコンポーネント取得
         uvScroll = FindObjectsOfType<UVScroll>(); // スクロールクラスのコンポーネントを取得
+        cameraMove = FindObjectOfType<CameraMove>();
         foreach (var item in uvScroll)
         {
             // スクロール移動の初期設定は0に
@@ -105,6 +107,10 @@ public class Player : StatusController {
             if (isright == false)
             {
                 //sprit
+            }
+            if (this.transform.position.x - 1 < cameraMove.mapStartX && movePos.x < 0)
+            {
+                movePos.x = 0;
             }
             if (Input.GetKeyDown(KeyCode.C) || Input.GetAxis("Vertical") <= -1.0f && jumpCoolDownCount >= jumpCoolDownLimit && climbFlg == false) // スペースキーが押されたら
             {
@@ -372,6 +378,12 @@ public class Player : StatusController {
             // ツタオブジェクトに当たったら一時的に接地判定無効化
             if (hit.collider.tag == "Climb")
             {
+                return false;
+            }
+            if (Goal.clearFlg == true)
+            {
+                movePos = Vector3.zero;
+                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
                 return false;
             }
             jumpCoolDownCount += Time.deltaTime; // 連続ジャンプ防止用のインターバルをカウント
