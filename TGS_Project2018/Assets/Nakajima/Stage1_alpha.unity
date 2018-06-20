@@ -461,6 +461,31 @@ Prefab:
       propertyPath: changePageName
       value: Page
       objectReference: {fileID: 0}
+    - target: {fileID: 114634046656737070, guid: 2b2072589fc39d54387431c033102fb0,
+        type: 2}
+      propertyPath: bookValueObj.Array.data[0]
+      value: 
+      objectReference: {fileID: 885011013}
+    - target: {fileID: 114634046656737070, guid: 2b2072589fc39d54387431c033102fb0,
+        type: 2}
+      propertyPath: bookValueObj.Array.data[1]
+      value: 
+      objectReference: {fileID: 1907637632}
+    - target: {fileID: 114634046656737070, guid: 2b2072589fc39d54387431c033102fb0,
+        type: 2}
+      propertyPath: bookValueObj.Array.data[2]
+      value: 
+      objectReference: {fileID: 603060933}
+    - target: {fileID: 114634046656737070, guid: 2b2072589fc39d54387431c033102fb0,
+        type: 2}
+      propertyPath: bookValueObj.Array.data[3]
+      value: 
+      objectReference: {fileID: 1932467063}
+    - target: {fileID: 114634046656737070, guid: 2b2072589fc39d54387431c033102fb0,
+        type: 2}
+      propertyPath: bookValueObj.Array.data[4]
+      value: 
+      objectReference: {fileID: 2088184003}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2b2072589fc39d54387431c033102fb0, type: 2}
   m_IsPrefabParent: 0

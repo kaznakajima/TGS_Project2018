@@ -40,18 +40,38 @@ public class ClearCon : MonoBehaviour
 
         if (Input.GetButtonDown("Click"))
         {
-            switch (state)
+            switch (SceneManager.GetActiveScene().name)
             {
-                case 0:
-                    StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-                    SceneManager.LoadScene("SelectTest");
+                case "GameOver":
+                    switch (state)
+                    {
+                        case 0:
+                            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                            SceneManager.LoadScene("SelectTest");
+                            break;
+                        case 1:
+                            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                            SceneManager.LoadScene("Stage1_alpha");
+                            break;
+                    }
+
+                    
                     break;
-                case 1:
-                    StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-                    SingletonMonoBehaviour<ScreenShot>.Instance.stageNum += 1;
-                    Debug.Log(SingletonMonoBehaviour<ScreenShot>.Instance.stageNum);
-                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[SingletonMonoBehaviour<ScreenShot>.Instance.stageNum];
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                case "Stage1_alpha":
+                    switch (state)
+                    {
+                        case 0:
+                            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                            SceneManager.LoadScene("SelectTest");
+                            break;
+                        case 1:
+                            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                            SingletonMonoBehaviour<ScreenShot>.Instance.stageNum += 1;
+                            Debug.Log(SingletonMonoBehaviour<ScreenShot>.Instance.stageNum);
+                            SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[SingletonMonoBehaviour<ScreenShot>.Instance.stageNum];
+                            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                            break;
+                    }
                     break;
             }
         }
