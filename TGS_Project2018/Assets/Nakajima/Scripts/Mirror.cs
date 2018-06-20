@@ -17,10 +17,18 @@ public class Mirror : StatusController
     // プレイヤーを映すためのオブジェクト(のちのち消す)
     public GameObject mirrorObj;
 
+    // 自身のAudioSource
+    AudioSource myAudio;
+
+    [SerializeField]
+    AudioClip[] SE;
+
     // Use this for initialization
     void Start () {
         // 方向を決定
         direction = -transform.right;
+        // 自身のAudioSourceを取得
+        myAudio = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -99,6 +107,7 @@ public class Mirror : StatusController
 
             // ステータス更新
             status = playerSt;
+            myAudio.PlayOneShot(SE[(int)status]);
 
             //mirrorAudio.PlayOneShot(mirrorSE[(int)status]);
 
@@ -138,6 +147,8 @@ public class Mirror : StatusController
     public IEnumerator DestroyAnimation(float x, float y, float time)
     {
         yield return new WaitForSeconds(0.5f);
+
+        DOTween.To(() => myAudio.volume, volume => myAudio.volume = volume, 0.0f, time);
 
         // 処理が終わったら姿を変える
         transform.DOScale(new Vector3(x, y, 1.0f), time).OnComplete(() =>
