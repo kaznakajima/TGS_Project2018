@@ -66,6 +66,7 @@ public class Player : StatusController {
         pageChange = GameObject.Find(changePageName).GetComponent<PageChange>(); // ページ遷移のコンポーネント取得
         myRigidbody = this.gameObject.GetComponent<Rigidbody>(); // RigidBodyコンポーネントを取得
         defaultRayRange = rayRange;
+        isright = true;
     }
 
     // Update is called once per frame
@@ -111,8 +112,10 @@ public class Player : StatusController {
                     statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE_LEFT);
                 }
             }
+            // 自キャラの座標x成分 - 1した値がマップの端点を超えておりかつそれ以上移動しようとしたら
             if (this.transform.position.x - 1 < cameraMove.mapStartX && movePos.x < 0)
             {
+                // 移動量は0にする
                 movePos.x = 0;
             }
             if (Input.GetKeyDown(KeyCode.C) || Input.GetAxis("Vertical") <= -1.0f && jumpCoolDownCount >= jumpCoolDownLimit && climbFlg == false) // スペースキーが押されたら
@@ -156,7 +159,6 @@ public class Player : StatusController {
             {
                 myRigidbody.useGravity = true; // 登り判定OFFで重力ON
             }
-
         }
 
         // キャラクターが右方向に移動していたら
