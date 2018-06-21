@@ -86,6 +86,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224721699293330004}
   - component: {fileID: 95155600502864718}
+  - component: {fileID: 114055332034422378}
   m_Layer: 5
   m_Name: Pivot
   m_TagString: Untagged
@@ -223,7 +224,6 @@ GameObject:
   - component: {fileID: 223131496068863252}
   - component: {fileID: 114296230924888040}
   - component: {fileID: 114539006029105800}
-  - component: {fileID: 114497537444063274}
   m_Layer: 5
   m_Name: GameOver_Canvas
   m_TagString: Untagged
@@ -418,6 +418,18 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114055332034422378
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1421127939000162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf00c633fbe29c4585f5dd1d948d7ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectObj: {fileID: 224470214096761976}
 --- !u!114 &114063647466208918
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -664,18 +676,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114497537444063274
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1695920895907360}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bf00c633fbe29c4585f5dd1d948d7ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selectObj: {fileID: 224470214096761976}
 --- !u!114 &114539006029105800
 MonoBehaviour:
   m_ObjectHideFlags: 1
