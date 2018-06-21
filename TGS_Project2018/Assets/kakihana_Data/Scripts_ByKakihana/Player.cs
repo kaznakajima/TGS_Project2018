@@ -139,18 +139,18 @@ public class Player : StatusController {
                 {
                     statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.CLIME);
                     movePos.y += speed;
-                    if (movePos.y >= playerMaxSpeed * 2)// 移動ベクトルが最小スピードを下回ったら
+                    if (movePos.y >= playerMaxSpeed)// 移動ベクトルが最小スピードを下回ったら
                     {
-                        movePos.y = playerMaxSpeed * 2;// 移動スピードは最小スピード固定
+                        movePos.y = playerMaxSpeed;// 移動スピードは最小スピード固定
                     }
                 }
                 else if (Input.GetAxisRaw("Vertical") < 0.0f)
                 {
                     statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.CLIME);
                     movePos.y += -speed;
-                    if (movePos.y <= playerMinSpeed * 2)// 移動ベクトルが最小スピードを下回ったら
+                    if (movePos.y <= playerMinSpeed)// 移動ベクトルが最小スピードを下回ったら
                     {
-                        movePos.y = playerMinSpeed * 2;// 移動スピードは最小スピード固定
+                        movePos.y = playerMinSpeed;// 移動スピードは最小スピード固定
                     }
                 }
                 else if (Input.GetAxisRaw("Vertical") == 0 && changeFlg == false && status == STATUS.NONE && climbFlg == false)
