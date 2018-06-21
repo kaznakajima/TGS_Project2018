@@ -101,12 +101,15 @@ public class Player : StatusController {
             else if (Input.GetAxisRaw("Horizontal") == 0 && changeFlg == false && status == STATUS.NONE)
             {
                 movePos = new Vector3(0.0f, 0.0f, 0.0f); // 移動量は０に
-                // 歩行アニメーションOFF
-                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
-            }
-            if (isright == false)
-            {
-                //sprit
+                // 最後の入力キーに応じてアイドルアニメーションを変更
+                if (isright == true)
+                {
+                    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
+                }
+                else if (isright == false)
+                {
+                    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE_LEFT);
+                }
             }
             if (this.transform.position.x - 1 < cameraMove.mapStartX && movePos.x < 0)
             {
