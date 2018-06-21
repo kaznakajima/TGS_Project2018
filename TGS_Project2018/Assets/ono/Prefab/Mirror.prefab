@@ -313,7 +313,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1316615561819584}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5858946, y: -4.4378757, z: 0}
+  m_LocalPosition: {x: 65.75107, y: -12.324223, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 4243812994990344}
@@ -333,7 +333,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 118
+  m_Constraints: 122
   m_CollisionDetection: 0
 --- !u!65 &65711348163894974
 BoxCollider:
@@ -466,10 +466,10 @@ MonoBehaviour:
   maxRay: 3
   mirrorObj: {fileID: 1300603614295460}
   SE:
-  - {fileID: 0}
+  - {fileID: 8300000, guid: eb2811d4558542a4385298e396c5673a, type: 3}
   - {fileID: 8300000, guid: 01a51271495ede14f8523c75adc31cfd, type: 3}
-  - {fileID: 8300000, guid: 4911dad39070e0548ba96472acb77d9a, type: 3}
-  - {fileID: 8300000, guid: 4911dad39070e0548ba96472acb77d9a, type: 3}
+  - {fileID: 8300000, guid: 5060189d8b771044da93398dbbc51871, type: 3}
+  - {fileID: 8300000, guid: 20add0878d4370c4ea4946e9158794e2, type: 3}
 --- !u!114 &114405516823977166
 MonoBehaviour:
   m_ObjectHideFlags: 1

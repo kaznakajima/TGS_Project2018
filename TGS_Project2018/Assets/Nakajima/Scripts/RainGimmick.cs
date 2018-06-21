@@ -37,9 +37,13 @@ public class RainGimmick : GimmickController
                 isMirror = true;
                 mirrorObj = rayHit.collider.gameObject;
 
+                Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
+                // ギミックが作動するためリセットをできなくする
+                mirror.canReset = false;
+
                 gimmickMaxRay = 0.0f;
                 Instantiate(rainObj, rayHit.collider.gameObject.transform);
-                //GimmickAction();
+
                 // 重力を無視する
                 rayHit.collider.gameObject.GetComponent<Rigidbody>().useGravity = false;
                 // ミラーの消去コルーチン開始

@@ -20,6 +20,8 @@ public class Player : StatusController {
     CameraMove cameraMove;
     UVScroll[] uvScroll = new UVScroll[2];
 
+    AudioSource myAudio;
+
     [SerializeField] float playerSpeed = 1.0f; // キャラクターのスピード
     [SerializeField] float playerMaxSpeed = 1.5f; // プレイヤーの最大スピード
     [SerializeField] float playerMinSpeed = -1.5f; // プレイヤーの最小スピード
@@ -53,6 +55,7 @@ public class Player : StatusController {
     [SerializeField] SpriteRenderer mySprite;
     // Use this for initialization
     void Start() {
+        myAudio = GetComponent<AudioSource>();
         statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE); // アニメーションの初期設定
         gm = GameObject.Find("Master").GetComponent<GameMaster>(); // ゲームマスターコンポーネント取得
         uvScroll = FindObjectsOfType<UVScroll>(); // スクロールクラスのコンポーネントを取得
@@ -101,12 +104,15 @@ public class Player : StatusController {
             else if (Input.GetAxisRaw("Horizontal") == 0 && changeFlg == false && status == STATUS.NONE)
             {
                 movePos = new Vector3(0.0f, 0.0f, 0.0f); // 移動量は０に
-                // 歩行アニメーションOFF
-                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
-            }
-            if (isright == false)
-            {
-                //sprit
+                // 最後の入力キーに応じてアイドルアニメーションを変更
+                if (isright == true)
+                {
+                    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
+                }
+                else if (isright == false)
+                {
+                    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE_LEFT);
+                }
             }
             if (this.transform.position.x - 1 < cameraMove.mapStartX && movePos.x < 0)
             {
@@ -331,6 +337,9 @@ public class Player : StatusController {
     {
         movePos = Vector3.zero;
         statusSr.material.shader = statusMaterial[0].shader;
+
+        myAudio.PlayOneShot(myAudio.clip);
+
         transform.DOScale(new Vector3(0, 0, 1), 1.0f).OnComplete(() =>
         {
             statusAnim.SetInteger("BluckAnim", changeNum);

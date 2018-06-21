@@ -14,6 +14,10 @@ public class Mirror : StatusController
     // 透明度
     float mirrorAlpha;
 
+    // リセットできるかどうか(ギミックが作動したならリセットさせない)
+    [HideInInspector]
+    public bool canReset = true;
+
     // プレイヤーを映すためのオブジェクト(のちのち消す)
     public GameObject mirrorObj;
 
@@ -35,6 +39,19 @@ public class Mirror : StatusController
 	void Update () {
         // Ray判定
         RayHit(direction, "Character");
+    }
+
+    // Mirrorのリセット
+    public void MirrorReset()
+    {
+        if (!canReset)
+        {
+            return;
+        }
+
+        StatusChenge(STATUS.NONE);
+        status = STATUS.NONE;
+        mirrorObj.SetActive(true);
     }
 
     // Rayの判定
@@ -73,14 +90,17 @@ public class Mirror : StatusController
     void FormChangeBefore(Player player)
     {
         GameObject Destroymirror = mirrorObj;
-        Destroy(Destroymirror);
+        Destroymirror.SetActive(false);
 
         maxRay = 0.0f;
 
         // 歪みシェーダーへ変更
         statusSr.material.shader = statusMaterial[1].shader;
 
-        //mirrorAudio.PlayOneShot(mirrorSE[(int)STATUS.NONE]);
+        if ((int)status == 0)
+        {
+            myAudio.PlayOneShot(SE[(int)status]);
+        }
 
         // 処理が終わったら姿を変える
         transform.DOScale(new Vector3(0.0f, 0.0f, 1.0f), 1.0f).OnComplete(() =>
@@ -96,8 +116,6 @@ public class Mirror : StatusController
         // Playerのステータスを取得
         STATUS playerSt = player.GetComponent<Player>().status;
         StatusChenge(playerSt);
-
-        //mirrorAudio.PlayOneShot(mirrorSE[(int)STATUS.NONE]);
 
         // 処理が終わったらシェーダー切り替え
         transform.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 1.0f).OnComplete(() =>
