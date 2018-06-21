@@ -59,14 +59,14 @@ public class Button : MonoBehaviour
                     if (inputY > 0.0f && buttonState > 0)
                     {
                         buttonState -= 1;
-                        selectObj.anchoredPosition += new Vector2(0, 100);
+                        selectObj.anchoredPosition += new Vector2(0, 162);
                         // 連続入力防止
                         speed = 0.0f;
                     }
                     else if (inputY < 0.0f && buttonState < 1)
                     {
                         buttonState += 1;
-                        selectObj.anchoredPosition -= new Vector2(0, 100);
+                        selectObj.anchoredPosition -= new Vector2(0, 162);
                         // 連続入力防止
                         speed = 0.0f;
                     }

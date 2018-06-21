@@ -20,6 +20,8 @@ public class Player : StatusController {
     CameraMove cameraMove;
     UVScroll[] uvScroll = new UVScroll[2];
 
+    AudioSource myAudio;
+
     [SerializeField] float playerSpeed = 1.0f; // キャラクターのスピード
     [SerializeField] float playerMaxSpeed = 1.5f; // プレイヤーの最大スピード
     [SerializeField] float playerMinSpeed = -1.5f; // プレイヤーの最小スピード
@@ -53,6 +55,7 @@ public class Player : StatusController {
     [SerializeField] SpriteRenderer mySprite;
     // Use this for initialization
     void Start() {
+        myAudio = GetComponent<AudioSource>();
         statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE); // アニメーションの初期設定
         gm = GameObject.Find("Master").GetComponent<GameMaster>(); // ゲームマスターコンポーネント取得
         uvScroll = FindObjectsOfType<UVScroll>(); // スクロールクラスのコンポーネントを取得
@@ -331,6 +334,9 @@ public class Player : StatusController {
     {
         movePos = Vector3.zero;
         statusSr.material.shader = statusMaterial[0].shader;
+
+        myAudio.PlayOneShot(myAudio.clip);
+
         transform.DOScale(new Vector3(0, 0, 1), 1.0f).OnComplete(() =>
         {
             statusAnim.SetInteger("BluckAnim", changeNum);
