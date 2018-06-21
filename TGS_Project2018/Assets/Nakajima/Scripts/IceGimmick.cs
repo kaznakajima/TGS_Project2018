@@ -10,6 +10,8 @@ public class IceGimmick : GimmickController
 
     // 接触しているか
     bool isContact;
+    // 滑る向き
+    float moveX;
 
     // 滑らせるためのオブジェクト
     Rigidbody playerRig;
@@ -44,10 +46,13 @@ public class IceGimmick : GimmickController
             if (rayHit.collider.name == objName &&
                 rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.FIRE)
             {
+                Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
+                // ギミックが作動するためリセットをできなくする
+                mirror.canReset = false;
                 gimmickMaxRay = 0.0f;
                 GimmickAction();
                 // ミラーの消去コルーチン開始
-                StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation(0.0f, 0.0f, 2.0f));
+                StartCoroutine(mirror.DestroyAnimation(0.0f, 0.0f, 2.0f));
             }
         }
     }
@@ -61,46 +66,36 @@ public class IceGimmick : GimmickController
     void Update() {
         RayHit(transform.up, "Enemy");
 
-        if (isContact)
-            SlideMove(playerRig, playerVec);
+
     }
 
-    void SlideMove(Rigidbody playerRig, Vector3 playerVec)
+    void SlideMove(float moveX)
     {
-        playerRig.AddForce(playerVec * 5.0f);
+
     }
 
     void OnCollisionEnter(Collision c)
     {
         if (c.gameObject.name == "Character")
         {
-            isContact = true;
-            playerRig = c.gameObject.GetComponent<Rigidbody>();
-
-            if (c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 1)
+            if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 1)
             {
-                playerVec = transform.right;
+                isContact = true;
+                moveX = 1.0f;
             }
-            if (c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 2)
+            else if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == -1)
             {
-                playerVec = -transform.right;
-            }
-            if (c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 0)
-            {
-                playerVec = transform.right;
+                isContact = true;
+                moveX = -1.0f;
             }
         }
     }
 
     void OnCollisionExit(Collision c)
     {
-        if (c.gameObject.name == "Character")
+        if(c.gameObject.name == "Character")
         {
             isContact = false;
-            if(playerRig != null)
-            {
-                playerRig.velocity = Vector2.zero;
-            }
         }
     }
 }

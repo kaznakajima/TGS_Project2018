@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 
 // ----------------スクリーンショットをとるクラス-----------------------------------
@@ -21,8 +22,7 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
     public string csvName;
 
     // ステージ名のデータ
-    [HideInInspector]
-    public string[] csvData = { "1-1", "Test_2", "1-2_2" };
+    public string[] csvData = { "1-1", "Test_2", "1-2_2"};
 
     // 現在のシーンのキャンバス
     [HideInInspector]
@@ -34,6 +34,18 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
 
     // 自身のAudioSource
     AudioSource myAudio;
+
+    // Playerを取得
+    public Player[] GetPlayer()
+    {
+        return FindObjectsOfType<Player>().ToArray();
+    }
+
+    // Mirrorを取得
+    public Mirror[] GetMirror()
+    {
+        return FindObjectsOfType<Mirror>().ToArray();
+    }
 
     void Start()
     {
@@ -57,5 +69,10 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
         tex2D.Apply();
 
         myAudio.PlayOneShot(myAudio.clip);
+
+        foreach(var mirror in GetMirror())
+        {
+            mirror.MirrorReset();
+        }
     }
 }

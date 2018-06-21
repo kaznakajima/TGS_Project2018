@@ -314,6 +314,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 935638c166b87b5478f8251b8c635b13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &1561778843
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4447787555566068, guid: e14d3ddeb2717074cb4e19ddc722e6b0, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4447787555566068, guid: e14d3ddeb2717074cb4e19ddc722e6b0, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4447787555566068, guid: e14d3ddeb2717074cb4e19ddc722e6b0, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4447787555566068, guid: e14d3ddeb2717074cb4e19ddc722e6b0, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4447787555566068, guid: e14d3ddeb2717074cb4e19ddc722e6b0, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4447787555566068, guid: e14d3ddeb2717074cb4e19ddc722e6b0, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4447787555566068, guid: e14d3ddeb2717074cb4e19ddc722e6b0, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4447787555566068, guid: e14d3ddeb2717074cb4e19ddc722e6b0, type: 2}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 95227400454217246, guid: e14d3ddeb2717074cb4e19ddc722e6b0,
+        type: 2}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 4391455c864a1934e9b0175542b7a7fb, type: 2}
+    - target: {fileID: 212418130455636650, guid: e14d3ddeb2717074cb4e19ddc722e6b0,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e4f5f6917b6c6b94ab9765038bad14af,
+        type: 3}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: e14d3ddeb2717074cb4e19ddc722e6b0, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1649239964
 GameObject:
   m_ObjectHideFlags: 0

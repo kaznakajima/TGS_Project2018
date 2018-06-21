@@ -10,57 +10,40 @@ public class GameMaster : MonoBehaviour {
     PageChange pc;
     Player player;
 
-    public Image[] bookValue =  new Image[5]; // 残り残機UI
+    const int BOOK_MAX_SIZE = 5;
+    public GameObject[] bookValueObj = new GameObject[BOOK_MAX_SIZE];
 
     public int sketchBookValue; // 残りページ数
-    //string stageNo; // ステージ番号
     public int tempSketchValue; // 差分用一時保存変数
-    public Vector3 savePositon;
+    public Vector3 savePositon; // リスポーン用の座標を格納
 
     [SerializeField] string changePageName;
 
 	// Use this for initialization
 	void Start () {
+        Goal.clearObj = GameObject.Find("GameClear_Canvas");
+        Goal.clearObj.SetActive(false);
         player = FindObjectOfType<Player>();
         // 現在のシーンの名前を取得
         mapLoad = GameObject.Find("StageInit").GetComponent<MapLoad>();
         pc = GameObject.Find(changePageName).GetComponent<PageChange>(); // ページ遷移のコンポーネント取得
-        // ステージによって残りページを設定
-        switch (mapLoad.CSVName)
+        sketchBookValue = BOOK_MAX_SIZE;
+        tempSketchValue = BOOK_MAX_SIZE; // 差分用変数の値を設定
+        for (int i = bookValueObj.Length; i > bookValueObj.Length; i++) // 残機UIの初期設定
         {
-            case "1-1":
-                sketchBookValue = 5;
-                break;
-            case "Test":
-                sketchBookValue = 3;
-                break;
-            case "Test_2":
-                sketchBookValue = 3;
-                break;
-            default:
-                sketchBookValue = 5;
-                break;
+            bookValueObj[i].GetComponent<GameObject>();
         }
-        tempSketchValue = sketchBookValue; // 差分用変数の値を設定
-        for (int i = bookValue.Length ; i <bookValue.Length - sketchBookValue; i--) // 残機UIの初期設定
-        {
-            bookValue[i].enabled = false;
-        }
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
+        CheckLife();
         // 現在の残りページと差分が異なれば残りページが減ったとみなす
         if (sketchBookValue != tempSketchValue && pc.pageChange == true)
         {
             Debug.Log("スケッチブック消費");
-            bookValue[sketchBookValue].enabled = false; // 残機UIを減らす
+            bookValueObj[sketchBookValue].SetActive(false); // 残機UIを減らす
             tempSketchValue = sketchBookValue; // イベント後、再度値がおなじになるように設定
-        }
-        else if (sketchBookValue == -1 && pc.pageChange == false)
-        {
-            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-            SceneManager.LoadScene("GameOverScene");
         }
 	}
 
@@ -74,5 +57,16 @@ public class GameMaster : MonoBehaviour {
         return savePositon;
     }
 
-
+    void CheckLife()
+    {
+        if (sketchBookValue != 0)
+        {
+            return;
+        }
+        if (sketchBookValue == 0 && pc.pageChange == false)
+        {
+            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+            SceneManager.LoadScene("GameOver");
+        }
+    }
 }

@@ -17,7 +17,10 @@ public class Player : StatusController {
 
     PageChange pageChange; // ページ遷移クラス
     GameMaster gm; // ゲームマスタークラス
+    CameraMove cameraMove;
     UVScroll[] uvScroll = new UVScroll[2];
+
+    AudioSource myAudio;
 
     [SerializeField] float playerSpeed = 1.0f; // キャラクターのスピード
     [SerializeField] float playerMaxSpeed = 1.5f; // プレイヤーの最大スピード
@@ -52,9 +55,11 @@ public class Player : StatusController {
     [SerializeField] SpriteRenderer mySprite;
     // Use this for initialization
     void Start() {
+        myAudio = GetComponent<AudioSource>();
         statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE); // アニメーションの初期設定
         gm = GameObject.Find("Master").GetComponent<GameMaster>(); // ゲームマスターコンポーネント取得
         uvScroll = FindObjectsOfType<UVScroll>(); // スクロールクラスのコンポーネントを取得
+        cameraMove = FindObjectOfType<CameraMove>();
         foreach (var item in uvScroll)
         {
             // スクロール移動の初期設定は0に
@@ -64,6 +69,7 @@ public class Player : StatusController {
         pageChange = GameObject.Find(changePageName).GetComponent<PageChange>(); // ページ遷移のコンポーネント取得
         myRigidbody = this.gameObject.GetComponent<Rigidbody>(); // RigidBodyコンポーネントを取得
         defaultRayRange = rayRange;
+        isright = true;
     }
 
     // Update is called once per frame
@@ -99,12 +105,21 @@ public class Player : StatusController {
             else if (Input.GetAxisRaw("Horizontal") == 0 && changeFlg == false && status == STATUS.NONE)
             {
                 movePos = new Vector3(0.0f, 0.0f, 0.0f); // 移動量は０に
-                // 歩行アニメーションOFF
-                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
+                // 最後の入力キーに応じてアイドルアニメーションを変更
+                if (isright == true)
+                {
+                    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
+                }
+                else if (isright == false)
+                {
+                    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE_LEFT);
+                }
             }
-            if (isright == false)
+            // 自キャラの座標x成分 - 1した値がマップの端点を超えておりかつそれ以上移動しようとしたら
+            if (this.transform.position.x - 1 < cameraMove.mapStartX && movePos.x < 0)
             {
-                //sprit
+                // 移動量は0にする
+                movePos.x = 0;
             }
             if (Input.GetKeyDown(KeyCode.C) || Input.GetAxis("Vertical") <= -1.0f && jumpCoolDownCount >= jumpCoolDownLimit && climbFlg == false) // スペースキーが押されたら
             {
@@ -147,7 +162,6 @@ public class Player : StatusController {
             {
                 myRigidbody.useGravity = true; // 登り判定OFFで重力ON
             }
-
         }
 
         // キャラクターが右方向に移動していたら
@@ -177,8 +191,9 @@ public class Player : StatusController {
         }
 
 
-        if (Input.GetKeyDown(KeyCode.Space) == true || Input.GetKeyDown("joystick button 6"))
+        if (Input.GetKeyDown(KeyCode.Space) == true || Input.GetKeyDown("joystick button 6") && pageChange.pageFlip <= -1)
         {
+            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
             StartCoroutine(pageChange.ScreenShot());
             gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
         }
@@ -325,6 +340,9 @@ public class Player : StatusController {
     {
         movePos = Vector3.zero;
         statusSr.material.shader = statusMaterial[0].shader;
+
+        myAudio.PlayOneShot(myAudio.clip);
+
         transform.DOScale(new Vector3(0, 0, 1), 1.0f).OnComplete(() =>
         {
             statusAnim.SetInteger("BluckAnim", changeNum);
@@ -372,6 +390,12 @@ public class Player : StatusController {
             // ツタオブジェクトに当たったら一時的に接地判定無効化
             if (hit.collider.tag == "Climb")
             {
+                return false;
+            }
+            if (Goal.clearFlg == true)
+            {
+                movePos = Vector3.zero;
+                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
                 return false;
             }
             jumpCoolDownCount += Time.deltaTime; // 連続ジャンプ防止用のインターバルをカウント

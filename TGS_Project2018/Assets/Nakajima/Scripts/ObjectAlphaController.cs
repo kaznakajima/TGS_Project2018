@@ -19,22 +19,10 @@ public class ObjectAlphaController : MonoBehaviour
     // アルファ判定用
     bool isReturn;
 
-    // Playerを取得
-    public Player[] GetPlayer()
-    {
-        return FindObjectsOfType<Player>().ToArray(); 
-    }
-
-    // Mirrorを取得
-    public Mirror[] GetMirror()
-    {
-        return map.GetComponentsInChildren<Mirror>().ToArray();
-    }
-
 	// Use this for initialization
 	void Start () {
         // アイコンを隠す
-        foreach (var player in GetPlayer())
+        foreach (var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
         {
             foreach (var playerSr in player.myElement)
             {
@@ -45,7 +33,7 @@ public class ObjectAlphaController : MonoBehaviour
                 Icons.color = new Color(Icons.color.r, Icons.color.g, Icons.color.b, playerIconAlpha);
             }
         }
-        foreach (var mirror in GetMirror())
+        foreach (var mirror in SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror())
         {
             mirror.mirrorObj.GetComponent<SpriteRenderer>().color = new Color(mirror.mirrorObj.GetComponent<SpriteRenderer>().color.r,
                 mirror.mirrorObj.GetComponent<SpriteRenderer>().color.g, mirror.mirrorObj.GetComponent<SpriteRenderer>().color.b, objAlpha);
@@ -62,13 +50,13 @@ public class ObjectAlphaController : MonoBehaviour
     void DistanceCheck()
     {
         // 鏡がいなければリターン
-        if(GetMirror().Length == 0)
+        if(SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Length == 0)
         {
             return;
         }
 
         // プレイヤーの状態をチェック
-        foreach (var player in GetPlayer())
+        foreach (var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
         {
             // プレイヤーが変化中はアイコンを出さない
             if (player.changeFlg || (int)player.status != 0)
@@ -79,13 +67,16 @@ public class ObjectAlphaController : MonoBehaviour
         }
 
         // プレイヤーと鏡が近づいたらアイコン表示
-        if(GetPlayer().Min(playerPos => GetMirror().Min(mirrorPos => 
+        if(SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer().Min(playerPos => SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorPos => 
             Mathf.Abs(playerPos.transform.position.x - mirrorPos.transform.position.x))) <= 3)
         {
-            AlphaChange(0.75f);
+            if(SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorStatus => (int)mirrorStatus.status == 0))
+            {
+                AlphaChange(0.75f);
+            }
         }
         // 離れたらアイコンを隠す
-        else if(GetPlayer().Min(playerPos => GetMirror().Min(mirrorPos =>
+        else if(SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer().Min(playerPos => SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorPos =>
             Mathf.Abs(playerPos.transform.position.x - mirrorPos.transform.position.x))) > 3)
         {
             AlphaChange(0.0f);
@@ -96,7 +87,7 @@ public class ObjectAlphaController : MonoBehaviour
     void IconsShow()
     {
         // プレイヤーの状態を確認
-        foreach (var playerStatus in GetPlayer())
+        foreach (var playerStatus in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
         {
             // 通常状態なら非表示
             if((int)playerStatus.status == 0)
@@ -146,7 +137,7 @@ public class ObjectAlphaController : MonoBehaviour
         DOTween.To(() => objAlpha, alpha => objAlpha = alpha, nextAlpha, 1.0f);
         //objAlpha = Mathf.Lerp(objAlpha, nextAlpha, 10.0f * Time.deltaTime);
 
-        foreach (var mirror in GetMirror())
+        foreach (var mirror in SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror())
         {
             if (mirror.mirrorObj == null)
             {
@@ -156,14 +147,9 @@ public class ObjectAlphaController : MonoBehaviour
             mirror.mirrorObj.GetComponent<SpriteRenderer>().color = new Color(mirror.mirrorObj.GetComponent<SpriteRenderer>().color.r,
                 mirror.mirrorObj.GetComponent<SpriteRenderer>().color.g, mirror.mirrorObj.GetComponent<SpriteRenderer>().color.b, objAlpha);
 
-            foreach (var player in GetPlayer())
+            foreach (var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
             {
-                // 距離を再度確認
-                if(Mathf.Abs(mirror.gameObject.transform.position.x - player.gameObject.transform.position.x) > 3)
-                {
-                    return;
-                }
-
+                
                 foreach (var playerSr in player.myElement)
                 {
                     playerSr.color = new Color(playerSr.color.r, playerSr.color.g, playerSr.color.b, objAlpha);

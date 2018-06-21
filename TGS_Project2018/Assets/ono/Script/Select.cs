@@ -119,7 +119,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = 0;
 
-                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[0];
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
                 //ステージ２
                 case 1:
@@ -128,7 +128,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = 120.0f;
 
-                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[1];
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
                 //ステージ３
                 case 2:
@@ -137,7 +137,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = -120.0f;
 
-                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[2];
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
             }
 

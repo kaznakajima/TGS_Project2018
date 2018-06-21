@@ -28,7 +28,7 @@ public class CameraMove : MonoBehaviour {
     public Vector3 buttomRight;
     [SerializeField] Vector3 cameraMovePos;
 
-    [SerializeField] float mapStartX,mapEndX;
+    public float mapStartX,mapEndX;
     [SerializeField] float edgeStartX, edgeEndX;
     [SerializeField] float height,cameraHeight,heightOffset;
     // Use this for initialization
@@ -40,17 +40,19 @@ public class CameraMove : MonoBehaviour {
         mapStartX = 0;
         height = mapLoad.height;
         cameraHeight = (Screen.height / 10);
-        heightOffset = Mathf.Abs((height - cameraHeight) / 2) + 1.0f ;
+        heightOffset = 5.5f;
         mapEndX = Mathf.Max(mapLoad.width);
-        this.transform.position = new Vector3(mapStartX + edgeStartX, playerTrans.position.y + offset.y, playerTrans.position.z + offset.z);
+        edgeStartX = Mathf.Abs(mapStartX - buttomRight.x + 0.5f);
+        edgeEndX = Mathf.Abs(mapEndX - edgeStartX);
+        this.transform.position = new Vector3(edgeStartX, playerTrans.position.y + offset.y, playerTrans.position.z + offset.z);
     }
 	
 	// UpDateメソッド終了後に呼び出し
 	void LateUpdate () {
-        //if (Goal.clearFlg)
-        //{
-        //    return;
-        //}
+        if (Goal.clearFlg)
+        {
+            return;
+        }
         topLeft = GetTopLeft();
         buttomRight = GetButtomRight();
         // デバッグ用、F1キーが押されたらイベントカメラに切り替え
@@ -68,7 +70,7 @@ public class CameraMove : MonoBehaviour {
 
         cameraMovePos = playerTrans.position;
 
-        cameraMovePos.x = Mathf.Clamp(cameraMovePos.x, mapStartX + edgeStartX, mapEndX - edgeEndX);
+        cameraMovePos.x = Mathf.Clamp(cameraMovePos.x, edgeStartX, edgeEndX);
         cameraMovePos.y = Mathf.Clamp(cameraMovePos.y,-height + heightOffset,0);
         cameraMovePos.z = cameraMovePos.z + offset.z;
 

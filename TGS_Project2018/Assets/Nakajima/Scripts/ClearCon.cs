@@ -12,9 +12,6 @@ public class ClearCon : MonoBehaviour
     // 現在のステート
     int state;
 
-    // 自身のAudioSource
-    AudioSource myAudio;
-
     // ボタン入力
     float speed = 1.0f;
 
@@ -29,31 +26,52 @@ public class ClearCon : MonoBehaviour
     void Update()
     {
         // ボタン入力
-        float selectX = Input.GetAxisRaw("Horizontal") * speed;
+        float selectX = Input.GetAxisRaw("Vertical") * speed;
         if(selectX > 0)
         {
-            state = 1;
-            selectObj.anchoredPosition = new Vector2(125.0f, selectObj.anchoredPosition.y);
+            state = 0;
+            selectObj.anchoredPosition = new Vector2(95.0f, selectObj.anchoredPosition.y);
         }
         else if(selectX < 0)
         {
-            state = -1;
-            selectObj.anchoredPosition = new Vector2(-435.0f, selectObj.anchoredPosition.y);
+            state = 1;
+            selectObj.anchoredPosition = new Vector2(-45.0f, selectObj.anchoredPosition.y);
         }
 
         if (Input.GetButtonDown("Click"))
         {
-            switch (state)
+            switch (SceneManager.GetActiveScene().name)
             {
-                case 0:
-                    StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-                    SceneManager.LoadScene("SelectTest");
+                case "GameOver":
+                    switch (state)
+                    {
+                        case 0:
+                            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                            SceneManager.LoadScene("SelectTest");
+                            break;
+                        case 1:
+                            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                            SceneManager.LoadScene("Stage1_alpha");
+                            break;
+                    }
+
+                    
                     break;
-                case 1:
-                    StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-                    SingletonMonoBehaviour<ScreenShot>.Instance.stageNum += 1;
-                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[SingletonMonoBehaviour<ScreenShot>.Instance.stageNum];
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                case "Stage1_alpha":
+                    switch (state)
+                    {
+                        case 0:
+                            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                            SceneManager.LoadScene("SelectTest");
+                            break;
+                        case 1:
+                            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                            SingletonMonoBehaviour<ScreenShot>.Instance.stageNum += 1;
+                            Debug.Log(SingletonMonoBehaviour<ScreenShot>.Instance.stageNum);
+                            SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[SingletonMonoBehaviour<ScreenShot>.Instance.stageNum];
+                            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                            break;
+                    }
                     break;
             }
         }

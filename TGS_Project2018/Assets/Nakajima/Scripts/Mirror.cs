@@ -14,19 +14,44 @@ public class Mirror : StatusController
     // 透明度
     float mirrorAlpha;
 
+    // リセットできるかどうか(ギミックが作動したならリセットさせない)
+    [HideInInspector]
+    public bool canReset = true;
+
     // プレイヤーを映すためのオブジェクト(のちのち消す)
     public GameObject mirrorObj;
+
+    // 自身のAudioSource
+    AudioSource myAudio;
+
+    [SerializeField]
+    AudioClip[] SE;
 
     // Use this for initialization
     void Start () {
         // 方向を決定
         direction = -transform.right;
+        // 自身のAudioSourceを取得
+        myAudio = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
         // Ray判定
         RayHit(direction, "Character");
+    }
+
+    // Mirrorのリセット
+    public void MirrorReset()
+    {
+        if (!canReset)
+        {
+            return;
+        }
+
+        StatusChenge(STATUS.NONE);
+        status = STATUS.NONE;
+        mirrorObj.SetActive(true);
     }
 
     // Rayの判定
@@ -65,14 +90,17 @@ public class Mirror : StatusController
     void FormChangeBefore(Player player)
     {
         GameObject Destroymirror = mirrorObj;
-        Destroy(Destroymirror);
+        Destroymirror.SetActive(false);
 
         maxRay = 0.0f;
 
         // 歪みシェーダーへ変更
         statusSr.material.shader = statusMaterial[1].shader;
 
-        //mirrorAudio.PlayOneShot(mirrorSE[(int)STATUS.NONE]);
+        if ((int)status == 0)
+        {
+            myAudio.PlayOneShot(SE[(int)status]);
+        }
 
         // 処理が終わったら姿を変える
         transform.DOScale(new Vector3(0.0f, 0.0f, 1.0f), 1.0f).OnComplete(() =>
@@ -89,8 +117,6 @@ public class Mirror : StatusController
         STATUS playerSt = player.GetComponent<Player>().status;
         StatusChenge(playerSt);
 
-        //mirrorAudio.PlayOneShot(mirrorSE[(int)STATUS.NONE]);
-
         // 処理が終わったらシェーダー切り替え
         transform.DOScale(new Vector3(1.0f, 1.0f, 1.0f), 1.0f).OnComplete(() =>
         {
@@ -99,6 +125,7 @@ public class Mirror : StatusController
 
             // ステータス更新
             status = playerSt;
+            myAudio.PlayOneShot(SE[(int)status]);
 
             //mirrorAudio.PlayOneShot(mirrorSE[(int)status]);
 
@@ -138,6 +165,8 @@ public class Mirror : StatusController
     public IEnumerator DestroyAnimation(float x, float y, float time)
     {
         yield return new WaitForSeconds(0.5f);
+
+        DOTween.To(() => myAudio.volume, volume => myAudio.volume = volume, 0.0f, time);
 
         // 処理が終わったら姿を変える
         transform.DOScale(new Vector3(x, y, 1.0f), time).OnComplete(() =>
