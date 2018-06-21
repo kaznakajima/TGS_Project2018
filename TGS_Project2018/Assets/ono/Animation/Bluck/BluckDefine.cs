@@ -9,6 +9,7 @@
 		,Bluck_Wind = 6
 		,Bluck_Stone = 7
 		,Clime = 8
-		,SIZE = 9
+		,Idle_Left = 9
+		,SIZE = 10
 	}
 }
