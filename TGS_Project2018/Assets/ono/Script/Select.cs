@@ -62,10 +62,11 @@ public class Select : MonoBehaviour {
         // ボタン入力
         float selectX = Input.GetAxisRaw("Horizontal") * speed;
 
-        if(selectX > 0 && !fadeFlg)
+        if (selectX > 0 && !fadeFlg)
         {
             Right();
-        }else if(selectX < 0 && !fadeFlg)
+        }
+        else if (selectX < 0 && !fadeFlg)
         {
             Left();
         }
@@ -91,7 +92,7 @@ public class Select : MonoBehaviour {
                 Scene(stageName);
             }
         }
-       
+
     }
     public void Right()
     {
@@ -118,7 +119,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = 0;
 
-                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[0];
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
                 //ステージ２
                 case 1:
@@ -127,7 +128,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = 120.0f;
 
-                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[1];
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
                 //ステージ３
                 case 2:
@@ -136,7 +137,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = -120.0f;
 
-                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[2];
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
             }
 

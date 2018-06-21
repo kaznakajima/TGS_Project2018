@@ -7,6 +7,10 @@ public class Goal : MonoBehaviour
 {
     // クリア判定
     public static bool clearFlg;
+    bool onWater;
+
+    // クリア表示
+    public static GameObject clearObj;
 
     // クリア判定用オブジェクト
     GameObject player;
@@ -17,7 +21,13 @@ public class Goal : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
+        // 水の上以外はクリア判定をしない
+        if (!onWater)
+        {
+            return;
+        }
 
         // Playerが取得できているなら実行
         if(player != null && clearFlg == false)
@@ -40,6 +50,11 @@ public class Goal : MonoBehaviour
 
     void OnCollisionEnter(Collision hit)
     {
+        // 水の上かどうかの判定
+        if(hit.gameObject.name == "Water")
+        {
+            onWater = true;
+        }
         // Playerを取得
         if(hit.gameObject.name == "Character")
         {
@@ -57,7 +72,11 @@ public class Goal : MonoBehaviour
         }
 
         // カメラ外に移動し終わったらシーン移動
-        StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-        SceneManager.LoadScene("GameClear");
+        if (clearFlg)
+        {
+            clearObj.SetActive(true);
+        }
+        //StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+        //SceneManager.LoadScene("GameClear");
     }
 }

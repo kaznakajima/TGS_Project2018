@@ -17,6 +17,7 @@ public class Player : StatusController {
 
     PageChange pageChange; // ページ遷移クラス
     GameMaster gm; // ゲームマスタークラス
+    CameraMove cameraMove;
     UVScroll[] uvScroll = new UVScroll[2];
 
     [SerializeField] float playerSpeed = 1.0f; // キャラクターのスピード
@@ -27,7 +28,9 @@ public class Player : StatusController {
     [SerializeField] float jumpCoolDownCount = 0.0f; // ジャンプのクールダウンカウント
     [SerializeField] float jumpCoolDownLimit = 0.5f; // ジャンプ再使用までの時間
     [SerializeField] float rayRange = 1.0f; // 接地判定の距離 
+    [SerializeField] float rayRangeH;
     [SerializeField] float defaultRayRange; // 保存用設置判定の距離
+    [SerializeField] bool isright;
 
     bool jumpFlg = false; // ジャンプ可能か
     [SerializeField] bool isGround; // 接地しているか
@@ -47,23 +50,26 @@ public class Player : StatusController {
     Vector3 startPos; // 上下移動開始点の座標を格納
     Vector3 oldVelocity; // なめらかに移動させるために必要な一時保存用ベクトル
 
+    [SerializeField] SpriteRenderer mySprite;
     // Use this for initialization
-    void Start () {
+    void Start() {
         statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE); // アニメーションの初期設定
         gm = GameObject.Find("Master").GetComponent<GameMaster>(); // ゲームマスターコンポーネント取得
         uvScroll = FindObjectsOfType<UVScroll>(); // スクロールクラスのコンポーネントを取得
+        cameraMove = FindObjectOfType<CameraMove>();
         foreach (var item in uvScroll)
         {
             // スクロール移動の初期設定は0に
             item.scrollSpeedX = 0.0f;
         }
+        mySprite = gameObject.GetComponent<SpriteRenderer>();
         pageChange = GameObject.Find(changePageName).GetComponent<PageChange>(); // ページ遷移のコンポーネント取得
         myRigidbody = this.gameObject.GetComponent<Rigidbody>(); // RigidBodyコンポーネントを取得
         defaultRayRange = rayRange;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update() {
         isGround = GroundJudgment(); // 常に接地判定を取る
         if (isGround || climbFlg) // プレイヤーが地面に設置していたら
         {
@@ -73,6 +79,7 @@ public class Player : StatusController {
             // スティックが右方向に倒れたら
             if (Input.GetAxisRaw("Horizontal") > 0)
             {
+                isright = true;
                 movePos.x += speed; // 移動ベクトルにスピードを加算
                 statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.RUN_RIGHT); // 歩行アニメーションON
                 if (movePos.x >= playerMaxSpeed) // 移動ベクトルが最大スピードを超えたら
@@ -82,6 +89,7 @@ public class Player : StatusController {
             }// スティックが左方向に倒れたら
             else if (Input.GetAxisRaw("Horizontal") < 0)
             {
+                isright = false;
                 // 移動ベクトルに負のスピードを加算
                 movePos.x += -speed;
                 statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.RUN_LEFT);
@@ -90,11 +98,19 @@ public class Player : StatusController {
                     movePos.x = playerMinSpeed;// 移動スピードは最小スピード固定
                 }
             }// 何も押されていなかったら
-            else if(Input.GetAxisRaw("Horizontal") == 0 && changeFlg == false && status == STATUS.NONE)
+            else if (Input.GetAxisRaw("Horizontal") == 0 && changeFlg == false && status == STATUS.NONE)
             {
-                movePos = new Vector3(0.0f,0.0f,0.0f); // 移動量は０に
+                movePos = new Vector3(0.0f, 0.0f, 0.0f); // 移動量は０に
                 // 歩行アニメーションOFF
                 statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
+            }
+            if (isright == false)
+            {
+                //sprit
+            }
+            if (this.transform.position.x - 1 < cameraMove.mapStartX && movePos.x < 0)
+            {
+                movePos.x = 0;
             }
             if (Input.GetKeyDown(KeyCode.C) || Input.GetAxis("Vertical") <= -1.0f && jumpCoolDownCount >= jumpCoolDownLimit && climbFlg == false) // スペースキーが押されたら
             {
@@ -111,6 +127,7 @@ public class Player : StatusController {
                 myRigidbody.useGravity = false; // 重力OFF
                 if (Input.GetAxisRaw("Vertical") > 0.0f)
                 {
+                    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.CLIME);
                     movePos.y += speed;
                     if (movePos.y >= playerMaxSpeed)// 移動ベクトルが最小スピードを下回ったら
                     {
@@ -119,6 +136,7 @@ public class Player : StatusController {
                 }
                 else if (Input.GetAxisRaw("Vertical") < 0.0f)
                 {
+                    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.CLIME);
                     movePos.y += -speed;
                     if (movePos.y <= playerMinSpeed)// 移動ベクトルが最小スピードを下回ったら
                     {
@@ -128,12 +146,14 @@ public class Player : StatusController {
                 else if (Input.GetAxisRaw("Vertical") == 0 && changeFlg == false && status == STATUS.NONE)
                 {
                     movePos.y = 0; // 移動量は０に
+                    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
                 }
             }
             else
             {
                 myRigidbody.useGravity = true; // 登り判定OFFで重力ON
             }
+
         }
 
         // キャラクターが右方向に移動していたら
@@ -161,6 +181,7 @@ public class Player : StatusController {
                 item.scrollSpeedX = 0.0f;
             }
         }
+
 
         if (Input.GetKeyDown(KeyCode.Space) == true || Input.GetKeyDown("joystick button 6"))
         {
@@ -298,7 +319,7 @@ public class Player : StatusController {
     void OnTriggerExit(Collider hit)
     {
         // 登るオブジェクトから離れたら
-        if (hit.gameObject.tag == "Climb") 
+        if (hit.gameObject.tag == "Climb")
         {
             climbFlg = false; // 登り判定OFF
             myRigidbody.useGravity = true; // 重力ON
@@ -306,7 +327,7 @@ public class Player : StatusController {
 
     }
 
-    void FormChange(int changeNum,STATUS _status)
+    void FormChange(int changeNum, STATUS _status)
     {
         movePos = Vector3.zero;
         statusSr.material.shader = statusMaterial[0].shader;
@@ -357,6 +378,12 @@ public class Player : StatusController {
             // ツタオブジェクトに当たったら一時的に接地判定無効化
             if (hit.collider.tag == "Climb")
             {
+                return false;
+            }
+            if (Goal.clearFlg == true)
+            {
+                movePos = Vector3.zero;
+                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
                 return false;
             }
             jumpCoolDownCount += Time.deltaTime; // 連続ジャンプ防止用のインターバルをカウント

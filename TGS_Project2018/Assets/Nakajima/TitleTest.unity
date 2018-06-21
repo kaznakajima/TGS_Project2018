@@ -250,11 +250,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 9ad312fdc9ab2bd4a95604740eac92e6, type: 3}
-  m_PlayOnAwake: 0
+  m_audioClip: {fileID: 8300000, guid: 4f09cca916acfab4d94aa04a9b73ef37, type: 3}
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -921,9 +921,9 @@ MonoBehaviour:
   tex2D: {fileID: 0}
   csvName: 
   csvData:
-  - 1-1
+  - Test
   - Test_2
-  - 1 - 2_2
+  - 1-2_2
   currentCnavas: {fileID: 0}
   stageNum: 0
 --- !u!4 &1122391582
