@@ -35,6 +35,7 @@ public class CameraMove : MonoBehaviour {
 	void Start () {
         mapLoad = FindObjectOfType<MapLoad>();
         player = FindObjectOfType<Player>();
+        playerTrans = player.transform;
         topLeft = GetTopLeft();
         buttomRight = GetButtomRight();
         mapStartX = 0;

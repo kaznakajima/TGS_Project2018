@@ -133,26 +133,27 @@ public class Player : StatusController {
             }
             if (climbFlg == true) // 登り判定がONなら
             {
+                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.CLIME);
                 myRigidbody.useGravity = false; // 重力OFF
                 if (Input.GetAxisRaw("Vertical") > 0.0f)
                 {
                     statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.CLIME);
                     movePos.y += speed;
-                    if (movePos.y >= playerMaxSpeed)// 移動ベクトルが最小スピードを下回ったら
+                    if (movePos.y >= playerMaxSpeed * 2)// 移動ベクトルが最小スピードを下回ったら
                     {
-                        movePos.y = playerMaxSpeed;// 移動スピードは最小スピード固定
+                        movePos.y = playerMaxSpeed * 2;// 移動スピードは最小スピード固定
                     }
                 }
                 else if (Input.GetAxisRaw("Vertical") < 0.0f)
                 {
                     statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.CLIME);
                     movePos.y += -speed;
-                    if (movePos.y <= playerMinSpeed)// 移動ベクトルが最小スピードを下回ったら
+                    if (movePos.y <= playerMinSpeed * 2)// 移動ベクトルが最小スピードを下回ったら
                     {
-                        movePos.y = playerMinSpeed;// 移動スピードは最小スピード固定
+                        movePos.y = playerMinSpeed * 2;// 移動スピードは最小スピード固定
                     }
                 }
-                else if (Input.GetAxisRaw("Vertical") == 0 && changeFlg == false && status == STATUS.NONE)
+                else if (Input.GetAxisRaw("Vertical") == 0 && changeFlg == false && status == STATUS.NONE && climbFlg == false)
                 {
                     movePos.y = 0; // 移動量は０に
                     statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
@@ -332,6 +333,14 @@ public class Player : StatusController {
         {
             climbFlg = false; // 登り判定OFF
             myRigidbody.useGravity = true; // 重力ON
+            if (isright == true)
+            {
+                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.RUN_RIGHT);
+            }
+            else if (isright == false)
+            {
+                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.RUN_LEFT);
+            }
         }
 
     }
