@@ -193,6 +193,7 @@ public class Player : StatusController {
 
         if (Input.GetKeyDown(KeyCode.Space) == true || Input.GetKeyDown("joystick button 6"))
         {
+            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
             StartCoroutine(pageChange.ScreenShot());
             gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
         }
