@@ -191,7 +191,7 @@ public class Player : StatusController {
         }
 
 
-        if (Input.GetKeyDown(KeyCode.Space) == true || Input.GetKeyDown("joystick button 6"))
+        if (Input.GetKeyDown(KeyCode.Space) == true || Input.GetKeyDown("joystick button 6") && pageChange.pageFlip <= -1)
         {
             StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
             StartCoroutine(pageChange.ScreenShot());
