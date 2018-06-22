@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4975927397874328}
   m_Layer: 0
   m_Name: Needle_90
-  m_TagString: Untagged
+  m_TagString: Needle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 212880405659318904}
   m_Layer: 0
   m_Name: Needle
-  m_TagString: Untagged
+  m_TagString: Needle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
