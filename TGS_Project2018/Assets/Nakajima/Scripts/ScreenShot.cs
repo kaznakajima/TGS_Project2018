@@ -86,6 +86,7 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
 
         if(SceneManager.GetActiveScene().name == "Stage1_alpha")
         {
+            myAudio.PlayOneShot(myAudio.clip);
             SingletonMonoBehaviour<ResetController>.Instance.CheckReset();
         }
     }

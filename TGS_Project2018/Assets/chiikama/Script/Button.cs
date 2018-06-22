@@ -37,6 +37,11 @@ public class Button : MonoBehaviour
                 SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 1.0f);
                 isPause = false;
                 break;
+            case "GameOver":
+                DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
+                SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 1.0f);
+                isPause = false;
+                break;
         }
     }
 

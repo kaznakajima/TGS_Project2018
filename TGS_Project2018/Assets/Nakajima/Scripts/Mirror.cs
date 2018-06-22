@@ -53,6 +53,11 @@ public class Mirror : StatusController
 	void Update () {
         // Ray判定
         RayHit(direction, "Character");
+
+        if(!isGimmick && (int)status != 0)
+        {
+            ResetController.resetIsonFlg = true;
+        }
     }
 
     // Rayの判定

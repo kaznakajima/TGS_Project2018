@@ -22,6 +22,8 @@ public class Player : StatusController {
 
     AudioSource myAudio;
 
+    public SpriteRenderer resetIcon;
+
     [SerializeField] float playerSpeed = 1.0f; // キャラクターのスピード
     [SerializeField] float playerMaxSpeed = 1.5f; // プレイヤーの最大スピード
     [SerializeField] float playerMinSpeed = -1.5f; // プレイヤーの最小スピード

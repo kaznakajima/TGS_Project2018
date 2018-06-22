@@ -208,7 +208,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1216996513949806}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1555.692, y: -1193.2286, z: 0}
+  m_LocalPosition: {x: -1557.0682, y: -1191.094, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4378724478310612}
@@ -460,6 +460,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 17a6def4a3aa66f458794fde41904001, type: 2}
   - {fileID: 2100000, guid: f77dc4132c6c99847bd146c99d92933f, type: 2}
   statusAlpha: 0
+  resetIcon: {fileID: 212606320803816570}
   playerSpeed: 1
   playerMaxSpeed: 1.5
   playerMinSpeed: -1.5
