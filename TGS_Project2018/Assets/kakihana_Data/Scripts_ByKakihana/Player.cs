@@ -43,7 +43,7 @@ public class Player : StatusController {
 
     CharacterController myCc; // キャラクターコントローラー
     Rigidbody myRigidbody; // 自分のRigidbody
-    public SpriteRenderer[] myElement = new SpriteRenderer[4];
+    public SpriteRenderer[] myElement = new SpriteRenderer[3];
 
     public Vector3 movePos; // 移動用変数
     [SerializeField] Vector3 wayPointPos; // リスポーン地点保存用変数
