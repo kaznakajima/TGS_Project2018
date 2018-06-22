@@ -425,7 +425,7 @@ Prefab:
     - target: {fileID: 114634046656737070, guid: 2b2072589fc39d54387431c033102fb0,
         type: 2}
       propertyPath: sketchBookValue
-      value: 8
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114634046656737070, guid: 2b2072589fc39d54387431c033102fb0,
         type: 2}
@@ -486,6 +486,11 @@ Prefab:
       propertyPath: bookValueObj.Array.data[4]
       value: 
       objectReference: {fileID: 2088184003}
+    - target: {fileID: 114634046656737070, guid: 2b2072589fc39d54387431c033102fb0,
+        type: 2}
+      propertyPath: tempSketchValue
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2b2072589fc39d54387431c033102fb0, type: 2}
   m_IsPrefabParent: 0
@@ -2353,6 +2358,10 @@ Prefab:
         type: 2}
       propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1678928130346334, guid: 02c450a3b0174824494a53ab30229aed, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 02c450a3b0174824494a53ab30229aed, type: 2}

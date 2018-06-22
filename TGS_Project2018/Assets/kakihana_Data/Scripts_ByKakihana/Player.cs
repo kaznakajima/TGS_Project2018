@@ -30,14 +30,12 @@ public class Player : StatusController {
     [SerializeField] float jumpCoolDownCount = 0.0f; // ジャンプのクールダウンカウント
     [SerializeField] float jumpCoolDownLimit = 0.5f; // ジャンプ再使用までの時間
     [SerializeField] float rayRange = 1.0f; // 接地判定の距離 
-    [SerializeField] float rayRangeH;
     [SerializeField] float defaultRayRange; // 保存用設置判定の距離
-    [SerializeField] bool isright;
+    [SerializeField] bool isright; // 右を向いているか
 
     bool jumpFlg = false; // ジャンプ可能か
     [SerializeField] bool isGround; // 接地しているか
     [SerializeField] bool climbFlg = false; // 上下移動可能か
-    [SerializeField] bool shipFlg = false; // 船に乗っているか
     public bool damageFlg = false; // ダメージを受けているか
     public bool changeFlg = false; // 変身しているか
     [SerializeField] bool pageChangeFlg = false; //ページがめくり終わったか
@@ -116,7 +114,7 @@ public class Player : StatusController {
                 }
             }
             // 自キャラの座標x成分 - 1した値がマップの端点を超えておりかつそれ以上移動しようとしたら
-            if (this.transform.position.x - 1 < cameraMove.mapStartX && movePos.x < 0)
+            if (this.transform.position.x - 0.5 < cameraMove.mapStartX && movePos.x < 0)
             {
                 // 移動量は0にする
                 movePos.x = 0;
@@ -190,14 +188,6 @@ public class Player : StatusController {
                 item.scrollSpeedX = 0.0f;
             }
         }
-
-
-        if (Input.GetKeyDown(KeyCode.Space) == true || Input.GetKeyDown("joystick button 6") && pageChange.pageFlip <= -1)
-        {
-            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-            StartCoroutine(pageChange.ScreenShot());
-            gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
-        }
         // ダメージオブジェクトに接触した状態でページをめくられた場合
         if (pageChange.pageChange == true && damageFlg == true)
         {
@@ -231,11 +221,15 @@ public class Player : StatusController {
                 changeFlg = true;
                 StatusChenge(STATUS.WIND);
             }
-            if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.Alpha4)) // ゲームボタン「Y」で土属性に書き換え
+            if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.Alpha4) && pageChange.pageFlip <= -1) // ゲームボタン「Y」で土属性に書き換え
             {
-                changeFlg = true;
-                StatusChenge(STATUS.EARTH);
+                StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                StartCoroutine(pageChange.ScreenShot());
+                gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
+                //changeFlg = true;
+                //StatusChenge(STATUS.EARTH);
             }
+
         }
         // ↑↑キー入力書き換え処理ここまで↑↑
 
@@ -282,11 +276,6 @@ public class Player : StatusController {
 
     void OnCollisionEnter(Collision hit)
     {
-        // 船と接触したら
-        if (hit.gameObject.tag == "Ship")
-        {
-            shipFlg = true;
-        }
         // ダメージオブジェクトに接触したら
         if (hit.gameObject.tag == "Needle")
         {
@@ -340,6 +329,7 @@ public class Player : StatusController {
             else if (isright == false)
             {
                 statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.RUN_LEFT);
+                movePos = Vector3.zero;
             }
         }
 
@@ -394,6 +384,7 @@ public class Player : StatusController {
             // ダメージオブジェクトに当たったらキャラクターは動かない
             if (damageFlg == true)
             {
+                movePos = Vector3.zero;
                 return false;
             }
             // ツタオブジェクトに当たったら一時的に接地判定無効化
