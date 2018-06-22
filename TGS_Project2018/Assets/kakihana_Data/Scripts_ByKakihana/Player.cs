@@ -218,14 +218,14 @@ public class Player : StatusController {
             }
             if (Input.GetKeyDown("joystick button 0") || Input.GetKeyDown(KeyCode.Alpha3)) // ゲームボタン「A」で風属性に書き換え
             {
-                changeFlg = true;
-                StatusChenge(STATUS.WIND);
-            }
-            if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.Alpha4) && pageChange.pageFlip <= -1) // ゲームボタン「Y」で土属性に書き換え
-            {
                 StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                 StartCoroutine(pageChange.ScreenShot());
                 gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
+            }
+            if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.Alpha4) && pageChange.pageFlip <= -1) // ゲームボタン「Y」で土属性に書き換え
+            {
+                changeFlg = true;
+                StatusChenge(STATUS.WIND);
                 //changeFlg = true;
                 //StatusChenge(STATUS.EARTH);
             }

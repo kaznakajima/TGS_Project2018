@@ -425,7 +425,7 @@ Prefab:
     - target: {fileID: 114634046656737070, guid: 2b2072589fc39d54387431c033102fb0,
         type: 2}
       propertyPath: sketchBookValue
-      value: 5
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 114634046656737070, guid: 2b2072589fc39d54387431c033102fb0,
         type: 2}
@@ -486,11 +486,6 @@ Prefab:
       propertyPath: bookValueObj.Array.data[4]
       value: 
       objectReference: {fileID: 2088184003}
-    - target: {fileID: 114634046656737070, guid: 2b2072589fc39d54387431c033102fb0,
-        type: 2}
-      propertyPath: tempSketchValue
-      value: 5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2b2072589fc39d54387431c033102fb0, type: 2}
   m_IsPrefabParent: 0
@@ -2149,6 +2144,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1367077395}
   - component: {fileID: 1367077394}
+  - component: {fileID: 1367077396}
   m_Layer: 0
   m_Name: StageInit
   m_TagString: Untagged
@@ -2197,6 +2193,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1367077396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1367077393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42c4f387352ccde4cb7dad395e158fae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canReset: 0
+  TreePos: {x: 0, y: 0, z: 0}
+  mirrorObj: {fileID: 1316615561819584, guid: 9c43ec6686544ca4c8aa39973c875a4c, type: 2}
+  TreeObj: {fileID: 1456967744725320, guid: 92763f8d280a01946b2ab5dc50af3a1b, type: 2}
 --- !u!1 &1399482306
 GameObject:
   m_ObjectHideFlags: 0
@@ -2358,10 +2369,6 @@ Prefab:
         type: 2}
       propertyPath: m_Pivot.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1678928130346334, guid: 02c450a3b0174824494a53ab30229aed, type: 2}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 02c450a3b0174824494a53ab30229aed, type: 2}
