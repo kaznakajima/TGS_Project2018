@@ -926,6 +926,8 @@ MonoBehaviour:
   - 1-2_2
   currentCnavas: {fileID: 0}
   stageNum: 0
+  myAudio: {fileID: 0}
+  bgmAudio: {fileID: 0}
 --- !u!4 &1122391582
 Transform:
   m_ObjectHideFlags: 0

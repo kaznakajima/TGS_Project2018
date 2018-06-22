@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class Button : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class Button : MonoBehaviour
     void Start()
     {
         myAudio = GameObject.Find("Audio").gameObject.GetComponent<AudioSource>();
+        SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio = SingletonMonoBehaviour<ScreenShot>.Instance.GetBGM();
 
         switch (SceneManager.GetActiveScene().name)
         {
@@ -31,6 +33,8 @@ public class Button : MonoBehaviour
                 isPause = true;
                 break;
             case "Stage1_alpha":
+                DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
+                SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 1.0f);
                 isPause = false;
                 break;
         }
@@ -164,7 +168,12 @@ public class Button : MonoBehaviour
             Resume();
         }
         StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-        SceneManager.LoadScene("SelectTest");
+        DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
+        SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.5f, 1.0f).OnComplete(() =>
+        {
+            SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
+            SceneManager.LoadScene("SelectTest");
+        });
     }
 
     public void DialogButton()//ダイアログ表示
@@ -177,6 +186,7 @@ public class Button : MonoBehaviour
         string sceneName = SceneManager.GetActiveScene().name;
         Resume();
         StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+        SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
         SceneManager.LoadScene(sceneName);
         Debug.Log("りとらい");
         Pauser.Clear();

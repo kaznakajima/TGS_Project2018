@@ -48,6 +48,10 @@ public class Select : MonoBehaviour {
         myAudio = GameObject.Find("Audio").gameObject.GetComponent<AudioSource>();
         Camera_Select.flg = false;
         SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[0];
+        SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio = SingletonMonoBehaviour<ScreenShot>.Instance.GetBGM();
+
+        DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
+        SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 1.0f);
 
         //alfa = GetComponent<Image>().color.a;
 
@@ -86,10 +90,10 @@ public class Select : MonoBehaviour {
             alfa += 1.0f * Time.deltaTime;
             Camera_Select.flg = true;
 
-            if (alfa >= 2)
+            if (alfa >= 1.9)
             {
-                StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                 Scene(stageName);
+                fadeFlg = false;
             }
         }
 
@@ -119,6 +123,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = 0;
 
+                    // ステージの設定
                     SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
                 //ステージ２
@@ -128,6 +133,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = 120.0f;
 
+                    // ステージの設定
                     SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
                 //ステージ３
@@ -137,6 +143,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = -120.0f;
 
+                    // ステージの設定
                     SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
             }
@@ -171,18 +178,29 @@ public class Select : MonoBehaviour {
                     rightStage = SelectStage[1];
 
                     cameraRotate = 0;
+
+                    // ステージの設定
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
                 //ステージ２
                 case 1:
                     leftStage = SelectStage[0];
                     rightStage = SelectStage[2];
+
                     cameraRotate = 120.0f;
+
+                    // ステージの設定
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
                 //ステージ３
                 case 2:
                     leftStage = SelectStage[1];
                     rightStage = SelectStage[0];
+
                     cameraRotate = -120.0f;
+
+                    // ステージの設定
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
             }
 
@@ -214,6 +232,12 @@ public class Select : MonoBehaviour {
 
     void Scene(string StageName)
     {
-        SceneManager.LoadScene(StageName);
+        DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
+        SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.5f, 1.0f).OnComplete(() =>
+        {
+            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+            SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
+            SceneManager.LoadScene(StageName);
+        });
     }
 }

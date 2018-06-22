@@ -28,8 +28,8 @@ public class FireGimmick : GimmickController
                 if (rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.FIRE)
                 {
                     Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
-                    // ギミックが作動するためリセットをできなくする
-                    mirror.canReset = false;
+                    mirror.isGimmick = true;
+                    SingletonMonoBehaviour<ResetController>.Instance.TreePos = gameObject.transform.parent.position;
                     gimmickMaxRay = 0.0f;
                     GimmickAction();
                     // ミラーの消去コルーチン開始
@@ -37,6 +37,8 @@ public class FireGimmick : GimmickController
                 }
                 if(rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.WIND)
                 {
+                    Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
+                    mirror.isGimmick = true;
                     gimmickMaxRay = 0.0f;
                     ForestBreak();
                     // ミラーの消去コルーチン開始
@@ -53,16 +55,17 @@ public class FireGimmick : GimmickController
         gimmickAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.FOREST.BREAK);
         GameObject childTree = GetComponentInChildren<CapsuleCollider>().gameObject;
 
-        StartCoroutine(BreakForest(childTree));
+        StartCoroutine(BreakAnimation(childTree));
     }
 
-    IEnumerator BreakForest(GameObject childTree)
+    IEnumerator BreakAnimation(GameObject childTree)
     {
         yield return new WaitForSeconds(2.25f);
 
         childTree.transform.parent = null;
         childTree.AddComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX |  RigidbodyConstraints.FreezePositionZ;
         childTree.GetComponent<Rigidbody>().velocity = Vector2.zero;
+        childTree.GetComponent<Goal>().isBreak = true;
         Destroy(gameObject);
     }
 

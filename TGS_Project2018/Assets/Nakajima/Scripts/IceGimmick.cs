@@ -47,8 +47,6 @@ public class IceGimmick : GimmickController
                 rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.FIRE)
             {
                 Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
-                // ギミックが作動するためリセットをできなくする
-                mirror.canReset = false;
                 gimmickMaxRay = 0.0f;
                 GimmickAction();
                 // ミラーの消去コルーチン開始

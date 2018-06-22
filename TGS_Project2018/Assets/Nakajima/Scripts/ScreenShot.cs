@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 
 // ----------------スクリーンショットをとるクラス-----------------------------------
@@ -33,7 +35,10 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
     public int stageNum;
 
     // 自身のAudioSource
-    AudioSource myAudio;
+    [HideInInspector]
+    public AudioSource myAudio;
+    [HideInInspector]
+    public AudioSource bgmAudio;
 
     // Playerを取得
     public Player[] GetPlayer()
@@ -45,6 +50,17 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
     public Mirror[] GetMirror()
     {
         return FindObjectsOfType<Mirror>().ToArray();
+    }
+
+    // ゴール判定を持つオブジェクトの取得
+    public Goal[] GetBreakForest()
+    {
+        return FindObjectsOfType<Goal>().ToArray();
+    }
+
+    public AudioSource GetBGM()
+    {
+        return bgmAudio = GameObject.Find("BGM").gameObject.GetComponent<AudioSource>();
     }
 
     void Start()
@@ -68,11 +84,9 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
         tex2D.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
         tex2D.Apply();
 
-        myAudio.PlayOneShot(myAudio.clip);
-
-        foreach(var mirror in GetMirror())
+        if(SceneManager.GetActiveScene().name == "Stage1_alpha")
         {
-            mirror.MirrorReset();
+            SingletonMonoBehaviour<ResetController>.Instance.CheckReset();
         }
     }
 }

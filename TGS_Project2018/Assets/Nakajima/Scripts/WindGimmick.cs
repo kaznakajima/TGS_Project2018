@@ -25,8 +25,7 @@ public class WindGimmick : GimmickController
                 rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.WIND)
             {
                 Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
-                // ギミックが作動するためリセットをできなくする
-                mirror.canReset = false;
+                mirror.isGimmick = true;
                 gimmickMaxRay = 0.0f;
                 GimmickAction();
                 // ミラーの消去コルーチン開始
