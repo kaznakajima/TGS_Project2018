@@ -63,7 +63,7 @@ public class GameMaster : MonoBehaviour {
         {
             return;
         }
-        if (sketchBookValue == 0 && pc.pageChange == false)
+        if (sketchBookValue == 0 && pc.pageFlip <= -1)
         {
             StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
             SceneManager.LoadScene("GameOver");
