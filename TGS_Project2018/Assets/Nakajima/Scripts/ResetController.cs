@@ -10,7 +10,10 @@ using UnityEngine;
 // ゲームシーンのみで使用
 public class ResetController : SingletonMonoBehaviour<ResetController>
 {
-    // リセット可能かどうか
+    // リセットアイコン表示フラグ
+    public static bool resetIsonFlg = false;
+
+    // リセット(生成)可能かどうか
     [HideInInspector]
     public bool canReset;
 
@@ -35,6 +38,7 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
             // ギミック作動中なら変化できない
             if (mirror.isGimmick)
             {
+
                 return;
             }
             // 鏡のステータスが通常じゃなければ姿だけリセット
@@ -55,6 +59,7 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
         {
             Instantiate(TreeObj, new Vector3((int)TreePos.x,(int)TreePos.y, 0.0f), Quaternion.identity);
             Instantiate(mirrorObj, new Vector3((int)TreePos.x - 1, (int)TreePos.y, 0.0f), Quaternion.identity);
+            resetIsonFlg = false;
             canReset = false;
         }
 
@@ -77,6 +82,7 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
 
                 Destroy(forest.gameObject);
                 canReset = false;
+                resetIsonFlg = false;
             }
         }
     }
@@ -97,13 +103,15 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
                 Destroy(mirror.rainObjInstance);
             }
             canReset = false;
+            resetIsonFlg = false;
         }
     }
 
 	// Use this for initialization
 	void Start () {
         canReset = false;
-	}
+        resetIsonFlg = false;
+    }
 	
 	// Update is called once per frame
 	void Update () {
