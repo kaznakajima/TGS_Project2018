@@ -250,7 +250,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 0b5258952d814de4f8a9947bb62149a2, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 9ad312fdc9ab2bd4a95604740eac92e6, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -923,7 +923,7 @@ MonoBehaviour:
   csvData:
   - Test
   - Test_2
-  - 1-2_2
+  - Test_3
   currentCnavas: {fileID: 0}
   stageNum: 0
   myAudio: {fileID: 0}

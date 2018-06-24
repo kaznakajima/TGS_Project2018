@@ -24,7 +24,7 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
     public string csvName;
 
     // ステージ名のデータ
-    public string[] csvData = { "1-1", "Test_2", "1-2_2"};
+    public string[] csvData = { "1-1", "Test_2", "Test_3"};
 
     // 現在のシーンのキャンバス
     [HideInInspector]
@@ -84,9 +84,13 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
         tex2D.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
         tex2D.Apply();
 
-        if(SceneManager.GetActiveScene().name == "Stage1_alpha")
+        if(SceneManager.GetActiveScene().name == "Stage1_alpha" )
         {
-            myAudio.PlayOneShot(myAudio.clip);
+            GameMaster master = FindObjectOfType<GameMaster>();
+            if(master.sketchBookValue >= 0)
+            {
+                myAudio.PlayOneShot(myAudio.clip);
+            }
             SingletonMonoBehaviour<ResetController>.Instance.CheckReset();
         }
     }

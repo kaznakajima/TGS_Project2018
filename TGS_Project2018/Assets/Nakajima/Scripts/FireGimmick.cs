@@ -28,8 +28,18 @@ public class FireGimmick : GimmickController
                 if (rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.FIRE)
                 {
                     Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
-                    mirror.isGimmick = true;
-                    SingletonMonoBehaviour<ResetController>.Instance.TreePos = gameObject.transform.parent.position;
+                    
+                    if (gameObject.transform.parent.name == "GoalForest(Clone)")
+                    {
+                        SingletonMonoBehaviour<ResetController>.Instance.TreePos = gameObject.transform.parent.position;
+                        ResetController.resetIsonFlg = true;
+                    }
+                    else
+                    {
+                        ResetController.resetIsonFlg = false;
+                        //mirror.isGimmick = true;
+                    }
+
                     gimmickMaxRay = 0.0f;
                     GimmickAction();
                     // ミラーの消去コルーチン開始
@@ -38,7 +48,15 @@ public class FireGimmick : GimmickController
                 if(rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.WIND)
                 {
                     Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
-                    mirror.isGimmick = true;
+                    if (gameObject.transform.parent.name == "GoalForest(Clone)")
+                    {
+                        ResetController.resetIsonFlg = false;
+                        //mirror.isGimmick = true;
+                    }
+                    else
+                    {
+                        ResetController.resetIsonFlg = true;
+                    }
                     gimmickMaxRay = 0.0f;
                     ForestBreak();
                     // ミラーの消去コルーチン開始
@@ -63,7 +81,8 @@ public class FireGimmick : GimmickController
         yield return new WaitForSeconds(2.25f);
 
         childTree.transform.parent = null;
-        childTree.AddComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX |  RigidbodyConstraints.FreezePositionZ;
+        childTree.AddComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX |  RigidbodyConstraints.FreezePositionZ 
+            | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
         childTree.GetComponent<Rigidbody>().velocity = Vector2.zero;
         childTree.GetComponent<Goal>().isBreak = true;
         Destroy(gameObject);

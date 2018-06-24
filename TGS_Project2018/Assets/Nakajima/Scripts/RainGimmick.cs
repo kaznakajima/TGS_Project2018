@@ -9,6 +9,10 @@ public class RainGimmick : GimmickController
     bool isMirror;
     GameObject mirrorObj;
 
+    // 当たり判定
+    [HideInInspector]
+    public bool isHit;
+
     // 自身のAudioSource
     AudioSource myAudio;
 
@@ -17,6 +21,10 @@ public class RainGimmick : GimmickController
     {
         myAudio.PlayOneShot(myAudio.clip);
         transform.DOMove(new Vector3(transform.position.x, transform.position.y + 10.18f, transform.position.z), 2.0f);
+        if (isHit)
+        {
+            return;
+        }
         isMirror = false;
     }
 
@@ -37,7 +45,7 @@ public class RainGimmick : GimmickController
                 mirrorObj = rayHit.collider.gameObject;
 
                 Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
-                mirror.isGimmick = true;
+                ResetController.resetIsonFlg = false;
                 gimmickMaxRay = 0.0f;
                 // 重力を無視する
                 rayHit.collider.gameObject.GetComponent<Rigidbody>().useGravity = false;

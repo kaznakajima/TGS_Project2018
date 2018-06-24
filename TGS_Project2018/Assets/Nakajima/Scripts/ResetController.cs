@@ -38,7 +38,6 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
             // ギミック作動中なら変化できない
             if (mirror.isGimmick)
             {
-
                 return;
             }
             // 鏡のステータスが通常じゃなければ姿だけリセット
@@ -59,6 +58,13 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
         {
             Instantiate(TreeObj, new Vector3((int)TreePos.x,(int)TreePos.y, 0.0f), Quaternion.identity);
             Instantiate(mirrorObj, new Vector3((int)TreePos.x - 1, (int)TreePos.y, 0.0f), Quaternion.identity);
+            foreach(var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
+            {
+                if(Mathf.Abs(player.transform.position.x - (int)TreeObj.transform.position.x) <= 1)
+                {
+                    player.transform.position = new Vector3((int)TreeObj.transform.position.x - 2, (int)TreeObj.transform.position.y, 0.0f);
+                }
+            }
             resetIsonFlg = false;
             canReset = false;
         }
@@ -79,6 +85,15 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
                     (int)forest.gameObject.transform.position.y, 0.0f), Quaternion.identity);
                 Instantiate(mirrorObj, new Vector3((int)forest.gameObject.transform.position.x - 1,
                     (int)forest.gameObject.transform.position.y, 0.0f), Quaternion.identity);
+
+                foreach (var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
+                {
+                    if (Mathf.Abs(player.transform.position.x - (int)TreeObj.transform.position.x) <= 1)
+                    {
+                        player.transform.position = new Vector3((int)TreeObj.transform.position.x - 2,
+                    (int)TreeObj.transform.position.y, 0.0f);
+                    }
+                }
 
                 Destroy(forest.gameObject);
                 canReset = false;
@@ -103,8 +118,8 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
                 Destroy(mirror.rainObjInstance);
             }
             canReset = false;
-            resetIsonFlg = false;
         }
+        resetIsonFlg = false;
     }
 
 	// Use this for initialization

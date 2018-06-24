@@ -14,6 +14,10 @@ public class Mirror : StatusController
     // 透明度
     float mirrorAlpha;
 
+    // 自身が映っている状態かどうか
+    [HideInInspector]
+    public bool isMirror;
+
     // プレイヤーを映すためのオブジェクト(のちのち消す)
     public GameObject mirrorObj;
 
@@ -54,10 +58,14 @@ public class Mirror : StatusController
         // Ray判定
         RayHit(direction, "Character");
 
-        if(!isGimmick && (int)status != 0)
-        {
-            ResetController.resetIsonFlg = true;
-        }
+        //if(!isGimmick && (int)status != 0)
+        //{
+        //    ResetController.resetIsonFlg = true;
+        //}
+        //else if(isGimmick && (int)status != 0)
+        //{
+        //    ResetController.resetIsonFlg = false;
+        //}
     }
 
     // Rayの判定
@@ -73,6 +81,7 @@ public class Mirror : StatusController
         {
             if (rayHit.collider.name == objName)
             {
+                isMirror = true;
                 RayObjAction(rayHit.collider.gameObject);
             }
         }
@@ -95,6 +104,7 @@ public class Mirror : StatusController
     // 姿を変える準備
     void FormChangeBefore(Player player)
     {
+        isMirror = false;
 
         GameObject Destroymirror = mirrorObj;
         Destroymirror.SetActive(false);
@@ -143,10 +153,13 @@ public class Mirror : StatusController
                     rainObjInstance = Instantiate(rainObj, transform);
                     rainObj.GetComponent<ParticleSystem>().Stop();
                     myAudio.PlayOneShot(SE[(int)status]);
+                    ResetController.resetIsonFlg = true;
                 }
                 return;
             }
             myAudio.PlayOneShot(SE[(int)status]);
+
+            ResetController.resetIsonFlg = true;
         });
     }
 
@@ -188,8 +201,6 @@ public class Mirror : StatusController
         // 処理が終わったら姿を変える
         transform.DOScale(new Vector3(x, y, 1.0f), time).OnComplete(() =>
         {
-            // リセット可能にする
-            isGimmick = false;
             SingletonMonoBehaviour<ResetController>.Instance.canReset = true;
             Destroy(gameObject);
         });

@@ -31,6 +31,11 @@ public class Select : MonoBehaviour {
 
     float cameraRotate;
 
+    float Interval = 0.0f;
+
+    // 連続入力防止
+    bool onButton = false;
+
     float alfa;
 
     [SerializeField,Header("FadeOut")]
@@ -50,8 +55,13 @@ public class Select : MonoBehaviour {
         SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[0];
         SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio = SingletonMonoBehaviour<ScreenShot>.Instance.GetBGM();
 
-        DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
-        SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 1.0f);
+        DOTween.To(() => Interval, volume =>
+                Interval = volume, 1.0f, 1.0f).OnComplete(() =>
+                {
+                    SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.Play();
+                    DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
+                    SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 1.0f);
+                });
 
         //alfa = GetComponent<Image>().color.a;
 
@@ -81,8 +91,13 @@ public class Select : MonoBehaviour {
         //}
         if (Input.GetButtonDown("Click") && !flg)
         {
+            if (onButton)
+            {
+                return;
+            }
             myAudio.PlayOneShot(myAudio.clip);
             fadeFlg = true;
+            onButton = true;
         }
 
         if (fadeFlg)
@@ -100,7 +115,7 @@ public class Select : MonoBehaviour {
     }
     public void Right()
     {
-        if (flg)
+        if (flg || onButton)
         {
             return;
         }
@@ -157,7 +172,7 @@ public class Select : MonoBehaviour {
 
     public void Left()
     {
-        if (flg)
+        if (flg || onButton)
         {
             return;
         }

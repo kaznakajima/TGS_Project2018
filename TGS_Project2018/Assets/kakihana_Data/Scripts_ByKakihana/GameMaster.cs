@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class GameMaster : MonoBehaviour {
 
@@ -65,8 +66,15 @@ public class GameMaster : MonoBehaviour {
         }
         if (sketchBookValue == 0 && pc.pageFlip <= -1)
         {
+            sketchBookValue = -1;
             StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-            SceneManager.LoadScene("GameOver");
+            DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
+            SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.5f, 1.0f).OnComplete(() =>
+            {
+                SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
+                SceneManager.LoadScene("GameOver");
+            });
+
         }
     }
 }

@@ -218,7 +218,7 @@ public class Player : StatusController {
                 changeFlg = true;
                 StatusChenge(STATUS.WATER);
             }
-            if (Input.GetKeyDown("joystick button 0") || Input.GetKeyDown(KeyCode.Alpha3) && pageChange.pageFlip <= -1) // ゲームボタン「A」で風属性に書き換え
+            if (Input.GetKeyDown("joystick button 0") && ResetController.resetIsonFlg == true || Input.GetKeyDown(KeyCode.Alpha3) && ResetController.resetIsonFlg == true) // ゲームボタン「A」で風属性に書き換え
             {
                 StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                 StartCoroutine(pageChange.ScreenShot());
@@ -309,6 +309,15 @@ public class Player : StatusController {
         }
     }
 
+    void OnCollisionExit(Collision c)
+    {
+        if (c.gameObject.name == "GroundSlope")
+        {
+            myRigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
+                    RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        }
+    }
+
     /*衝突判定メソッド*/
     void OnTriggerEnter(Collider hit)
     {
@@ -342,16 +351,19 @@ public class Player : StatusController {
         movePos = Vector3.zero;
         statusSr.material.shader = statusMaterial[0].shader;
 
-        myAudio.PlayOneShot(myAudio.clip);
+        if(_status != STATUS.NONE)
+        {
+            myAudio.PlayOneShot(myAudio.clip);
+        }
 
         transform.DOScale(new Vector3(0, 0, 1), 1.0f).OnComplete(() =>
         {
             statusAnim.SetInteger("BluckAnim", changeNum);
             transform.DOScale(new Vector3(1, 1, 1), 1.0f).OnComplete(() =>
             {
+                changeFlg = false;
                 statusSr.material.shader = statusMaterial[1].shader;
                 status = _status;
-                changeFlg = false;
             });
         });
     }

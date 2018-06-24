@@ -15,9 +15,14 @@ public class Button : MonoBehaviour
     // ポーズ中かどうか
     bool isPause;
 
+    float Interval = 0.0f;
+
     // 選択中のボタン
     int buttonState;
     float speed = 1.0f;
+
+    // 連続入力防止
+    bool onButton = false;
 
     // 自身のAudioSource
     AudioSource myAudio;
@@ -33,13 +38,12 @@ public class Button : MonoBehaviour
                 isPause = true;
                 break;
             case "Stage1_alpha":
-                DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
-                SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 1.0f);
-                isPause = false;
-                break;
-            case "GameOver":
-                DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
-                SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 1.0f);
+                DOTween.To(() => Interval, volume =>
+                 Interval = volume, 1.0f, 1.0f).OnComplete(() =>
+                 {
+                     DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
+                     SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 1.0f);
+                 });
                 isPause = false;
                 break;
         }
@@ -87,9 +91,15 @@ public class Button : MonoBehaviour
 
                     if (Input.GetButtonDown("Click"))
                     {
+                        if (onButton)
+                        {
+                            return;
+                        }
+
                         switch (buttonState)
                         {
                             case 0:
+                                myAudio.PlayOneShot(myAudio.clip);
                                 SelectScene();
                                 break;
                             case 1:
@@ -123,6 +133,11 @@ public class Button : MonoBehaviour
 
                     if (Input.GetButtonDown("Click"))
                     {
+                        if (onButton)
+                        {
+                            return;
+                        }
+
                         switch (buttonState)
                         {
                             case 0:
@@ -168,6 +183,7 @@ public class Button : MonoBehaviour
 
     public void SelectScene()//セレクトシーンに移動
     {
+        onButton = true;
        if(pauseUI != null)
         {
             Resume();
@@ -190,8 +206,8 @@ public class Button : MonoBehaviour
     {
         string sceneName = SceneManager.GetActiveScene().name;
         Resume();
+        onButton = true;
         StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-        SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
         SceneManager.LoadScene(sceneName);
         Debug.Log("りとらい");
         Pauser.Clear();

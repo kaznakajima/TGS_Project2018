@@ -70,21 +70,39 @@ public class ObjectAlphaController : MonoBehaviour
             
         }
 
-        // プレイヤーと鏡が近づいたらアイコン表示
-        if(SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer().Min(playerPos => SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorPos => 
-            Mathf.Abs(playerPos.transform.position.x - mirrorPos.transform.position.x))) <= 3)
+        foreach (var mirror in SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror())
         {
-            if(SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorStatus => (int)mirrorStatus.status == 0))
+            if (mirror.isMirror && (int)mirror.status == 0)
             {
                 AlphaChange(0.75f);
             }
         }
-        // 離れたらアイコンを隠す
-        else if(SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer().Min(playerPos => SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorPos =>
+
+        if (SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer().Min(playerPos => SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorPos =>
             Mathf.Abs(playerPos.transform.position.x - mirrorPos.transform.position.x))) > 3)
         {
+            foreach (var mirror in SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror())
+            {
+                mirror.isMirror = false;
+            }
             AlphaChange(0.0f);
         }
+
+        // プレイヤーと鏡が近づいたらアイコン表示
+        //if(SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer().Min(playerPos => SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorPos => 
+        //    Mathf.Abs(playerPos.transform.position.x - mirrorPos.transform.position.x))) <= 3)
+        //{
+        //    if(SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorStatus => (int)mirrorStatus.status == 0))
+        //    {
+        //        AlphaChange(0.75f);
+        //    }
+        //}
+        //// 離れたらアイコンを隠す
+        //else if(SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer().Min(playerPos => SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorPos =>
+        //    Mathf.Abs(playerPos.transform.position.x - mirrorPos.transform.position.x))) > 3)
+        //{
+        //    AlphaChange(0.0f);
+        //}
     }
 
     // プレイヤーアイコン表示、非表示用メソッド
@@ -157,15 +175,14 @@ public class ObjectAlphaController : MonoBehaviour
     {
 
         // アルファの値が同じなら早期リターン
-        if (objAlpha == 0.0f && nextAlpha == 0.0f ||
+        if (objAlpha == 0.0f && nextAlpha == 0.1f ||
             objAlpha == 0.75f && nextAlpha == 0.75f)
         {
             return;
         }
-
+        //objAlpha = Mathf.Lerp(objAlpha, nextAlpha, 10.0f * Time.deltaTime);
         // 次のアルファの値に設定
         DOTween.To(() => objAlpha, alpha => objAlpha = alpha, nextAlpha, 1.0f);
-        //objAlpha = Mathf.Lerp(objAlpha, nextAlpha, 10.0f * Time.deltaTime);
 
         foreach (var mirror in SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror())
         {
@@ -174,8 +191,19 @@ public class ObjectAlphaController : MonoBehaviour
                 return;
             }
 
-            mirror.mirrorObj.GetComponent<SpriteRenderer>().color = new Color(mirror.mirrorObj.GetComponent<SpriteRenderer>().color.r,
+            if (mirror.isMirror && nextAlpha == 0.75f)
+            {
+                mirror.mirrorObj.GetComponent<SpriteRenderer>().color = new Color(mirror.mirrorObj.GetComponent<SpriteRenderer>().color.r,
                 mirror.mirrorObj.GetComponent<SpriteRenderer>().color.g, mirror.mirrorObj.GetComponent<SpriteRenderer>().color.b, objAlpha);
+            }
+            else if (!mirror.isMirror && nextAlpha == 0.0f)
+            {
+                if(mirror.mirrorObj.GetComponent<SpriteRenderer>().color.a > nextAlpha)
+                {
+                    mirror.mirrorObj.GetComponent<SpriteRenderer>().color = new Color(mirror.mirrorObj.GetComponent<SpriteRenderer>().color.r,
+                mirror.mirrorObj.GetComponent<SpriteRenderer>().color.g, mirror.mirrorObj.GetComponent<SpriteRenderer>().color.b, objAlpha);
+                }
+            }
 
             foreach (var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
             {
