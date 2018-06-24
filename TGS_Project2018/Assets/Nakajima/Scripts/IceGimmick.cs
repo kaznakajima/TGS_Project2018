@@ -72,12 +72,12 @@ public class IceGimmick : GimmickController
             if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 1)
             {
                 moveX = 1.0f;
-                c.gameObject.GetComponent<Rigidbody>().AddForce(transform.right * moveX * 300.0f);
+                c.gameObject.GetComponent<Rigidbody>().AddForce(transform.right * moveX * 100.0f);
             }
             else if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == -1)
             {
                 moveX = -1.0f;
-                c.gameObject.GetComponent<Rigidbody>().AddForce(transform.right * moveX * 300.0f);
+                c.gameObject.GetComponent<Rigidbody>().AddForce(transform.right * moveX * 100.0f);
             }
         }
     }
@@ -86,7 +86,9 @@ public class IceGimmick : GimmickController
     {
         if (c.gameObject.name == "Ivy")
         {
-            c.gameObject.GetComponent<RainGimmick>().isHit = true;
+            RainGimmick rain = c.gameObject.GetComponent<RainGimmick>();
+            rain.isHit = true;
+            rain.GimmickAction();
         }
     }
 

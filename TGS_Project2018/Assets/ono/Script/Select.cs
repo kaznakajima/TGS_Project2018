@@ -60,7 +60,7 @@ public class Select : MonoBehaviour {
                 {
                     SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.Play();
                     DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
-                    SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 1.0f);
+                    SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 2.0f);
                 });
 
         //alfa = GetComponent<Image>().color.a;
@@ -248,7 +248,7 @@ public class Select : MonoBehaviour {
     void Scene(string StageName)
     {
         DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
-        SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.5f, 1.0f).OnComplete(() =>
+        SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.0f, 0.5f).OnComplete(() =>
         {
             StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
             SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);

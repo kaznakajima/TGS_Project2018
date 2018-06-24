@@ -19,9 +19,13 @@ public class ClearCon : MonoBehaviour
     // インターバル
     float Interval = 0.0f;
 
+    // 自身のAudioSource
+    AudioSource myAudio;
+
     // Use this for initialization
     void Start()
     {
+        myAudio = GameObject.Find("Audio").gameObject.GetComponent<AudioSource>();
         SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio = SingletonMonoBehaviour<ScreenShot>.Instance.GetBGM();
 
         DOTween.To(() => Interval, volume =>
@@ -55,6 +59,8 @@ public class ClearCon : MonoBehaviour
 
         if (Input.GetButtonDown("Click"))
         {
+            myAudio.PlayOneShot(myAudio.clip);
+            Button.selectBack = true;
             switch (SceneManager.GetActiveScene().name)
             {
                 case "GameOver":

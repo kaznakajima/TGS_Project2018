@@ -23,6 +23,7 @@ public class Button : MonoBehaviour
 
     // 連続入力防止
     bool onButton = false;
+    public static bool selectBack;
 
     // 自身のAudioSource
     AudioSource myAudio;
@@ -42,7 +43,7 @@ public class Button : MonoBehaviour
                  Interval = volume, 1.0f, 1.0f).OnComplete(() =>
                  {
                      DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
-                     SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 1.0f);
+                     SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 2.0f);
                  });
                 isPause = false;
                 break;
@@ -183,14 +184,15 @@ public class Button : MonoBehaviour
 
     public void SelectScene()//セレクトシーンに移動
     {
+        selectBack = true;
         onButton = true;
-       if(pauseUI != null)
+        if (pauseUI != null)
         {
             Resume();
         }
         StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
         DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
-        SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.5f, 1.0f).OnComplete(() =>
+        SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.0f, 0.5f).OnComplete(() =>
         {
             SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
             SceneManager.LoadScene("SelectTest");
@@ -204,6 +206,7 @@ public class Button : MonoBehaviour
 
     public void RetryScene()
     {
+        selectBack = false;
         string sceneName = SceneManager.GetActiveScene().name;
         Resume();
         onButton = true;

@@ -220,6 +220,7 @@ public class Player : StatusController {
             }
             if (Input.GetKeyDown("joystick button 0") && ResetController.resetIsonFlg == true || Input.GetKeyDown(KeyCode.Alpha3) && ResetController.resetIsonFlg == true) // ゲームボタン「A」で風属性に書き換え
             {
+                Button.selectBack = false;
                 StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                 StartCoroutine(pageChange.ScreenShot());
                 gm.sketchBookValue -= 1; // マスタークラスの残機を減らす

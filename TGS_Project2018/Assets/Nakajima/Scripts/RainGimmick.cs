@@ -19,12 +19,17 @@ public class RainGimmick : GimmickController
     // ギミック処理
     public override void GimmickAction()
     {
-        myAudio.PlayOneShot(myAudio.clip);
-        transform.DOMove(new Vector3(transform.position.x, transform.position.y + 10.18f, transform.position.z), 2.0f);
-        if (isHit)
+        float nextPosition;
+        if(isHit)
         {
-            return;
+            nextPosition = transform.position.y;
         }
+        else
+        {
+            myAudio.PlayOneShot(myAudio.clip);
+            nextPosition = transform.position.y + 10.18f;
+        }
+        transform.DOMove(new Vector3(transform.position.x, nextPosition, transform.position.z), 2.0f);
         isMirror = false;
     }
 
