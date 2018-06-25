@@ -886,7 +886,7 @@ MonoBehaviour:
   - {fileID: 1599313102}
   - {fileID: 208239838}
   - {fileID: 521397991}
-  stageName: Stage1_alpha
+  stageName: MainGameScene
   StageNum: 0
   rollSpeed: 100
   fadeImage: {fileID: 773863376}
