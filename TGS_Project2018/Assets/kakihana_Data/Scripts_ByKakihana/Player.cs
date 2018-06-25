@@ -10,8 +10,9 @@ public class Player : StatusController {
      操作方法 
      横移動･･･ADキーor左右矢印キー
      ジャンプ･･･Cキー
-     属性変換･･･数字キー（1火属性、2水属性、3風属性、4土属性）
-     ツタ上り･･･ツタの近くでQキー長押し
+     属性変換･･･数字キー（1火属性、2水属性、3風属性）
+     数字０キーでリセット
+     ツタ上り･･･ツタの近く上下矢印キーorWSキー
     */
     // privateでもインスペクター上で編集できるようにSerializeField属性を付けた
 
@@ -208,24 +209,24 @@ public class Player : StatusController {
         // ↓↓以下の行よりキー入力によりキャラクター書き換え処理を行う↓↓
         if (changeFlg == false)
         {
-            if (Input.GetKeyDown("joystick button 1") || Input.GetKeyDown(KeyCode.Alpha1)) // ゲームボタン「B」で炎属性に書き換え
+            if (Input.GetKeyDown("joystick button 1") || Input.GetKeyDown(KeyCode.RightArrow)) // ゲームボタン「B」で炎属性に書き換え
             {
                 changeFlg = true;
                 StatusChenge(STATUS.FIRE);
             }
-            if (Input.GetKeyDown("joystick button 2") || Input.GetKeyDown(KeyCode.Alpha2)) // ゲームボタン「X」で水属性に書き換え
+            if (Input.GetKeyDown("joystick button 2") || Input.GetKeyDown(KeyCode.LeftArrow)) // ゲームボタン「X」で水属性に書き換え
             {
                 changeFlg = true;
                 StatusChenge(STATUS.WATER);
             }
-            if (Input.GetKeyDown("joystick button 0") && ResetController.resetIsonFlg == true || Input.GetKeyDown(KeyCode.Alpha3) && ResetController.resetIsonFlg == true) // ゲームボタン「A」で風属性に書き換え
+            if (Input.GetKeyDown("joystick button 0") && ResetController.resetIsonFlg == true || Input.GetKeyDown(KeyCode.DownArrow) && ResetController.resetIsonFlg == true) // リセット用
             {
                 Button.selectBack = false;
                 StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                 StartCoroutine(pageChange.ScreenShot());
                 gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
             }
-            if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.Alpha4)) // ゲームボタン「Y」で土属性に書き換え
+            if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.UpArrow)) // ゲームボタン「Y」で土属性に書き換え
             {
                 changeFlg = true;
                 StatusChenge(STATUS.WIND);
