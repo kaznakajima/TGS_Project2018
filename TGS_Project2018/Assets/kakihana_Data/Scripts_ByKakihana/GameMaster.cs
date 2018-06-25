@@ -11,7 +11,7 @@ public class GameMaster : MonoBehaviour {
     PageChange pc;
     Player player;
 
-    const int BOOK_MAX_SIZE = 5;
+    const int BOOK_MAX_SIZE = 3;
     public GameObject[] bookValueObj = new GameObject[BOOK_MAX_SIZE];
 
     public int sketchBookValue; // 残りページ数
