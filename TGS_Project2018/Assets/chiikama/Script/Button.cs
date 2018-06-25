@@ -35,10 +35,10 @@ public class Button : MonoBehaviour
 
         switch (SceneManager.GetActiveScene().name)
         {
-            case "TitleTest":
+            case "TitleScene":
                 isPause = true;
                 break;
-            case "Stage1_alpha":
+            case "MainGameScene":
                 DOTween.To(() => Interval, volume =>
                  Interval = volume, 1.0f, 1.0f).OnComplete(() =>
                  {
@@ -68,7 +68,7 @@ public class Button : MonoBehaviour
 
             switch (SceneManager.GetActiveScene().name)
             {
-                case "TitleTest":
+                case "TitleScene":
                     // 選択状態の変更
                     if (inputY > 0.0f && buttonState > 0)
                     {
@@ -110,7 +110,7 @@ public class Button : MonoBehaviour
                         }
                     }
                     break;
-                case "Stage1_alpha":
+                case "MainGameScene":
                     // 選択状態の変更
                     if (inputY > 0.0f && buttonState > 0)
                     {
@@ -195,7 +195,7 @@ public class Button : MonoBehaviour
         SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.0f, 0.5f).OnComplete(() =>
         {
             SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
-            SceneManager.LoadScene("SelectTest");
+            SceneManager.LoadScene("SelectScene");
         });
     }
 

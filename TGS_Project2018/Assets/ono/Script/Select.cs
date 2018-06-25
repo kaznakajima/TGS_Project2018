@@ -6,18 +6,19 @@ using DG.Tweening;
 using UnityEngine.SceneManagement;
 
 
-public class Select : MonoBehaviour {
+public class Select : MonoBehaviour
+{
 
-    [SerializeField,Header("メインカメラ")]
+    [SerializeField, Header("メインカメラ")]
     Camera maincamera;
 
-    [SerializeField,Header("SelectStage_(No.)を入れて")]
+    [SerializeField, Header("SelectStage_(No.)を入れて")]
     GameObject[] SelectStage;
 
-    [SerializeField,Header("ステージ名")]
+    [SerializeField, Header("ステージ名")]
     public string stageName;
 
-   public int StageNum = 0; //選択ステージ関数
+    public int StageNum = 0; //選択ステージ関数
 
     bool flg;
 
@@ -26,7 +27,7 @@ public class Select : MonoBehaviour {
     GameObject rightStage;
     GameObject leftStage;
 
-    [SerializeField,Header("回転速度")]
+    [SerializeField, Header("回転速度")]
     float rollSpeed;
 
     float cameraRotate;
@@ -38,7 +39,7 @@ public class Select : MonoBehaviour {
 
     float alfa;
 
-    [SerializeField,Header("FadeOut")]
+    [SerializeField, Header("FadeOut")]
     GameObject fadeImage;
 
     // 自身のAudioSource
@@ -49,10 +50,13 @@ public class Select : MonoBehaviour {
 
     bool fadeFlg;
     // Use this for initialization
-    void Start () {
-        myAudio = GameObject.Find("Audio").gameObject.GetComponent<AudioSource>();
+    void Start()
+    {
         Camera_Select.flg = false;
+        // ステージ情報の初期化
         SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[0];
+        // 音楽の設定
+        myAudio = GameObject.Find("Audio").gameObject.GetComponent<AudioSource>();
         SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio = SingletonMonoBehaviour<ScreenShot>.Instance.GetBGM();
 
         DOTween.To(() => Interval, volume =>
@@ -122,8 +126,8 @@ public class Select : MonoBehaviour {
 
         // ボタン入力を遮断
         speed = 0.0f;
-       
-        if(StageNum < SelectStage.Length - 1)
+
+        if (StageNum < SelectStage.Length - 1)
         {
 
             StageNum += 1;
@@ -180,7 +184,7 @@ public class Select : MonoBehaviour {
         // ボタン入力を遮断
         speed = 0.0f;
 
-       if(StageNum > 0)
+        if (StageNum > 0)
         {
             StageNum -= 1;
             SingletonMonoBehaviour<ScreenShot>.Instance.stageNum = StageNum;
@@ -241,12 +245,13 @@ public class Select : MonoBehaviour {
 
     private IEnumerator TimeStand()
     {
-            yield return new WaitForSeconds(2.0f);
-            flg = false;
+        yield return new WaitForSeconds(2.0f);
+        flg = false;
     }
 
     void Scene(string StageName)
     {
+        // 音楽のフェードをしたのちシーン遷移
         DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
         SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.0f, 0.5f).OnComplete(() =>
         {

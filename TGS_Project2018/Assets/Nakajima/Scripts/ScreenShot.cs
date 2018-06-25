@@ -84,7 +84,7 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
         tex2D.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
         tex2D.Apply();
 
-        if(SceneManager.GetActiveScene().name == "Stage1_alpha")
+        if(SceneManager.GetActiveScene().name == "MainGameScene")
         {
             GameMaster master = FindObjectOfType<GameMaster>();
             if(master.sketchBookValue >= 0 && Button.selectBack == false)

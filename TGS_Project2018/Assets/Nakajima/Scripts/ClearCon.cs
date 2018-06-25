@@ -25,9 +25,11 @@ public class ClearCon : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        // BGMの設定
         myAudio = GameObject.Find("Audio").gameObject.GetComponent<AudioSource>();
         SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio = SingletonMonoBehaviour<ScreenShot>.Instance.GetBGM();
 
+        // 音楽のフェード
         DOTween.To(() => Interval, volume =>
                 Interval = volume, 1.0f, 1.0f).OnComplete(() =>
                 {
@@ -49,7 +51,8 @@ public class ClearCon : MonoBehaviour
         }
         else if(selectX < 0)
         {
-            if(SceneManager.GetActiveScene().name == "Stage1_alpha" && SingletonMonoBehaviour<ScreenShot>.Instance.stageNum == 2)
+            // ステージが最大だったら入力をキャンセル
+            if(SceneManager.GetActiveScene().name == "MainGameScene" && SingletonMonoBehaviour<ScreenShot>.Instance.stageNum == 2)
             {
                 return;
             }
@@ -72,7 +75,7 @@ public class ClearCon : MonoBehaviour
                             SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.5f, 1.0f).OnComplete(() =>
                             {
                                 SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
-                                SceneManager.LoadScene("SelectTest");
+                                SceneManager.LoadScene("SelectScene");
                             });
                             break;
                         case 1:
@@ -84,11 +87,9 @@ public class ClearCon : MonoBehaviour
                                 SceneManager.LoadScene("Stage1_alpha");
                             });
                             break;
-                    }
-
-                    
+                    } 
                     break;
-                case "Stage1_alpha":
+                case "MainGameScene":
                     switch (state)
                     {
                         case 0:
@@ -97,7 +98,7 @@ public class ClearCon : MonoBehaviour
                             SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.5f, 1.0f).OnComplete(() =>
                             {
                                 SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
-                                SceneManager.LoadScene("SelectTest");
+                                SceneManager.LoadScene("SelectScene");
                             });
                             break;
                         case 1:
