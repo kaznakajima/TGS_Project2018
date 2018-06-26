@@ -31,6 +31,8 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
     GameObject mirrorObj; // 鏡
     [SerializeField]
     GameObject TreeObj; // 木
+    [SerializeField]
+    GameObject GoalObj; // ゴール用オブジェクト
 
     // オブジェクトのリセット
     public void CheckReset()
@@ -59,13 +61,13 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
         // 燃やされてもリセット
         if (TreePos != Vector3.zero)
         {
-            Instantiate(TreeObj, new Vector3((int)TreePos.x,(int)TreePos.y, 0.0f), Quaternion.identity);
+            Instantiate(GoalObj, new Vector3((int)TreePos.x,(int)TreePos.y, 0.0f), Quaternion.identity);
             Instantiate(mirrorObj, new Vector3((int)TreePos.x - 1, (int)TreePos.y, 0.0f), Quaternion.identity);
             foreach(var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
             {
-                if(Mathf.Abs(player.transform.position.x - (int)TreeObj.transform.position.x) <= 1)
+                if(Mathf.Abs(player.transform.position.x - (int)GoalObj.transform.position.x) <= 2)
                 {
-                    player.transform.position = new Vector3((int)TreeObj.transform.position.x - 2, (int)TreeObj.transform.position.y, 0.0f);
+                    player.transform.position = new Vector3((int)GoalObj.transform.position.x - 3, (int)GoalObj.transform.position.y, 0.0f);
                 }
             }
             resetIsonFlg = false;
@@ -84,8 +86,7 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
 
         // 木が壊されているか確認
         foreach (Goal forest in SingletonMonoBehaviour<ScreenShot>.Instance.GetBreakForest())
-        {
-
+        { 
             // 壊されているならオブジェクトもリセット
             if(forest.isBreak == true)
             {
@@ -96,7 +97,7 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
 
                 foreach (var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
                 {
-                    if (Mathf.Abs(player.transform.position.x - (int)TreeObj.transform.position.x) <= 1)
+                    if (Mathf.Abs(player.transform.position.x - (int)TreeObj.transform.position.x) <= 2)
                     {
                         player.transform.position = new Vector3((int)TreeObj.transform.position.x - 2,
                     (int)TreeObj.transform.position.y, 0.0f);

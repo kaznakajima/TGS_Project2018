@@ -90,6 +90,12 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
             if(master.sketchBookValue >= 0 && Button.selectBack == false)
             {
                 myAudio.PlayOneShot(myAudio.clip);
+                // ゲームオーバーの際はキャンバスは隠さない
+                if (master.sketchBookValue != 0)
+                {
+                    currentCnavas = GameObject.FindObjectOfType<Button>().gameObject;
+                    currentCnavas.SetActive(false);
+                }
             }
             SingletonMonoBehaviour<ResetController>.Instance.CheckReset();
         }

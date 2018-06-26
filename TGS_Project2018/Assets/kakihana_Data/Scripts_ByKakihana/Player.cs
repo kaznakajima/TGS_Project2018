@@ -78,6 +78,11 @@ public class Player : StatusController {
 
     // Update is called once per frame
     void Update() {
+        if (Goal.clearFlg || gm.sketchBookValue <= 0)
+        {
+            return;
+        }
+
         isGround = GroundJudgment(); // 常に接地判定を取る
         if (isGround || climbFlg) // プレイヤーが地面に設置していたら
         {
