@@ -25,6 +25,7 @@ public class Player : StatusController {
 
     public SpriteRenderer resetIcon;
 
+    float Interval;
     [SerializeField] float playerSpeed = 1.0f; // キャラクターのスピード
     [SerializeField] float playerMaxSpeed = 1.5f; // プレイヤーの最大スピード
     [SerializeField] float playerMinSpeed = -1.5f; // プレイヤーの最小スピード
@@ -136,7 +137,6 @@ public class Player : StatusController {
             }
             if (climbFlg == true) // 登り判定がONなら
             {
-                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.CLIME);
                 myRigidbody.useGravity = false; // 重力OFF
                 if (Input.GetAxisRaw("Vertical") > 0.0f)
                 {
@@ -156,15 +156,16 @@ public class Player : StatusController {
                         movePos.y = playerMinSpeed;// 移動スピードは最小スピード固定
                     }
                 }
-                else if (Input.GetAxisRaw("Vertical") == 0 && changeFlg == false && status == STATUS.NONE && climbFlg == false)
-                {
-                    movePos.y = 0; // 移動量は０に
-                    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
-                }
+                //else if (Input.GetAxisRaw("Vertical") == 0 && changeFlg == false && status == STATUS.NONE && climbFlg == false)
+                //{
+                //    movePos.y = 0; // 移動量は０に
+                //    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
+                //}
             }
             else
             {
                 myRigidbody.useGravity = true; // 登り判定OFFで重力ON
+                movePos.y = 0;
             }
         }
 
@@ -287,9 +288,18 @@ public class Player : StatusController {
         {
             // ダメージアニメーション再生
             statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.DAMAGE);
-            // デバッグ用最後の中間地点の座標を設定
-            wayPointPos = new Vector3(1.5f, 4.0f, 0.0f);
             damageFlg = true; // ダメージフラグON
+
+            // インターバル分待ってからリセット
+            DOTween.To(() => Interval, volume =>
+              Interval = volume, 1.0f, 1.0f).OnComplete(() =>
+              {
+                  Button.selectBack = false;
+                  StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                  StartCoroutine(pageChange.ScreenShot());
+                  gm.sketchBookValue = gm.sketchBookValue - 1; // マスタークラスの残機を減らす
+                  Interval = 0.0f;
+              });
         }
     }
 
@@ -311,14 +321,33 @@ public class Player : StatusController {
                     RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
             }
         }
+        if (c.gameObject.name == "Ice(Clone)")
+        {
+            if (c.gameObject.GetComponent<IceGimmick>().isSlope)
+            {
+                speed = 0.0f;
+            }
+        }
     }
 
     void OnCollisionExit(Collision c)
     {
+        if(c.gameObject.name == "Ground(Clone)")
+        {
+            wayPointPos = new Vector3(c.gameObject.transform.position.x, c.gameObject.transform.position.y + 2.0f, 0.0f);
+        }
+
         if (c.gameObject.name == "GroundSlope")
         {
             myRigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
                     RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        }
+        if (c.gameObject.name == "Ice(Clone)")
+        {
+            if (c.gameObject.GetComponent<IceGimmick>().isSlope)
+            {
+                speed = 70.0f;
+            }
         }
     }
 
