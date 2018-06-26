@@ -30,7 +30,7 @@ public class GameMaster : MonoBehaviour {
         pc = GameObject.Find(changePageName).GetComponent<PageChange>(); // ページ遷移のコンポーネント取得
         sketchBookValue = BOOK_MAX_SIZE;
         tempSketchValue = sketchBookValue; // 差分用変数の値を設定
-        for (int i = bookValueObj.Length; i > bookValueObj.Length; i++) // 残機UIの初期設定
+        for (int i = 0; i > bookValueObj.Length; i++) // 残機UIの初期設定
         {
             bookValueObj[i].GetComponent<GameObject>();
         }
