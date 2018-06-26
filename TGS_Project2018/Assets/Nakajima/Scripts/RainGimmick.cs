@@ -22,15 +22,22 @@ public class RainGimmick : GimmickController
         float nextPosition;
         if(isHit)
         {
-            ResetController.resetIsonFlg = true;
+            SingletonMonoBehaviour<ResetController>.Instance.IvyObj = gameObject;
             nextPosition = transform.position.y;
         }
         else
         {
             myAudio.PlayOneShot(myAudio.clip);
             nextPosition = transform.position.y + 10.18f;
+            SingletonMonoBehaviour<ResetController>.Instance.IvyPos = transform.position;
         }
-        transform.DOMove(new Vector3(transform.position.x, nextPosition, transform.position.z), 2.0f);
+        transform.DOMove(new Vector3(transform.position.x, nextPosition, transform.position.z), 2.0f).OnComplete(() =>
+        {
+            if (isHit)
+            {
+                ResetController.resetIsonFlg = true;
+            }
+        });
         isMirror = false;
     }
 
@@ -72,6 +79,7 @@ public class RainGimmick : GimmickController
         if (isMirror && mirrorObj == null)
         {
             GimmickAction();
+            gimmickMaxRay = 2.0f;
         }
     }
 }
