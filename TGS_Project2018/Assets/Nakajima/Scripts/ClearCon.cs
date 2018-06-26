@@ -84,7 +84,7 @@ public class ClearCon : MonoBehaviour
                             SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.5f, 1.0f).OnComplete(() =>
                             {
                                 SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
-                                SceneManager.LoadScene("Stage1_alpha");
+                                SceneManager.LoadScene("MainGameScene");
                             });
                             break;
                     } 

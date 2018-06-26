@@ -9,7 +9,11 @@ public class IceGimmick : GimmickController
     GameObject steam;
 
     // 滑る向き
-    float moveX;
+    float moveX = 3.0f;
+
+    // 滑る判定
+    [HideInInspector]
+    public bool isSlope = true;
 
     // 滑らせるためのオブジェクト
     Rigidbody playerRig;
@@ -40,6 +44,11 @@ public class IceGimmick : GimmickController
         Debug.DrawRay(transform.position, direction * gimmickMaxRay, Color.red);
         if (Physics.Raycast(ray, out rayHit, gimmickMaxRay))
         {
+            if (rayHit.collider.name == objName)
+            {
+                isSlope = false;
+            }
+
             // 鏡の属性が炎だったらギミック作動
             if (rayHit.collider.name == objName &&
                 rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.FIRE)
@@ -48,7 +57,6 @@ public class IceGimmick : GimmickController
                 gimmickMaxRay = 0.0f;
                 GimmickAction();
                 ResetController.resetIsonFlg = false;
-                //mirror.isGimmick = true;
                 // ミラーの消去コルーチン開始
                 StartCoroutine(mirror.DestroyAnimation(0.0f, 0.0f, 2.0f));
             }
@@ -65,20 +73,11 @@ public class IceGimmick : GimmickController
         RayHit(transform.up, "Enemy");
     }
 
-    void OnCollisionEnter(Collision c)
+    void OnCollisionStay(Collision c)
     {
-        if (c.gameObject.name == "Character")
+        if (c.gameObject.name == "Character" && isSlope)
         {
-            if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 1)
-            {
-                moveX = 1.0f;
-                c.gameObject.GetComponent<Rigidbody>().AddForce(transform.right * moveX * 100.0f);
-            }
-            else if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == -1)
-            {
-                moveX = -1.0f;
-                c.gameObject.GetComponent<Rigidbody>().AddForce(transform.right * moveX * 100.0f);
-            }
+            c.gameObject.transform.position += new Vector3(moveX, 0.0f, 0.0f) * Time.deltaTime;
         }
     }
 

@@ -36,6 +36,8 @@ public class Select : MonoBehaviour
 
     // 連続入力防止
     bool onButton = false;
+    // ボタンが押せるかどうか
+    bool canPush = false;
 
     float alfa;
 
@@ -59,9 +61,11 @@ public class Select : MonoBehaviour
         myAudio = GameObject.Find("Audio").gameObject.GetComponent<AudioSource>();
         SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio = SingletonMonoBehaviour<ScreenShot>.Instance.GetBGM();
 
+        // インターバルを計算し、音楽のフェード
         DOTween.To(() => Interval, volume =>
                 Interval = volume, 1.0f, 1.0f).OnComplete(() =>
                 {
+                    canPush = true;
                     SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.Play();
                     DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
                     SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 2.0f);
@@ -95,7 +99,7 @@ public class Select : MonoBehaviour
         //}
         if (Input.GetButtonDown("Click") && !flg)
         {
-            if (onButton)
+            if (onButton || !canPush)
             {
                 return;
             }

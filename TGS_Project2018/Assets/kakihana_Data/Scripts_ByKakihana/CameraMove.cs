@@ -57,17 +57,17 @@ public class CameraMove : MonoBehaviour {
         topLeft = GetTopLeft();
         buttomRight = GetButtomRight();
         // デバッグ用、F1キーが押されたらイベントカメラに切り替え
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            targetGimmick = GameObject.Find("Event1").GetComponent<Transform>();
-            velocity = MoveSmooth(playerTrans.position, targetGimmick.position, frameLimit);
-            eventFlg = true;
-        }
-        // イベントモードでなければ通常通りプレイヤーの移動に応じてカメラが移動
-        if (eventFlg)
-        {
-            StartCoroutine("EventMove");
-        }
+        //if (Input.GetKeyDown(KeyCode.F1))
+        //{
+        //    targetGimmick = GameObject.Find("Event1").GetComponent<Transform>();
+        //    velocity = MoveSmooth(playerTrans.position, targetGimmick.position, frameLimit);
+        //    eventFlg = true;
+        //}
+        //// イベントモードでなければ通常通りプレイヤーの移動に応じてカメラが移動
+        //if (eventFlg)
+        //{
+        //    StartCoroutine("EventMove");
+        //}
 
         cameraMovePos = playerTrans.position;
 

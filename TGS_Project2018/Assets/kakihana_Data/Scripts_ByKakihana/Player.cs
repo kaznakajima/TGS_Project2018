@@ -16,10 +16,14 @@ public class Player : StatusController {
     */
     // privateでもインスペクター上で編集できるようにSerializeField属性を付けた
 
+    float Interval;
+
     PageChange pageChange; // ページ遷移クラス
     GameMaster gm; // ゲームマスタークラス
     CameraMove cameraMove;
     UVScroll[] uvScroll = new UVScroll[2];
+    [HideInInspector]
+    public bool isScroll = true;
 
     AudioSource myAudio;
 
@@ -107,11 +111,11 @@ public class Player : StatusController {
             {
                 movePos = new Vector3(0.0f, 0.0f, 0.0f); // 移動量は０に
                 // 最後の入力キーに応じてアイドルアニメーションを変更
-                if (isright == true)
+                if (isright == true && !climbFlg)
                 {
                     statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
                 }
-                else if (isright == false)
+                else if (isright == false && !climbFlg)
                 {
                     statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE_LEFT);
                 }
@@ -122,19 +126,18 @@ public class Player : StatusController {
                 // 移動量は0にする
                 movePos.x = 0;
             }
-            if (Input.GetKeyDown(KeyCode.C) || Input.GetAxis("Vertical") <= -1.0f && jumpCoolDownCount >= jumpCoolDownLimit && climbFlg == false) // スペースキーが押されたら
-            {
-                jumpFlg = true; // ジャンプフラグON
-            }
-            if (jumpFlg == true) // ジャンプフラグがONなら
-            {
-                myRigidbody.velocity = Vector3.up * jumpSpeed; // ジャンプを移動ベクトルに代入
-                jumpCoolDownCount = 0.0f; // ジャンプクールダウンカウント初期化
-                jumpFlg = false; // ２段ジャンプを防ぐため、再度地面に設置しないとジャンプできないようにする
-            }
+            //if (Input.GetKeyDown(KeyCode.C) || Input.GetAxis("Vertical") <= -1.0f && jumpCoolDownCount >= jumpCoolDownLimit && climbFlg == false) // スペースキーが押されたら
+            //{
+            //    jumpFlg = true; // ジャンプフラグON
+            //}
+            //if (jumpFlg == true) // ジャンプフラグがONなら
+            //{
+            //    myRigidbody.velocity = Vector3.up * jumpSpeed; // ジャンプを移動ベクトルに代入
+            //    jumpCoolDownCount = 0.0f; // ジャンプクールダウンカウント初期化
+            //    jumpFlg = false; // ２段ジャンプを防ぐため、再度地面に設置しないとジャンプできないようにする
+            //}
             if (climbFlg == true) // 登り判定がONなら
             {
-                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.CLIME);
                 myRigidbody.useGravity = false; // 重力OFF
                 if (Input.GetAxisRaw("Vertical") > 0.0f)
                 {
@@ -154,20 +157,21 @@ public class Player : StatusController {
                         movePos.y = playerMinSpeed;// 移動スピードは最小スピード固定
                     }
                 }
-                else if (Input.GetAxisRaw("Vertical") == 0 && changeFlg == false && status == STATUS.NONE && climbFlg == false)
-                {
-                    movePos.y = 0; // 移動量は０に
-                    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
-                }
+                //else if (Input.GetAxisRaw("Vertical") == 0 && changeFlg == false && status == STATUS.NONE && climbFlg == false)
+                //{
+                //    movePos.y = 0; // 移動量は０に
+                //    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
+                //}
             }
             else
             {
                 myRigidbody.useGravity = true; // 登り判定OFFで重力ON
+                movePos.y = 0;
             }
         }
 
         // キャラクターが右方向に移動していたら
-        if (movePos.x > 0)
+        if (movePos.x > 0 && isScroll)
         {
             foreach (var item in uvScroll)
             {
@@ -175,7 +179,7 @@ public class Player : StatusController {
                 item.scrollSpeedX = -1.0f;
             }
         }
-        else if (movePos.x < 0) // キャラクターが左方向に移動していたら
+        else if (movePos.x < 0 && isScroll) // キャラクターが左方向に移動していたら
         {
             foreach (var item in uvScroll)
             {
@@ -230,8 +234,6 @@ public class Player : StatusController {
             {
                 changeFlg = true;
                 StatusChenge(STATUS.WIND);
-                //changeFlg = true;
-                //StatusChenge(STATUS.EARTH);
             }
 
         }
@@ -243,8 +245,7 @@ public class Player : StatusController {
 
     // キャラクター描き換えメソッド
     public override void StatusChenge(STATUS _status)
-    {
-        SpriteRenderer playerSprite = gameObject.GetComponent<SpriteRenderer>();
+    { 
         // ページがめくり終わるまで変身できない
         if (status != _status && pageChange.pageFlip < -1)
         {
@@ -266,7 +267,6 @@ public class Player : StatusController {
         }// 変更先のステータスが現在のステータスと同じなら元のキャラクターに戻る
         else if (status == _status && pageChange.pageFlip < -1)
         {
-
             FormChange((int)ANIM_ENUMS.BLUCK.IDLE, STATUS.NONE);
         }
     }
@@ -285,19 +285,32 @@ public class Player : StatusController {
         {
             // ダメージアニメーション再生
             statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.DAMAGE);
-            // デバッグ用最後の中間地点の座標を設定
-            wayPointPos = new Vector3(1.5f, 4.0f, 0.0f);
             damageFlg = true; // ダメージフラグON
+
+            // インターバル分待ってからリセット
+            DOTween.To(() => Interval, volume =>
+              Interval = volume, 1.0f, 1.0f).OnComplete(() =>
+              {
+                  Button.selectBack = false;
+                  StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                  StartCoroutine(pageChange.ScreenShot());
+                  gm.sketchBookValue = gm.sketchBookValue - 1; // マスタークラスの残機を減らす
+                  Interval = 0.0f;
+              });
         }
     }
 
     // プレイヤーが坂の上に立ったら
     void OnCollisionStay(Collision c)
     {
+        if(c.gameObject.name != "Ground(Clone)")
+        {
+            isScroll = false;
+        }
         if (c.gameObject.name == "GroundSlope")
         {
             // 止まっているなら滑る
-            if (statusAnim.GetInteger("BluckAnim") == 0)
+            if (statusAnim.GetInteger("BluckAnim") == 0 || statusAnim.GetInteger("BluckAnim") == 9)
             {
                 myRigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
                     RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
@@ -309,14 +322,38 @@ public class Player : StatusController {
                     RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
             }
         }
+        if(c.gameObject.name == "Ice(Clone)" )
+        {
+            if (c.gameObject.GetComponent<IceGimmick>().isSlope)
+            {
+                speed = 0.0f;
+            }
+        }
     }
 
     void OnCollisionExit(Collision c)
     {
+        if (c.gameObject.name != "Ground(Clone)")
+        {
+            isScroll = true;
+        }
+        else
+        {
+            isScroll = false;
+            wayPointPos = new Vector3(c.gameObject.transform.position.x, c.gameObject.transform.position.y + 2.0f, 0.0f);
+        }
+
         if (c.gameObject.name == "GroundSlope")
         {
             myRigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
                     RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        }
+        if (c.gameObject.name == "Ice(Clone)")
+        {
+            if (c.gameObject.GetComponent<IceGimmick>().isSlope)
+            {
+                speed = 70.0f;
+            }
         }
     }
 

@@ -22,6 +22,7 @@ public class RainGimmick : GimmickController
         float nextPosition;
         if(isHit)
         {
+            ResetController.resetIsonFlg = true;
             nextPosition = transform.position.y;
         }
         else
@@ -48,8 +49,6 @@ public class RainGimmick : GimmickController
             {
                 isMirror = true;
                 mirrorObj = rayHit.collider.gameObject;
-
-                Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
                 ResetController.resetIsonFlg = false;
                 gimmickMaxRay = 0.0f;
                 // 重力を無視する

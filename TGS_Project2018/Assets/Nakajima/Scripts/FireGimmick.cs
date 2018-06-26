@@ -47,7 +47,6 @@ public class FireGimmick : GimmickController
                 }
                 if(rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.WIND)
                 {
-                    Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
                     if (gameObject.transform.parent.name == "GoalForest(Clone)")
                     {
                         ResetController.resetIsonFlg = false;
