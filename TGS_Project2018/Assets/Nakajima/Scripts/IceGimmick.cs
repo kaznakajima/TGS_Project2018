@@ -24,6 +24,8 @@ public class IceGimmick : GimmickController
     {
         GameObject obj = Instantiate(steam) as GameObject;
         obj.transform.position = transform.position;
+        // レイヤー変更
+        gameObject.layer = 9;
 
         transform.DOScale(Vector3.zero, 3.0f).OnComplete(() =>
         {

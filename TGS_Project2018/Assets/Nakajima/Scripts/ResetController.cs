@@ -58,6 +58,11 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
             return;
         }
 
+        foreach (Player player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
+        {
+            player.FormChange((int)ANIM_ENUMS.BLUCK.IDLE, StatusController.STATUS.NONE);
+        }
+
         // 燃やされてもリセット
         if (TreePos != Vector3.zero)
         {
@@ -114,8 +119,14 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
     // 鏡の姿だけリセット
     public void StatusReset()
     {
+        foreach (Player player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
+        {
+            player.changeFlg = true;
+            player.FormChange((int)ANIM_ENUMS.BLUCK.IDLE, StatusController.STATUS.NONE);
+        }
+
         // Mirrorの取得
-        foreach(Mirror mirror in SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror())
+        foreach (Mirror mirror in SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror())
         {
             // Mirrorのステータスを通常に変更
             mirror.StatusChenge(StatusController.STATUS.NONE);

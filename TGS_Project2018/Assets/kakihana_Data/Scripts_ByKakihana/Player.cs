@@ -80,6 +80,7 @@ public class Player : StatusController {
     void Update() {
         if (Goal.clearFlg || gm.sketchBookValue <= 0)
         {
+            statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
             return;
         }
 
@@ -113,8 +114,8 @@ public class Player : StatusController {
             }// 何も押されていなかったら
             else if (Input.GetAxisRaw("Horizontal") == 0 && changeFlg == false && status == STATUS.NONE)
             {
-                movePos = new Vector3(0.0f, 0.0f, 0.0f); // 移動量は０に
-                // 最後の入力キーに応じてアイドルアニメーションを変更
+                movePos.x = 0.0f; // 移動量は０に
+                                                         // 最後の入力キーに応じてアイドルアニメーションを変更
                 if (isright == true)
                 {
                     statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
@@ -130,22 +131,23 @@ public class Player : StatusController {
                 // 移動量は0にする
                 movePos.x = 0;
             }
-            if (Input.GetKeyDown(KeyCode.C) || Input.GetAxis("Vertical") <= -1.0f && jumpCoolDownCount >= jumpCoolDownLimit && climbFlg == false) // スペースキーが押されたら
-            {
-                jumpFlg = true; // ジャンプフラグON
-            }
-            if (jumpFlg == true) // ジャンプフラグがONなら
-            {
-                myRigidbody.velocity = Vector3.up * jumpSpeed; // ジャンプを移動ベクトルに代入
-                jumpCoolDownCount = 0.0f; // ジャンプクールダウンカウント初期化
-                jumpFlg = false; // ２段ジャンプを防ぐため、再度地面に設置しないとジャンプできないようにする
-            }
+            //if (Input.GetKeyDown(KeyCode.C) || Input.GetAxis("Vertical") <= -1.0f && jumpCoolDownCount >= jumpCoolDownLimit && climbFlg == false) // スペースキーが押されたら
+            //{
+            //    jumpFlg = true; // ジャンプフラグON
+            //}
+            //if (jumpFlg == true) // ジャンプフラグがONなら
+            //{
+            //    myRigidbody.velocity = Vector3.up * jumpSpeed; // ジャンプを移動ベクトルに代入
+            //    jumpCoolDownCount = 0.0f; // ジャンプクールダウンカウント初期化
+            //    jumpFlg = false; // ２段ジャンプを防ぐため、再度地面に設置しないとジャンプできないようにする
+            //}
             if (climbFlg == true) // 登り判定がONなら
             {
+                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.CLIME);
                 myRigidbody.useGravity = false; // 重力OFF
                 if (Input.GetAxisRaw("Vertical") > 0.0f)
                 {
-                    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.CLIME);
+                    
                     movePos.y += speed;
                     if (movePos.y >= playerMaxSpeed)// 移動ベクトルが最小スピードを下回ったら
                     {
@@ -154,18 +156,16 @@ public class Player : StatusController {
                 }
                 else if (Input.GetAxisRaw("Vertical") < 0.0f)
                 {
-                    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.CLIME);
                     movePos.y += -speed;
                     if (movePos.y <= playerMinSpeed)// 移動ベクトルが最小スピードを下回ったら
                     {
                         movePos.y = playerMinSpeed;// 移動スピードは最小スピード固定
                     }
                 }
-                //else if (Input.GetAxisRaw("Vertical") == 0 && changeFlg == false && status == STATUS.NONE && climbFlg == false)
-                //{
-                //    movePos.y = 0; // 移動量は０に
-                //    statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
-                //}
+                else if (Input.GetAxisRaw("Vertical") == 0)
+                {
+                    movePos.y = 0; // 移動量は０に
+                }
             }
             else
             {
@@ -274,7 +274,6 @@ public class Player : StatusController {
         }// 変更先のステータスが現在のステータスと同じなら元のキャラクターに戻る
         else if (status == _status && pageChange.pageFlip < -1)
         {
-
             FormChange((int)ANIM_ENUMS.BLUCK.IDLE, STATUS.NONE);
         }
     }
@@ -289,21 +288,34 @@ public class Player : StatusController {
     void OnCollisionEnter(Collision hit)
     {
         // ダメージオブジェクトに接触したら
-        if (hit.gameObject.tag == "Needle")
+        if (hit.gameObject.tag == "Needle" && damageFlg == false)
         {
+            Interval = 0.0f;
+
             // ダメージアニメーション再生
             statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.DAMAGE);
             damageFlg = true; // ダメージフラグON
 
             // インターバル分待ってからリセット
             DOTween.To(() => Interval, volume =>
-              Interval = volume, 1.0f, 1.0f).OnComplete(() =>
+              Interval = volume, 0.25f, 1.0f).OnComplete(() =>
               {
                   Button.selectBack = false;
                   StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                   StartCoroutine(pageChange.ScreenShot());
-                  gm.sketchBookValue = gm.sketchBookValue - 1; // マスタークラスの残機を減らす
                   Interval = 0.0f;
+                  DOTween.To(() => Interval, volume =>
+                   Interval = volume, 0.25f, 0.5f).OnComplete(() =>
+                  {
+                      if (gm.sketchBookValue > 0 && Interval == 0.25f)
+                      {
+                          gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
+                          statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
+                          transform.position = wayPointPos; // 保存された中間地点に移動する
+                          damageFlg = false; // ダメージフラグOFF
+                          Interval = 0.0f;
+                      }
+                  });
               });
         }
     }
@@ -384,7 +396,7 @@ public class Player : StatusController {
 
     }
 
-    void FormChange(int changeNum, STATUS _status)
+    public void FormChange(int changeNum, STATUS _status)
     {
         movePos = Vector3.zero;
         statusSr.material.shader = statusMaterial[0].shader;
