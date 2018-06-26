@@ -39,7 +39,7 @@ public class PageChange : PageController
         pageRenderer.material.SetFloat("_Flip", pageFlip);
 
         // キャンバスを不可視に
-        if(SceneManager.GetActiveScene().name == "Stage1_alpha")
+        if(SceneManager.GetActiveScene().name == "MainGameScene")
         {
             currentCanvas = GameObject.FindObjectOfType<Button>().gameObject;
             currentCanvas.SetActive(false);
@@ -66,7 +66,7 @@ public class PageChange : PageController
         if (pageFlip < -1 && pageChange || pageFlip > 1 && pageChange)
         {
             // キャンバスを可視に
-            if (SceneManager.GetActiveScene().name == "Stage1_alpha")
+            if (SceneManager.GetActiveScene().name == "MainGameScene")
             {
                 currentCanvas.SetActive(true);
             }

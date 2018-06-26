@@ -567,6 +567,7 @@ GameObject:
   - component: {fileID: 448416448}
   - component: {fileID: 448416449}
   - component: {fileID: 448416450}
+  - component: {fileID: 448416451}
   m_Layer: 0
   m_Name: Stage1_BackGround
   m_TagString: Untagged
@@ -643,6 +644,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollSpeedX: 0.1
+--- !u!114 &448416451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 448416447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9555112adbe16664185ddd09de85e2c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &603060933
 GameObject:
   m_ObjectHideFlags: 0
@@ -1297,8 +1309,9 @@ GameObject:
   - component: {fileID: 779210293}
   - component: {fileID: 779210295}
   - component: {fileID: 779210294}
+  - component: {fileID: 779210296}
   m_Layer: 0
-  m_Name: Stage1_BackGround (1)
+  m_Name: Stage1_BackGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1373,6 +1386,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &779210296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 779210292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9555112adbe16664185ddd09de85e2c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &883528430
 GameObject:
   m_ObjectHideFlags: 0

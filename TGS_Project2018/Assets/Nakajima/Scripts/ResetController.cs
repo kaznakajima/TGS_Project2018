@@ -20,14 +20,17 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
     // 木が元々あった位置
     [HideInInspector]
     public Vector3 TreePos;
+    // ツタが元々あった位置、ツタのオブジェクト
+    [HideInInspector]
+    public Vector3 IvyPos;
+    [HideInInspector]
+    public GameObject IvyObj;
 
     // リセット用のオブジェクト
     [SerializeField]
     GameObject mirrorObj; // 鏡
-    GameObject resetMirror;
     [SerializeField]
     GameObject TreeObj; // 木
-    GameObject resetTree;
 
     // オブジェクトのリセット
     public void CheckReset()
@@ -69,14 +72,16 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
             canReset = false;
         }
 
+        // ツタが登り切らなかったらリセット
+        if(IvyObj != null)
+        {
+            IvyObj.transform.position = IvyPos;
+            Instantiate(mirrorObj, new Vector3((int)IvyPos.x, (int)IvyPos.y + 1, 0.0f), Quaternion.identity);
+        }
+
         // 木が壊されているか確認
         foreach (Goal forest in SingletonMonoBehaviour<ScreenShot>.Instance.GetBreakForest())
         {
-            // リセット済みならリターン
-            if(resetMirror != null || resetTree != null)
-            {
-                return;
-            }
 
             // 壊されているならオブジェクトもリセット
             if(forest.isBreak == true)
