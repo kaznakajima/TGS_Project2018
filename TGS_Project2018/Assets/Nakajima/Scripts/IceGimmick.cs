@@ -8,8 +8,6 @@ public class IceGimmick : GimmickController
     [SerializeField]
     GameObject steam;
 
-    // 接触しているか
-    bool isContact;
     // 滑る向き
     float moveX;
 
@@ -47,10 +45,10 @@ public class IceGimmick : GimmickController
                 rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.FIRE)
             {
                 Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
-                // ギミックが作動するためリセットをできなくする
-                mirror.canReset = false;
                 gimmickMaxRay = 0.0f;
                 GimmickAction();
+                ResetController.resetIsonFlg = false;
+                //mirror.isGimmick = true;
                 // ミラーの消去コルーチン開始
                 StartCoroutine(mirror.DestroyAnimation(0.0f, 0.0f, 2.0f));
             }
@@ -65,13 +63,6 @@ public class IceGimmick : GimmickController
     // Update is called once per frame
     void Update() {
         RayHit(transform.up, "Enemy");
-
-
-    }
-
-    void SlideMove(float moveX)
-    {
-
     }
 
     void OnCollisionEnter(Collision c)
@@ -80,22 +71,29 @@ public class IceGimmick : GimmickController
         {
             if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 1)
             {
-                isContact = true;
                 moveX = 1.0f;
+                c.gameObject.GetComponent<Rigidbody>().AddForce(transform.right * moveX * 100.0f);
             }
             else if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == -1)
             {
-                isContact = true;
                 moveX = -1.0f;
+                c.gameObject.GetComponent<Rigidbody>().AddForce(transform.right * moveX * 100.0f);
             }
+        }
+    }
+
+    void OnTriggerEnter(Collider c)
+    {
+        if (c.gameObject.name == "Ivy")
+        {
+            RainGimmick rain = c.gameObject.GetComponent<RainGimmick>();
+            rain.isHit = true;
+            rain.GimmickAction();
         }
     }
 
     void OnCollisionExit(Collision c)
     {
-        if(c.gameObject.name == "Character")
-        {
-            isContact = false;
-        }
+
     }
 }

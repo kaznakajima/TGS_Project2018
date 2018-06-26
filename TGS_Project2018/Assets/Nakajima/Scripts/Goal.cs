@@ -7,6 +7,10 @@ public class Goal : MonoBehaviour
 {
     // クリア判定
     public static bool clearFlg;
+    // 木が切られた判定
+    [SerializeField]
+    public bool isBreak;
+    // 水の上かどうか
     bool onWater;
 
     // クリア表示
@@ -18,6 +22,7 @@ public class Goal : MonoBehaviour
 	// Use this for initialization
 	void Start () {
         clearFlg = false;
+        isBreak = false;
 	}
 	
 	// Update is called once per frame

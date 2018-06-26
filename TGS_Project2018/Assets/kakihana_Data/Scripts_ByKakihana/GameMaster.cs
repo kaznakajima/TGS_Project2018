@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class GameMaster : MonoBehaviour {
 
@@ -10,7 +11,7 @@ public class GameMaster : MonoBehaviour {
     PageChange pc;
     Player player;
 
-    const int BOOK_MAX_SIZE = 5;
+    const int BOOK_MAX_SIZE = 3;
     public GameObject[] bookValueObj = new GameObject[BOOK_MAX_SIZE];
 
     public int sketchBookValue; // 残りページ数
@@ -28,7 +29,7 @@ public class GameMaster : MonoBehaviour {
         mapLoad = GameObject.Find("StageInit").GetComponent<MapLoad>();
         pc = GameObject.Find(changePageName).GetComponent<PageChange>(); // ページ遷移のコンポーネント取得
         sketchBookValue = BOOK_MAX_SIZE;
-        tempSketchValue = BOOK_MAX_SIZE; // 差分用変数の値を設定
+        tempSketchValue = sketchBookValue; // 差分用変数の値を設定
         for (int i = bookValueObj.Length; i > bookValueObj.Length; i++) // 残機UIの初期設定
         {
             bookValueObj[i].GetComponent<GameObject>();
@@ -63,10 +64,17 @@ public class GameMaster : MonoBehaviour {
         {
             return;
         }
-        if (sketchBookValue == 0 && pc.pageChange == false)
+        if (sketchBookValue == 0 && pc.pageFlip <= -1)
         {
+            sketchBookValue = -1;
             StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-            SceneManager.LoadScene("GameOver");
+            DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
+            SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.5f, 1.0f).OnComplete(() =>
+            {
+                SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
+                SceneManager.LoadScene("GameOver");
+            });
+
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class Button : MonoBehaviour
 {
@@ -14,9 +15,15 @@ public class Button : MonoBehaviour
     // ポーズ中かどうか
     bool isPause;
 
+    float Interval = 0.0f;
+
     // 選択中のボタン
     int buttonState;
     float speed = 1.0f;
+
+    // 連続入力防止
+    bool onButton = false;
+    public static bool selectBack;
 
     // 自身のAudioSource
     AudioSource myAudio;
@@ -24,13 +31,20 @@ public class Button : MonoBehaviour
     void Start()
     {
         myAudio = GameObject.Find("Audio").gameObject.GetComponent<AudioSource>();
+        SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio = SingletonMonoBehaviour<ScreenShot>.Instance.GetBGM();
 
         switch (SceneManager.GetActiveScene().name)
         {
-            case "TitleTest":
+            case "TitleScene":
                 isPause = true;
                 break;
-            case "Stage1_alpha":
+            case "MainGameScene":
+                DOTween.To(() => Interval, volume =>
+                 Interval = volume, 1.0f, 1.0f).OnComplete(() =>
+                 {
+                     DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
+                     SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 2.0f);
+                 });
                 isPause = false;
                 break;
         }
@@ -54,7 +68,7 @@ public class Button : MonoBehaviour
 
             switch (SceneManager.GetActiveScene().name)
             {
-                case "TitleTest":
+                case "TitleScene":
                     // 選択状態の変更
                     if (inputY > 0.0f && buttonState > 0)
                     {
@@ -78,9 +92,15 @@ public class Button : MonoBehaviour
 
                     if (Input.GetButtonDown("Click"))
                     {
+                        if (onButton)
+                        {
+                            return;
+                        }
+
                         switch (buttonState)
                         {
                             case 0:
+                                myAudio.PlayOneShot(myAudio.clip);
                                 SelectScene();
                                 break;
                             case 1:
@@ -90,7 +110,7 @@ public class Button : MonoBehaviour
                         }
                     }
                     break;
-                case "Stage1_alpha":
+                case "MainGameScene":
                     // 選択状態の変更
                     if (inputY > 0.0f && buttonState > 0)
                     {
@@ -114,6 +134,11 @@ public class Button : MonoBehaviour
 
                     if (Input.GetButtonDown("Click"))
                     {
+                        if (onButton)
+                        {
+                            return;
+                        }
+
                         switch (buttonState)
                         {
                             case 0:
@@ -159,12 +184,19 @@ public class Button : MonoBehaviour
 
     public void SelectScene()//セレクトシーンに移動
     {
-       if(pauseUI != null)
+        selectBack = true;
+        onButton = true;
+        if (pauseUI != null)
         {
             Resume();
         }
         StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-        SceneManager.LoadScene("SelectTest");
+        DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
+        SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.0f, 0.5f).OnComplete(() =>
+        {
+            SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
+            SceneManager.LoadScene("SelectScene");
+        });
     }
 
     public void DialogButton()//ダイアログ表示
@@ -174,8 +206,10 @@ public class Button : MonoBehaviour
 
     public void RetryScene()
     {
+        selectBack = false;
         string sceneName = SceneManager.GetActiveScene().name;
         Resume();
+        onButton = true;
         StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
         SceneManager.LoadScene(sceneName);
         Debug.Log("りとらい");

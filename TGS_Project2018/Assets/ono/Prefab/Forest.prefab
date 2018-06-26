@@ -84,8 +84,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4798257209779272}
   - component: {fileID: 212140372881670548}
-  - component: {fileID: 136402627832693566}
   - component: {fileID: 114994179090519472}
+  - component: {fileID: 136329432297049308}
   m_Layer: 0
   m_Name: Forest_2
   m_TagString: Untagged
@@ -130,7 +130,7 @@ Transform:
   m_GameObject: {fileID: 1871915149939946}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.9, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4922710824183748}
   m_RootOrder: 0
@@ -142,8 +142,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1456967744725320}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 22.042496, y: -6.1936054, z: 0}
-  m_LocalScale: {x: 1.25, y: 1.25, z: 1}
+  m_LocalPosition: {x: 22.894732, y: -9.301887, z: 0}
+  m_LocalScale: {x: 1.75, y: 1.25, z: 1}
   m_Children:
   - {fileID: 4922710824183748}
   m_Father: {fileID: 0}
@@ -232,7 +232,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e17db06e5f7332d4486cecb716b1c696, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!136 &136402627832693566
+  isBreak: 0
+--- !u!136 &136329432297049308
 CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -241,7 +242,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.1
+  m_Radius: 0.15
   m_Height: 0.95
   m_Direction: 1
   m_Center: {x: 0.1, y: 0, z: 0}

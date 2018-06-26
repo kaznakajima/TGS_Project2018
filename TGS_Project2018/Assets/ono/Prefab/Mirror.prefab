@@ -313,7 +313,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1316615561819584}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 65.75107, y: -12.324223, z: 0}
+  m_LocalPosition: {x: 22.954693, y: -10.148768, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 4243812994990344}
@@ -355,9 +355,10 @@ AudioSource:
   m_GameObject: {fileID: 1691919756880042}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  OutputAudioMixerGroup: {fileID: 243046034536261948, guid: 2744fd257043d33438fbc142dca3abfa,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: eb2811d4558542a4385298e396c5673a, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -464,7 +465,14 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 17a6def4a3aa66f458794fde41904001, type: 2}
   statusAlpha: 0
   maxRay: 3
+  isMirror: 0
   mirrorObj: {fileID: 1300603614295460}
+  isGimmick: 0
+  rainObj: {fileID: 1388680778221530, guid: 449a3c37af0da4d4e8ac0f8eb86f434f, type: 2}
+  rainObjInstance: {fileID: 0}
+  resetTree: {fileID: 1456967744725320, guid: 92763f8d280a01946b2ab5dc50af3a1b, type: 2}
+  resetMirror: {fileID: 1316615561819584}
+  myAudio: {fileID: 0}
   SE:
   - {fileID: 8300000, guid: eb2811d4558542a4385298e396c5673a, type: 3}
   - {fileID: 8300000, guid: 01a51271495ede14f8523c75adc31cfd, type: 3}

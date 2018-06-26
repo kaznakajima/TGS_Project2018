@@ -5,19 +5,31 @@ using DG.Tweening;
 
 public class RainGimmick : GimmickController
 {
-    // 雨用のパーティクル
-    [SerializeField]
-    GameObject rainObj;
-
     // Mirrorの判定用
     bool isMirror;
     GameObject mirrorObj;
 
+    // 当たり判定
+    [HideInInspector]
+    public bool isHit;
+
+    // 自身のAudioSource
+    AudioSource myAudio;
+
     // ギミック処理
     public override void GimmickAction()
     {
-        rainObj.GetComponent<ParticleSystem>().Stop();
-        transform.DOMove(new Vector3(transform.position.x, transform.position.y + 10.18f, transform.position.z), 2.0f);
+        float nextPosition;
+        if(isHit)
+        {
+            nextPosition = transform.position.y;
+        }
+        else
+        {
+            myAudio.PlayOneShot(myAudio.clip);
+            nextPosition = transform.position.y + 10.18f;
+        }
+        transform.DOMove(new Vector3(transform.position.x, nextPosition, transform.position.z), 2.0f);
         isMirror = false;
     }
 
@@ -38,12 +50,8 @@ public class RainGimmick : GimmickController
                 mirrorObj = rayHit.collider.gameObject;
 
                 Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
-                // ギミックが作動するためリセットをできなくする
-                mirror.canReset = false;
-
+                ResetController.resetIsonFlg = false;
                 gimmickMaxRay = 0.0f;
-                Instantiate(rainObj, rayHit.collider.gameObject.transform);
-
                 // 重力を無視する
                 rayHit.collider.gameObject.GetComponent<Rigidbody>().useGravity = false;
                 // ミラーの消去コルーチン開始
@@ -55,7 +63,7 @@ public class RainGimmick : GimmickController
 
     // Use this for initialization
     void Start () {
-		
+        myAudio = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame

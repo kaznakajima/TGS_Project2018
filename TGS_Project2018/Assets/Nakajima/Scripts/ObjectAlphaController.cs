@@ -13,6 +13,7 @@ public class ObjectAlphaController : MonoBehaviour
     float objAlpha = 0.0f;
     // プレイヤーアイコンのアルファ値
     float playerIconAlpha = 0.0f;
+    float resetIconAlpha = 0.0f;
     // アルファ値比較用変数
     float comparison = 0.0f;
 
@@ -32,6 +33,8 @@ public class ObjectAlphaController : MonoBehaviour
             {
                 Icons.color = new Color(Icons.color.r, Icons.color.g, Icons.color.b, playerIconAlpha);
             }
+
+            player.resetIcon.color = new Color(player.resetIcon.color.r, player.resetIcon.color.g, player.resetIcon.color.b, resetIconAlpha);
         }
         foreach (var mirror in SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror())
         {
@@ -64,23 +67,42 @@ public class ObjectAlphaController : MonoBehaviour
                 AlphaChange(0.0f);
                 return;
             }
+            
         }
 
-        // プレイヤーと鏡が近づいたらアイコン表示
-        if(SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer().Min(playerPos => SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorPos => 
-            Mathf.Abs(playerPos.transform.position.x - mirrorPos.transform.position.x))) <= 3)
+        foreach (var mirror in SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror())
         {
-            if(SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorStatus => (int)mirrorStatus.status == 0))
+            if (mirror.isMirror && (int)mirror.status == 0)
             {
                 AlphaChange(0.75f);
             }
         }
-        // 離れたらアイコンを隠す
-        else if(SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer().Min(playerPos => SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorPos =>
+
+        if (SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer().Min(playerPos => SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorPos =>
             Mathf.Abs(playerPos.transform.position.x - mirrorPos.transform.position.x))) > 3)
         {
+            foreach (var mirror in SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror())
+            {
+                mirror.isMirror = false;
+            }
             AlphaChange(0.0f);
         }
+
+        // プレイヤーと鏡が近づいたらアイコン表示
+        //if(SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer().Min(playerPos => SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorPos => 
+        //    Mathf.Abs(playerPos.transform.position.x - mirrorPos.transform.position.x))) <= 3)
+        //{
+        //    if(SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorStatus => (int)mirrorStatus.status == 0))
+        //    {
+        //        AlphaChange(0.75f);
+        //    }
+        //}
+        //// 離れたらアイコンを隠す
+        //else if(SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer().Min(playerPos => SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror().Min(mirrorPos =>
+        //    Mathf.Abs(playerPos.transform.position.x - mirrorPos.transform.position.x))) > 3)
+        //{
+        //    AlphaChange(0.0f);
+        //}
     }
 
     // プレイヤーアイコン表示、非表示用メソッド
@@ -92,6 +114,19 @@ public class ObjectAlphaController : MonoBehaviour
             // 通常状態なら非表示
             if((int)playerStatus.status == 0)
             {
+                if (ResetController.resetIsonFlg)
+                {
+                    DOTween.To(() => resetIconAlpha, alpha => resetIconAlpha = alpha, 1.0f, 1.0f);
+                    playerStatus.resetIcon.color = new Color(playerStatus.resetIcon.color.r,
+                     playerStatus.resetIcon.color.g, playerStatus.resetIcon.color.b, resetIconAlpha);
+                }
+                else
+                {
+                    DOTween.To(() => resetIconAlpha, alpha => resetIconAlpha = alpha, 0.0f, 1.0f);
+                    playerStatus.resetIcon.color = new Color(playerStatus.resetIcon.color.r,
+                     playerStatus.resetIcon.color.g, playerStatus.resetIcon.color.b, resetIconAlpha);
+                }
+
                 comparison = 0.0f;
                 DOTween.To(() => playerIconAlpha, alpha => playerIconAlpha = alpha, comparison, 1.0f);
                 //playerIconAlpha = Mathf.Lerp(playerIconAlpha, comparison, 10.0f * Time.deltaTime);
@@ -113,6 +148,19 @@ public class ObjectAlphaController : MonoBehaviour
                     Icons.color = new Color(Icons.color.r, Icons.color.g, Icons.color.b, 0.0f);
                 }
 
+                if(ResetController.resetIsonFlg)
+                {
+                    DOTween.To(() => resetIconAlpha, alpha => resetIconAlpha = alpha, 1.0f, 1.0f);
+                    playerStatus.resetIcon.color = new Color(playerStatus.resetIcon.color.r,
+                     playerStatus.resetIcon.color.g, playerStatus.resetIcon.color.b, resetIconAlpha);
+                }
+                else
+                {
+                    DOTween.To(() => resetIconAlpha, alpha => resetIconAlpha = alpha, 0.0f, 1.0f);
+                    playerStatus.resetIcon.color = new Color(playerStatus.resetIcon.color.r,
+                     playerStatus.resetIcon.color.g, playerStatus.resetIcon.color.b, resetIconAlpha);
+                }
+
                 comparison = 0.75f;
                 DOTween.To(() => playerIconAlpha, alpha => playerIconAlpha = alpha, comparison, 1.0f);
                 //playerIconAlpha = Mathf.Lerp(playerIconAlpha, 0.75f, 10.0f * Time.deltaTime);
@@ -127,15 +175,14 @@ public class ObjectAlphaController : MonoBehaviour
     {
 
         // アルファの値が同じなら早期リターン
-        if (objAlpha == 0.0f && nextAlpha == 0.0f ||
+        if (objAlpha == 0.0f && nextAlpha == 0.1f ||
             objAlpha == 0.75f && nextAlpha == 0.75f)
         {
             return;
         }
-
+        //objAlpha = Mathf.Lerp(objAlpha, nextAlpha, 10.0f * Time.deltaTime);
         // 次のアルファの値に設定
         DOTween.To(() => objAlpha, alpha => objAlpha = alpha, nextAlpha, 1.0f);
-        //objAlpha = Mathf.Lerp(objAlpha, nextAlpha, 10.0f * Time.deltaTime);
 
         foreach (var mirror in SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror())
         {
@@ -144,8 +191,19 @@ public class ObjectAlphaController : MonoBehaviour
                 return;
             }
 
-            mirror.mirrorObj.GetComponent<SpriteRenderer>().color = new Color(mirror.mirrorObj.GetComponent<SpriteRenderer>().color.r,
+            if (mirror.isMirror && nextAlpha == 0.75f)
+            {
+                mirror.mirrorObj.GetComponent<SpriteRenderer>().color = new Color(mirror.mirrorObj.GetComponent<SpriteRenderer>().color.r,
                 mirror.mirrorObj.GetComponent<SpriteRenderer>().color.g, mirror.mirrorObj.GetComponent<SpriteRenderer>().color.b, objAlpha);
+            }
+            else if (!mirror.isMirror && nextAlpha == 0.0f)
+            {
+                if(mirror.mirrorObj.GetComponent<SpriteRenderer>().color.a > nextAlpha)
+                {
+                    mirror.mirrorObj.GetComponent<SpriteRenderer>().color = new Color(mirror.mirrorObj.GetComponent<SpriteRenderer>().color.r,
+                mirror.mirrorObj.GetComponent<SpriteRenderer>().color.g, mirror.mirrorObj.GetComponent<SpriteRenderer>().color.b, objAlpha);
+                }
+            }
 
             foreach (var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
             {

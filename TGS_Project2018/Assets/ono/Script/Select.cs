@@ -6,18 +6,19 @@ using DG.Tweening;
 using UnityEngine.SceneManagement;
 
 
-public class Select : MonoBehaviour {
+public class Select : MonoBehaviour
+{
 
-    [SerializeField,Header("メインカメラ")]
+    [SerializeField, Header("メインカメラ")]
     Camera maincamera;
 
-    [SerializeField,Header("SelectStage_(No.)を入れて")]
+    [SerializeField, Header("SelectStage_(No.)を入れて")]
     GameObject[] SelectStage;
 
-    [SerializeField,Header("ステージ名")]
+    [SerializeField, Header("ステージ名")]
     public string stageName;
 
-   public int StageNum = 0; //選択ステージ関数
+    public int StageNum = 0; //選択ステージ関数
 
     bool flg;
 
@@ -26,14 +27,19 @@ public class Select : MonoBehaviour {
     GameObject rightStage;
     GameObject leftStage;
 
-    [SerializeField,Header("回転速度")]
+    [SerializeField, Header("回転速度")]
     float rollSpeed;
 
     float cameraRotate;
 
+    float Interval = 0.0f;
+
+    // 連続入力防止
+    bool onButton = false;
+
     float alfa;
 
-    [SerializeField,Header("FadeOut")]
+    [SerializeField, Header("FadeOut")]
     GameObject fadeImage;
 
     // 自身のAudioSource
@@ -44,10 +50,22 @@ public class Select : MonoBehaviour {
 
     bool fadeFlg;
     // Use this for initialization
-    void Start () {
-        myAudio = GameObject.Find("Audio").gameObject.GetComponent<AudioSource>();
+    void Start()
+    {
         Camera_Select.flg = false;
+        // ステージ情報の初期化
         SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[0];
+        // 音楽の設定
+        myAudio = GameObject.Find("Audio").gameObject.GetComponent<AudioSource>();
+        SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio = SingletonMonoBehaviour<ScreenShot>.Instance.GetBGM();
+
+        DOTween.To(() => Interval, volume =>
+                Interval = volume, 1.0f, 1.0f).OnComplete(() =>
+                {
+                    SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.Play();
+                    DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
+                    SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 2.0f);
+                });
 
         //alfa = GetComponent<Image>().color.a;
 
@@ -77,8 +95,13 @@ public class Select : MonoBehaviour {
         //}
         if (Input.GetButtonDown("Click") && !flg)
         {
+            if (onButton)
+            {
+                return;
+            }
             myAudio.PlayOneShot(myAudio.clip);
             fadeFlg = true;
+            onButton = true;
         }
 
         if (fadeFlg)
@@ -86,25 +109,25 @@ public class Select : MonoBehaviour {
             alfa += 1.0f * Time.deltaTime;
             Camera_Select.flg = true;
 
-            if (alfa >= 2)
+            if (alfa >= 1.9)
             {
-                StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                 Scene(stageName);
+                fadeFlg = false;
             }
         }
 
     }
     public void Right()
     {
-        if (flg)
+        if (flg || onButton)
         {
             return;
         }
 
         // ボタン入力を遮断
         speed = 0.0f;
-       
-        if(StageNum < SelectStage.Length - 1)
+
+        if (StageNum < SelectStage.Length - 1)
         {
 
             StageNum += 1;
@@ -119,6 +142,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = 0;
 
+                    // ステージの設定
                     SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
                 //ステージ２
@@ -128,6 +152,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = 120.0f;
 
+                    // ステージの設定
                     SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
                 //ステージ３
@@ -137,6 +162,7 @@ public class Select : MonoBehaviour {
 
                     cameraRotate = -120.0f;
 
+                    // ステージの設定
                     SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
             }
@@ -150,7 +176,7 @@ public class Select : MonoBehaviour {
 
     public void Left()
     {
-        if (flg)
+        if (flg || onButton)
         {
             return;
         }
@@ -158,7 +184,7 @@ public class Select : MonoBehaviour {
         // ボタン入力を遮断
         speed = 0.0f;
 
-       if(StageNum > 0)
+        if (StageNum > 0)
         {
             StageNum -= 1;
             SingletonMonoBehaviour<ScreenShot>.Instance.stageNum = StageNum;
@@ -171,18 +197,29 @@ public class Select : MonoBehaviour {
                     rightStage = SelectStage[1];
 
                     cameraRotate = 0;
+
+                    // ステージの設定
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
                 //ステージ２
                 case 1:
                     leftStage = SelectStage[0];
                     rightStage = SelectStage[2];
+
                     cameraRotate = 120.0f;
+
+                    // ステージの設定
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
                 //ステージ３
                 case 2:
                     leftStage = SelectStage[1];
                     rightStage = SelectStage[0];
+
                     cameraRotate = -120.0f;
+
+                    // ステージの設定
+                    SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                     break;
             }
 
@@ -208,12 +245,19 @@ public class Select : MonoBehaviour {
 
     private IEnumerator TimeStand()
     {
-            yield return new WaitForSeconds(2.0f);
-            flg = false;
+        yield return new WaitForSeconds(2.0f);
+        flg = false;
     }
 
     void Scene(string StageName)
     {
-        SceneManager.LoadScene(StageName);
+        // 音楽のフェードをしたのちシーン遷移
+        DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
+        SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.0f, 0.5f).OnComplete(() =>
+        {
+            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+            SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
+            SceneManager.LoadScene(StageName);
+        });
     }
 }

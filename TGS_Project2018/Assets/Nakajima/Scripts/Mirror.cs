@@ -14,16 +14,34 @@ public class Mirror : StatusController
     // 透明度
     float mirrorAlpha;
 
-    // リセットできるかどうか(ギミックが作動したならリセットさせない)
+    // 自身が映っている状態かどうか
     [HideInInspector]
-    public bool canReset = true;
+    public bool isMirror;
 
     // プレイヤーを映すためのオブジェクト(のちのち消す)
     public GameObject mirrorObj;
 
-    // 自身のAudioSource
-    AudioSource myAudio;
+    // ギミックが作動したかどうか
+    [HideInInspector]
+    public bool isGimmick;
 
+    // 雨用のエフェクト
+    [SerializeField]
+    GameObject rainObj;
+    [HideInInspector]
+    public GameObject rainObjInstance;
+
+    // リセット用のObject
+    [SerializeField]
+    GameObject resetTree;
+    [SerializeField]
+    GameObject resetMirror;
+
+    // 自身のAudioSource
+    [HideInInspector]
+    public AudioSource myAudio;
+
+    // ギミックのSE
     [SerializeField]
     AudioClip[] SE;
 
@@ -39,19 +57,15 @@ public class Mirror : StatusController
 	void Update () {
         // Ray判定
         RayHit(direction, "Character");
-    }
 
-    // Mirrorのリセット
-    public void MirrorReset()
-    {
-        if (!canReset)
-        {
-            return;
-        }
-
-        StatusChenge(STATUS.NONE);
-        status = STATUS.NONE;
-        mirrorObj.SetActive(true);
+        //if(!isGimmick && (int)status != 0)
+        //{
+        //    ResetController.resetIsonFlg = true;
+        //}
+        //else if(isGimmick && (int)status != 0)
+        //{
+        //    ResetController.resetIsonFlg = false;
+        //}
     }
 
     // Rayの判定
@@ -67,6 +81,7 @@ public class Mirror : StatusController
         {
             if (rayHit.collider.name == objName)
             {
+                isMirror = true;
                 RayObjAction(rayHit.collider.gameObject);
             }
         }
@@ -89,6 +104,8 @@ public class Mirror : StatusController
     // 姿を変える準備
     void FormChangeBefore(Player player)
     {
+        isMirror = false;
+
         GameObject Destroymirror = mirrorObj;
         Destroymirror.SetActive(false);
 
@@ -125,11 +142,24 @@ public class Mirror : StatusController
 
             // ステータス更新
             status = playerSt;
-            myAudio.PlayOneShot(SE[(int)status]);
-
-            //mirrorAudio.PlayOneShot(mirrorSE[(int)status]);
 
             maxRay = 3.0f;
+
+            // 雨だったらエフェクト生成
+            if (status == STATUS.WATER)
+            {
+                if(rainObjInstance == null)
+                {
+                    rainObjInstance = Instantiate(rainObj, transform);
+                    rainObj.GetComponent<ParticleSystem>().Stop();
+                    myAudio.PlayOneShot(SE[(int)status]);
+                    ResetController.resetIsonFlg = true;
+                }
+                return;
+            }
+            myAudio.PlayOneShot(SE[(int)status]);
+
+            ResetController.resetIsonFlg = true;
         });
     }
 
@@ -171,6 +201,7 @@ public class Mirror : StatusController
         // 処理が終わったら姿を変える
         transform.DOScale(new Vector3(x, y, 1.0f), time).OnComplete(() =>
         {
+            SingletonMonoBehaviour<ResetController>.Instance.canReset = true;
             Destroy(gameObject);
         });
     }
