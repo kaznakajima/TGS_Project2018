@@ -33,10 +33,12 @@ public class Player : StatusController {
     [SerializeField] float jumpCoolDownCount = 0.0f; // ジャンプのクールダウンカウント
     [SerializeField] float jumpCoolDownLimit = 0.5f; // ジャンプ再使用までの時間
     [SerializeField] float rayRange = 1.0f; // 接地判定の距離 
+    [SerializeField] float rayRangeH = 0.6f; // 水平方向の接地判定距離
     [SerializeField] float defaultRayRange; // 保存用設置判定の距離
     [SerializeField] bool isright; // 右を向いているか
 
-    bool jumpFlg = false; // ジャンプ可能か
+    [SerializeField] bool jumpFlg = false; // ジャンプ可能か
+    [SerializeField] bool isScroll = false; // スクロール可能か
     [SerializeField] bool isGround; // 接地しているか
     [SerializeField] bool climbFlg = false; // 上下移動可能か
     public bool damageFlg = false; // ダメージを受けているか
@@ -167,7 +169,7 @@ public class Player : StatusController {
         }
 
         // キャラクターが右方向に移動していたら
-        if (movePos.x > 0)
+        if (movePos.x > 0 && isScroll == true)
         {
             foreach (var item in uvScroll)
             {
@@ -175,7 +177,7 @@ public class Player : StatusController {
                 item.scrollSpeedX = -1.0f;
             }
         }
-        else if (movePos.x < 0) // キャラクターが左方向に移動していたら
+        else if (movePos.x < 0 && isScroll == true) // キャラクターが左方向に移動していたら
         {
             foreach (var item in uvScroll)
             {
@@ -183,7 +185,7 @@ public class Player : StatusController {
                 item.scrollSpeedX = 1.0f;
             }
         }
-        else if (movePos.x == 0) // キャラクターが静止していたら
+        else if (movePos.x == 0 || isScroll == false) // キャラクターが静止していたら
         {
             foreach (var item in uvScroll)
             {
@@ -374,8 +376,15 @@ public class Player : StatusController {
     bool GroundJudgment()
     {
         RaycastHit hit; // 衝突判定
+        RaycastHit hitH;
         // 線のRayを自キャラの下方向に飛ばす
         var isHit = Physics.Linecast(this.transform.position, new Vector3(this.transform.position.x, this.transform.position.y - rayRange, this.transform.position.z), out hit);
+        // 線のRayを自キャラの水平方向に飛ばす 向きに応じて左右どちらに飛ばすか決定する
+        var isHitH = Physics.Linecast(
+            this.transform.position, 
+            new Vector3(isright == true ? this.transform.position.x + rayRangeH : this.transform.position.x - rayRangeH, 
+            this.transform.position.y, this.transform.position.z),
+            out hitH);
         if (isHit) // 衝突していたら
         {
             // 中間地点と接触したら、座標と地面埋まり防止のため、y軸を＋１した値を変数に格納
@@ -417,6 +426,25 @@ public class Player : StatusController {
             jumpCoolDownCount += Time.deltaTime; // 連続ジャンプ防止用のインターバルをカウント
             // デバッグ用Rayを画面に出力
             Debug.DrawRay(transform.position, Vector3.down * rayRange,Color.red); // デバッグ用に画面にRayを出力
+            // 水平方向のRayがオブジェクトに接触かつプレイヤーが移動中なら
+            if (isHitH && movePos != Vector3.zero)
+            {
+                // スクロール不可能に
+                isScroll = false;
+            }
+            else
+            {
+                // 条件に一致していなければスクロール可能
+                isScroll = true;
+            }
+            if (isright)
+            {
+                Debug.DrawRay(transform.position, Vector3.right * rayRangeH, Color.red);
+            }
+            else
+            {
+                Debug.DrawRay(transform.position, Vector3.left * rayRangeH, Color.red);
+            }
             return true; // 接地している
         }
         else 
