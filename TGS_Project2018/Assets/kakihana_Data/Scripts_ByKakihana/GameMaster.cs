@@ -46,7 +46,7 @@ public class GameMaster : MonoBehaviour {
         if (sketchBookValue != tempSketchValue && pc.pageChange == true)
         {
             Debug.Log("スケッチブック消費");
-            lifeValue.text = sketchBookValue.ToString();
+            lifeValue.text = string.Format(sketchBookValue.ToString());
             //bookValueObj[sketchBookValue].SetActive(false); // 残機UIを減らす
             tempSketchValue = sketchBookValue; // イベント後、再度値がおなじになるように設定
         }
