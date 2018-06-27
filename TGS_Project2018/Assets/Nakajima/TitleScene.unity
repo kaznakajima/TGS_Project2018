@@ -155,22 +155,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 488c9e3aeb29cb2468f64d4552f0e448, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &229844764 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1725828159990992, guid: bdc9090881afb7b48be451cfb64f49ee,
-    type: 2}
-  m_PrefabInternal: {fileID: 1951425562}
---- !u!114 &229844766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 229844764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94a3b8d764d47054d9089ad6ed23c39f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &251652080
 GameObject:
   m_ObjectHideFlags: 0
@@ -1720,9 +1704,9 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114877764584014930, guid: bdc9090881afb7b48be451cfb64f49ee,
+    - target: {fileID: 224127222994245500, guid: bdc9090881afb7b48be451cfb64f49ee,
         type: 2}
-      propertyPath: m_Enabled
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

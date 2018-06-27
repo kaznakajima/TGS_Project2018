@@ -110,13 +110,23 @@ public class Select : MonoBehaviour
 
         if (fadeFlg)
         {
-            alfa += 1.0f * Time.deltaTime;
-            Camera_Select.flg = true;
-
-            if (alfa >= 1.9)
+            if (SceneManager.GetActiveScene().name == "Tutorial")
             {
+                StageNum = 0;
+                SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                 Scene(stageName);
-                fadeFlg = false;
+                return;
+            }
+            else
+            {
+                alfa += 1.0f * Time.deltaTime;
+                Camera_Select.flg = true;
+
+                if (alfa >= 1.9)
+                {
+                    Scene(stageName);
+                    fadeFlg = false;
+                }
             }
         }
 

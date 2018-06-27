@@ -73,19 +73,19 @@ public class Button : MonoBehaviour
                     if (inputY > 0.0f && buttonState > 0)
                     {
                         buttonState -= 1;
-                        selectObj.anchoredPosition += new Vector2(0, 162);
+                        selectObj.anchoredPosition += new Vector2(0, 130);
                         // 連続入力防止
                         speed = 0.0f;
                     }
-                    else if (inputY < 0.0f && buttonState < 1)
+                    else if (inputY < 0.0f && buttonState < 2)
                     {
                         buttonState += 1;
-                        selectObj.anchoredPosition -= new Vector2(0, 162);
+                        selectObj.anchoredPosition -= new Vector2(0, 130);
                         // 連続入力防止
                         speed = 0.0f;
                     }
                     // 再入力可能
-                    if (inputY == 0)
+                    if (inputVec.y == 0)
                     {
                         speed = 1.0f;
                     }
@@ -101,9 +101,13 @@ public class Button : MonoBehaviour
                         {
                             case 0:
                                 myAudio.PlayOneShot(myAudio.clip);
-                                SelectScene();
+                                SelectScene("SelectScene");
                                 break;
                             case 1:
+                                myAudio.PlayOneShot(myAudio.clip);
+                                SelectScene("Tutorial");
+                                break;
+                            case 2:
                                 myAudio.PlayOneShot(myAudio.clip);
                                 Exit();
                                 break;
@@ -146,7 +150,7 @@ public class Button : MonoBehaviour
                                 Resume();
                                 break;
                             case 1:
-                                SelectScene();
+                                SelectScene("SelectScene");
                                 break;
                             case 2:
                                 RetryScene();
@@ -182,7 +186,7 @@ public class Button : MonoBehaviour
     }
 
 
-    public void SelectScene()//セレクトシーンに移動
+    public void SelectScene(string selectStr)//セレクトシーンに移動
     {
         selectBack = true;
         onButton = true;
@@ -195,7 +199,7 @@ public class Button : MonoBehaviour
         SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.0f, 0.5f).OnComplete(() =>
         {
             SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
-            SceneManager.LoadScene("SelectScene");
+            SceneManager.LoadScene(selectStr);
         });
     }
 
