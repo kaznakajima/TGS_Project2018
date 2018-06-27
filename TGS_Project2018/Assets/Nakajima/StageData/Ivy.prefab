@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 114910408364163068}
   - component: {fileID: 65899382080191536}
   - component: {fileID: 82379187178459912}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Ivy
   m_TagString: Climb
   m_Icon: {fileID: 0}

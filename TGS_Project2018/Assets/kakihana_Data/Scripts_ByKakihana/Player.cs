@@ -266,8 +266,11 @@ public class Player : StatusController {
     //キャラクター移動メソッド
     void CharactorMove(Vector3 pos)
     {
-        //キャラクター移動
-        transform.position += movePos * Time.deltaTime;
+        if (isScroll)
+        {
+            transform.position += movePos * Time.deltaTime;
+        }
+
     }
 
     void OnCollisionEnter(Collision hit)
