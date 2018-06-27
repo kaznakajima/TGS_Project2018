@@ -290,6 +290,9 @@ public class Player : StatusController {
         // ダメージオブジェクトに接触したら
         if (hit.gameObject.tag == "Needle" && damageFlg == false)
         {
+            // ダメージ音
+            hit.gameObject.GetComponent<AudioSource>().PlayOneShot(hit.gameObject.GetComponent<AudioSource>().clip);
+
             Interval = 0.0f;
 
             // ダメージアニメーション再生
@@ -309,9 +312,13 @@ public class Player : StatusController {
                   {
                       if (gm.sketchBookValue > 0 && Interval == 0.25f)
                       {
+                          FormChange((int)ANIM_ENUMS.BLUCK.IDLE, STATUS.NONE);
                           gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
                           statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
-                          transform.position = wayPointPos; // 保存された中間地点に移動する
+                          if (SingletonMonoBehaviour<ResetController>.Instance.canReset)
+                          {
+                              transform.position = wayPointPos; // 保存された中間地点に移動する
+                          }
                           damageFlg = false; // ダメージフラグOFF
                           Interval = 0.0f;
                       }

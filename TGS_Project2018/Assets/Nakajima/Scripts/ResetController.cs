@@ -58,11 +58,6 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
             return;
         }
 
-        foreach (Player player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
-        {
-            player.FormChange((int)ANIM_ENUMS.BLUCK.IDLE, StatusController.STATUS.NONE);
-        }
-
         // 燃やされてもリセット
         if (TreePos != Vector3.zero)
         {
@@ -84,6 +79,13 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
         {
             IvyObj.transform.position = IvyPos;
             IvyObj.GetComponent<RainGimmick>().isHit = false;
+            foreach (var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
+            {
+                if (Mathf.Abs(player.transform.position.x - (int)IvyObj.transform.position.x) <= 1)
+                {
+                    player.transform.position = new Vector3((int)IvyObj.transform.position.x - 2, (int)IvyObj.transform.position.y + 2.0f, 0.0f);
+                }
+            }
             Instantiate(mirrorObj, new Vector3((int)IvyPos.x, (int)IvyPos.y + 1, 0.0f), Quaternion.identity);
             resetIsonFlg = false;
             canReset = false;
@@ -95,9 +97,9 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
             // 壊されているならオブジェクトもリセット
             if(forest.isBreak == true)
             {
-                Instantiate(TreeObj, new Vector3((int)forest.gameObject.transform.position.x,
+                Instantiate(TreeObj, new Vector3((int)forest.gameObject.transform.position.x - 1,
                     (int)forest.gameObject.transform.position.y, 0.0f), Quaternion.identity);
-                Instantiate(mirrorObj, new Vector3((int)forest.gameObject.transform.position.x - 1,
+                Instantiate(mirrorObj, new Vector3((int)forest.gameObject.transform.position.x - 2,
                     (int)forest.gameObject.transform.position.y, 0.0f), Quaternion.identity);
 
                 foreach (var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
