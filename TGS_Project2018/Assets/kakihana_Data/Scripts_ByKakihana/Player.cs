@@ -64,7 +64,7 @@ public class Player : StatusController {
             item.scrollSpeedX = 0.0f;
         }
         mySprite = gameObject.GetComponent<SpriteRenderer>();
-        pageChange = GameObject.Find(changePageName).GetComponent<PageChange>(); // ページ遷移のコンポーネント取得
+        pageChange = GameObject.FindObjectOfType<PageChange>(); // ページ遷移のコンポーネント取得
         myRigidbody = this.gameObject.GetComponent<Rigidbody>(); // RigidBodyコンポーネントを取得
         isright = true; // 初期位置では右を向いている
     }
