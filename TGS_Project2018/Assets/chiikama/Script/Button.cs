@@ -77,7 +77,7 @@ public class Button : MonoBehaviour
                         // 連続入力防止
                         speed = 0.0f;
                     }
-                    else if (inputY < 0.0f && buttonState < 2)
+                    else if (inputY < 0.0f && buttonState < 1)
                     {
                         buttonState += 1;
                         selectObj.anchoredPosition -= new Vector2(0, 130);
@@ -104,10 +104,6 @@ public class Button : MonoBehaviour
                                 SelectScene("SelectScene");
                                 break;
                             case 1:
-                                myAudio.PlayOneShot(myAudio.clip);
-                                SelectScene("Tutorial");
-                                break;
-                            case 2:
                                 myAudio.PlayOneShot(myAudio.clip);
                                 Exit();
                                 break;
@@ -150,9 +146,11 @@ public class Button : MonoBehaviour
                                 Resume();
                                 break;
                             case 1:
+                                myAudio.PlayOneShot(myAudio.clip);
                                 SelectScene("SelectScene");
                                 break;
                             case 2:
+                                myAudio.PlayOneShot(myAudio.clip);
                                 RetryScene();
                                 break;
                         }

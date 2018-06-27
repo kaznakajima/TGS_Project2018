@@ -81,7 +81,6 @@ public class Select : MonoBehaviour
     {
         //fadeImage.GetComponent<Image>().color = new Color(0, 0, 0, alfa);
 
-        // ボタン入力
         float selectX = Input.GetAxisRaw("Horizontal") * speed;
 
         if (selectX > 0 && !fadeFlg)
@@ -106,6 +105,18 @@ public class Select : MonoBehaviour
             myAudio.PlayOneShot(myAudio.clip);
             fadeFlg = true;
             onButton = true;
+        }
+
+        // チュートリアルシーンへの移動
+        if (Input.GetButtonDown("Tutorial") && !flg && SceneManager.GetActiveScene().name != "Tutorial")
+        {
+            if (onButton || !canPush)
+            {
+                return;
+            }
+            myAudio.PlayOneShot(myAudio.clip);
+            onButton = true;
+            Scene("Tutorial");
         }
 
         if (fadeFlg)
