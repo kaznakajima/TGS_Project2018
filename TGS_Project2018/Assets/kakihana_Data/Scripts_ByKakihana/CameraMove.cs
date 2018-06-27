@@ -9,8 +9,8 @@ public class CameraMove : MonoBehaviour {
      【カメラ移動クラス】
      位置はMainCameraオブジェクトのInspector上にあるoffsetにて変更可能
     */
-    MapLoad mapLoad;
-    Player player;
+    MapLoad mapLoad; // マップ読み込みクラス
+    Player player; // プレイヤークラス
 
     public Transform playerTrans; // 追従する対象
     public Transform targetGimmick; // イベント時に追従する対象
@@ -20,31 +20,30 @@ public class CameraMove : MonoBehaviour {
     [SerializeField, Range(0, 600)] uint frameLimit; // ターゲットまでの所要移動時間（フレーム）
     [SerializeField] uint frameCount,endCount; // 現在の経過フレーム数
     [SerializeField] bool endFlg = false; // イベントカメラ移動の復路判定
-    [SerializeField] bool cameraEndFlg;
     public bool eventFlg = false; // イベントが発生しているか
 
     [SerializeField] Vector3 velocity,returnVelocity; // イベント時のカメラ移動量
-    public Vector3 topLeft;
-    public Vector3 buttomRight;
-    [SerializeField] Vector3 cameraMovePos;
+    public Vector3 topLeft; // カメラ左端の座標
+    public Vector3 buttomRight; // カメラ右端の座標
+    [SerializeField] Vector3 cameraMovePos; // カメラ移動量
 
-    public float mapStartX,mapEndX;
-    [SerializeField] float edgeStartX, edgeEndX;
-    [SerializeField] float height,cameraHeight,heightOffset;
+    public float mapStartX,mapEndX; // マップの端点を保存する変数
+    [SerializeField] float edgeStartX, edgeEndX; // 自キャラとカメラ端点の差分を保存する変数
+    [SerializeField] float height,heightOffset; // ステージの高さ、カメラの高さ、高さの補正値
     // Use this for initialization
 	void Start () {
-        mapLoad = FindObjectOfType<MapLoad>();
-        player = FindObjectOfType<Player>();
-        playerTrans = player.transform;
-        topLeft = GetTopLeft();
-        buttomRight = GetButtomRight();
-        mapStartX = 0;
-        height = mapLoad.height;
-        cameraHeight = (Screen.height / 10);
-        heightOffset = 5.5f;
-        mapEndX = Mathf.Max(mapLoad.width);
-        edgeStartX = Mathf.Abs(mapStartX - buttomRight.x + 0.5f);
-        edgeEndX = Mathf.Abs(mapEndX - edgeStartX);
+        mapLoad = FindObjectOfType<MapLoad>(); // マップ読み込みクラスのコンポーネント取得
+        player = FindObjectOfType<Player>(); // プレイヤークラスのコンポーネント取得
+        playerTrans = player.transform; // プレイヤーの座標取得
+        topLeft = GetTopLeft(); // カメラの左端を取得
+        buttomRight = GetButtomRight(); // カメラの右端を取得
+        mapStartX = 0; // マップの左端は必ず0になっている
+        height = mapLoad.height; // マップ読み込みクラスよりマップの高さを取得する
+        heightOffset = 5.5f; // 高さの補正値を設定
+        mapEndX = Mathf.Max(mapLoad.width); //マップの右端を取得
+        edgeStartX = Mathf.Abs(mapStartX - buttomRight.x + 0.5f); // マップ左端と自キャラの差分を求める
+        edgeEndX = Mathf.Abs(mapEndX - edgeStartX); // マップ右端と自キャラの差分を求める
+        // カメラ初期座標の設定
         this.transform.position = new Vector3(edgeStartX, playerTrans.position.y + offset.y, playerTrans.position.z + offset.z);
     }
 	
@@ -54,8 +53,8 @@ public class CameraMove : MonoBehaviour {
         {
             return;
         }
-        topLeft = GetTopLeft();
-        buttomRight = GetButtomRight();
+        topLeft = GetTopLeft(); // カメラ左端座標を取得
+        buttomRight = GetButtomRight();// カメラ右端座標を取得
         // デバッグ用、F1キーが押されたらイベントカメラに切り替え
         //if (Input.GetKeyDown(KeyCode.F1))
         //{
@@ -69,12 +68,16 @@ public class CameraMove : MonoBehaviour {
         //    StartCoroutine("EventMove");
         //}
 
+        // カメラ移動量はプレイヤーの座標より取得
         cameraMovePos = playerTrans.position;
 
+        // マップ両端の座標と自キャラの差分の間のみ移動可能
         cameraMovePos.x = Mathf.Clamp(cameraMovePos.x, edgeStartX, edgeEndX);
+        // マップにより設定された範囲内のみで移動可能
         cameraMovePos.y = Mathf.Clamp(cameraMovePos.y,-height + heightOffset,0);
         cameraMovePos.z = cameraMovePos.z + offset.z;
 
+        // 計算後、カメラを移動する
         this.transform.position = cameraMovePos;
 
     }
@@ -128,6 +131,7 @@ public class CameraMove : MonoBehaviour {
             (endPos.z - startPos.z) / (float)frame);
     }
 
+    // カメラ左端取得メソッド
     private Vector3 GetTopLeft()
     {
         topLeft = Camera.main.ScreenToWorldPoint(Vector3.zero);
@@ -135,6 +139,7 @@ public class CameraMove : MonoBehaviour {
         return topLeft;
     }
 
+    // カメラ右端取得メソッド
     private Vector3 GetButtomRight()
     {
         buttomRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width,Screen.height,0));
