@@ -36,6 +36,7 @@ public class ClearCon : MonoBehaviour
                     SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.Play();
                     DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
                     SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 1.0f);
+                    Button.selectBack = false;
                 });
     }
 
@@ -62,6 +63,10 @@ public class ClearCon : MonoBehaviour
 
         if (Input.GetButtonDown("Click"))
         {
+            if (Button.selectBack)
+            {
+                return;
+            }
             myAudio.PlayOneShot(myAudio.clip);
             Button.selectBack = true;
             switch (SceneManager.GetActiveScene().name)
@@ -70,19 +75,19 @@ public class ClearCon : MonoBehaviour
                     switch (state)
                     {
                         case 0:
-                            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                             DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
                             SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.5f, 1.0f).OnComplete(() =>
                             {
+                                StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                                 SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
                                 SceneManager.LoadScene("SelectScene");
                             });
                             break;
                         case 1:
-                            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                             DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
                             SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.5f, 1.0f).OnComplete(() =>
                             {
+                                StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                                 SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
                                 SceneManager.LoadScene("MainGameScene");
                             });
@@ -93,22 +98,21 @@ public class ClearCon : MonoBehaviour
                     switch (state)
                     {
                         case 0:
-                            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                             DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
                             SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.5f, 1.0f).OnComplete(() =>
                             {
+                                StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                                 SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
                                 SceneManager.LoadScene("SelectScene");
                             });
                             break;
                         case 1:
-                            StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                             SingletonMonoBehaviour<ScreenShot>.Instance.stageNum += 1;
-                            Debug.Log(SingletonMonoBehaviour<ScreenShot>.Instance.stageNum);
                             SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[SingletonMonoBehaviour<ScreenShot>.Instance.stageNum];
                             DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
                             SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 0.5f, 1.0f).OnComplete(() =>
                             {
+                                StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                                 SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.PlayOneShot(SingletonMonoBehaviour<ScreenShot>.Instance.myAudio.clip);
                                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                             });

@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 136436097794249486}
   - component: {fileID: 114580633831012054}
   - component: {fileID: 82211777995661962}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Character
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4924220650472652}
   - component: {fileID: 212192488717654092}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Water
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4378724478310612}
   - component: {fileID: 95312382492536908}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4991965525146356}
   - component: {fileID: 212606320803816570}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Reset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,7 +88,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4349074507640622}
   - component: {fileID: 114207300373308088}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ku-ro-
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4310701184824464}
   - component: {fileID: 212921714084882768}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4391640599101012}
   - component: {fileID: 212276010182061620}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4065267927968102}
   - component: {fileID: 212745519925127478}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +152,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4925901013091116}
   - component: {fileID: 212280653432898542}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Wind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,7 +168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4514303162156244}
   - component: {fileID: 212655349185538706}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -469,8 +469,11 @@ MonoBehaviour:
   jumpCoolDownCount: 0
   jumpCoolDownLimit: 0.5
   rayRange: 2
+  rayRangeH: 0.6
   defaultRayRange: 0
   isright: 0
+  jumpFlg: 0
+  isScroll: 0
   isGround: 0
   climbFlg: 0
   damageFlg: 0

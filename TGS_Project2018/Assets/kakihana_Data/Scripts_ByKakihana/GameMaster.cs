@@ -18,6 +18,9 @@ public class GameMaster : MonoBehaviour {
     public int tempSketchValue; // 差分用一時保存変数
     public Vector3 savePositon; // リスポーン用の座標を格納
 
+    [SerializeField]
+    Text lifeValue;
+
     [SerializeField] string changePageName;
 
 	// Use this for initialization
@@ -43,7 +46,8 @@ public class GameMaster : MonoBehaviour {
         if (sketchBookValue != tempSketchValue && pc.pageChange == true)
         {
             Debug.Log("スケッチブック消費");
-            bookValueObj[sketchBookValue].SetActive(false); // 残機UIを減らす
+            lifeValue.text = string.Format(sketchBookValue.ToString());
+            //bookValueObj[sketchBookValue].SetActive(false); // 残機UIを減らす
             tempSketchValue = sketchBookValue; // イベント後、再度値がおなじになるように設定
         }
 	}

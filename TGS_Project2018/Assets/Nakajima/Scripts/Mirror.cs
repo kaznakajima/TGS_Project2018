@@ -12,9 +12,10 @@ public class Mirror : StatusController
     [SerializeField]
     float maxRay;
     // 透明度
-    float mirrorAlpha;
+    [HideInInspector]
+    public float mirrorAlpha;
 
-    // 自身が映っている状態かどうか
+    // Playerが映っている状態かどうか
     [HideInInspector]
     public bool isMirror;
 
@@ -92,7 +93,8 @@ public class Mirror : StatusController
     {
         // ステータスをチェックし、変化できないなら return
         Player player = gameObj.GetComponent<Player>();
-        if (status != STATUS.NONE || status == player.status)
+        if (status != STATUS.NONE || status == player.status
+            || player.changeFlg)
         {
             return;
         }
@@ -195,6 +197,9 @@ public class Mirror : StatusController
     public IEnumerator DestroyAnimation(float x, float y, float time)
     {
         yield return new WaitForSeconds(0.5f);
+
+        // レイヤーの変更
+        gameObject.layer = 9;
 
         DOTween.To(() => myAudio.volume, volume => myAudio.volume = volume, 0.0f, time);
 

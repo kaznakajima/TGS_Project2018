@@ -61,7 +61,7 @@ public class PageChange : PageController
 
     //ページをめくる、閉じるアニメーション
     public override IEnumerator PageAnimation(float flip, float pageSp)
-    {
+    { 
         // ページが開いた、閉じた状態で変更中ならbreak
         if (pageFlip < -1 && pageChange || pageFlip > 1 && pageChange)
         {
