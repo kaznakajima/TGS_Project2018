@@ -139,7 +139,7 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
                 mirror.myAudio.Stop();
                 Destroy(mirror.rainObjInstance);
             }
-            canReset = false;
+            //canReset = false;
         }
         resetIsonFlg = false;
     }

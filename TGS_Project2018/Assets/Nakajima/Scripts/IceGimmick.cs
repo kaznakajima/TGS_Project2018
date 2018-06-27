@@ -75,6 +75,20 @@ public class IceGimmick : GimmickController
         RayHit(transform.up, "Enemy");
     }
 
+    void OnCollisionEnter(Collision c)
+    {
+        if (c.gameObject.name == "Character" && isSlope)
+        {
+            if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 1)
+            {
+                moveX = 3.0f;
+            }
+           else if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 2)
+            {
+                moveX = -3.0f;
+            }
+        }
+    }
     void OnCollisionStay(Collision c)
     {
         if (c.gameObject.name == "Character" && isSlope)

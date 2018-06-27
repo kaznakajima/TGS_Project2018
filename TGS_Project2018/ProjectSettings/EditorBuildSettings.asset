@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/MiraMiraPublic/Scenes/SelectScene.unity
     guid: 65d66d394b0e2704cb29d222b1578611
   - enabled: 1
+    path: Assets/Tutorial.unity
+    guid: 89cf0c9fb3468c845948a7d7c8aaef5c
+  - enabled: 1
     path: Assets/MiraMiraPublic/Scenes/MainGameScene.unity
     guid: 2483bb11b3f936845b6043b7e5847914
   - enabled: 1

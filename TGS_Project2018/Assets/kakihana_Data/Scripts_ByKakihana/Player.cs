@@ -278,6 +278,7 @@ public class Player : StatusController {
             // ダメージ音
             hit.gameObject.GetComponent<AudioSource>().PlayOneShot(hit.gameObject.GetComponent<AudioSource>().clip);
 
+            SingletonMonoBehaviour<ResetController>.Instance.canReset = true;
             Interval = 0.0f;
 
             // ダメージアニメーション再生
