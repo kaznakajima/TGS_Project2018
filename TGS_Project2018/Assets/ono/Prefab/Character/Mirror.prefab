@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4237689894827768}
   - component: {fileID: 198996780011491142}
   - component: {fileID: 199419954398492366}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Cloud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4258959494735970}
   - component: {fileID: 198385641499662016}
   - component: {fileID: 199582196170563062}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4758804517448042}
   - component: {fileID: 198125607147610244}
   - component: {fileID: 199993273603858762}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Wind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 4543270406108392}
   - component: {fileID: 212504022537630244}
   - component: {fileID: 114405516823977166}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Enemy_player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4922607908189332}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Mirror
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 4526806721532652}
   - component: {fileID: 198202568376662220}
   - component: {fileID: 199133739017222118}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 4770001555288782}
   - component: {fileID: 198245283949895426}
   - component: {fileID: 199321194172582090}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Wind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 4621237922901312}
   - component: {fileID: 198579220334873178}
   - component: {fileID: 199293062199959020}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Cloud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,7 +154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4243812994990344}
   - component: {fileID: 95299774898352500}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}

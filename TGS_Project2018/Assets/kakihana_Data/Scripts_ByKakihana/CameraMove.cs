@@ -30,6 +30,8 @@ public class CameraMove : MonoBehaviour {
     public float mapStartX,mapEndX; // マップの端点を保存する変数
     [SerializeField] float edgeStartX, edgeEndX; // 自キャラとカメラ端点の差分を保存する変数
     [SerializeField] float height,heightOffset; // ステージの高さ、カメラの高さ、高さの補正値
+    [HideInInspector]
+    public bool isScroll = false;
     // Use this for initialization
 	void Start () {
         mapLoad = FindObjectOfType<MapLoad>(); // マップ読み込みクラスのコンポーネント取得
@@ -76,10 +78,31 @@ public class CameraMove : MonoBehaviour {
         // マップにより設定された範囲内のみで移動可能
         cameraMovePos.y = Mathf.Clamp(cameraMovePos.y,-height + heightOffset,0);
         cameraMovePos.z = cameraMovePos.z + offset.z;
+        if(cameraMovePos.x == transform.position.x)
+        {
+            isScroll = false;
+        }
+        else
+        {
+            isScroll = true;
+        }
 
         // 計算後、カメラを移動する
         this.transform.position = cameraMovePos;
+    }
 
+    public bool PlayerCenter(Vector3 playerPos)
+    {
+        Vector3 centerPos = Camera.main.WorldToViewportPoint(playerPos);
+        if(centerPos.x > 0.5f)
+        {
+            return true;
+        }
+        if(centerPos.x < 0.5f)
+        {
+            return false;
+        }
+        return false;
     }
 
     // イベントカメラ初期設定メソッド、目標地点のGameObjectを引数として使う

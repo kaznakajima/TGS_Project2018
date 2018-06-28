@@ -29,16 +29,17 @@ public class Player : StatusController {
     bool onSlope = false;
 
     float Interval;
+    float rayPoint = 1.0f;
     [SerializeField] float playerSpeed = 1.0f; // キャラクターのスピード
     [SerializeField] float playerMaxSpeed = 1.5f; // プレイヤーの最大スピード
     [SerializeField] float playerMinSpeed = -1.5f; // プレイヤーの最小スピード
     [SerializeField] float speed; // 移動スピード
-    [SerializeField] float rayRange = 1.0f; // 接地判定の距離 
+    [SerializeField] float rayRange; // 接地判定の距離 
     [SerializeField] float rayRangeH = 0.6f; // 水平方向の接地判定距離
     [SerializeField] float edgeJudgeOffset = 0.5f; // ステージ両端を取得するために必要なオフセット値
 
     [SerializeField] bool isright; // 右を向いているか
-    [SerializeField] bool isScroll = false; // スクロール可能か
+    [SerializeField] bool isTouch = false; // 接触しているか
     [SerializeField] bool isGround; // 接地しているか
     [SerializeField] bool climbFlg = false; // 上下移動可能か
     public bool damageFlg = false; // ダメージを受けているか
@@ -74,6 +75,11 @@ public class Player : StatusController {
 
     // Update is called once per frame
     void Update() {
+        if (Goal.clearFlg)
+        {
+            return;
+        }
+
         if (gm.sketchBookValue <= 0)
         {
             statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.DAMAGE);
@@ -163,7 +169,7 @@ public class Player : StatusController {
         }
 
         // スクロール可能なら移動方向に応じて背景をスクロールさせる
-        if (movePos.x > 0 && isScroll == true)
+        if (movePos.x > 0 && cameraMove.isScroll)
         {       // 右方向に進んでいたら
             foreach (var item in uvScroll)
             {
@@ -171,7 +177,7 @@ public class Player : StatusController {
                 item.scrollSpeedX = -1.0f;
             }
         }
-        else if (movePos.x < 0 && isScroll == true)
+        else if (movePos.x < 0 && cameraMove.isScroll)
         {       // 左方向に進んでいたら
             foreach (var item in uvScroll)
             {
@@ -179,7 +185,7 @@ public class Player : StatusController {
                 item.scrollSpeedX = 1.0f;
             }
         }
-        else if (movePos.x == 0 || isScroll == false) // キャラクターが静止していたら
+        else if (movePos.x == 0 || cameraMove.isScroll == false) // キャラクターが静止していたら
         {
             foreach (var item in uvScroll)
             {
@@ -268,7 +274,7 @@ public class Player : StatusController {
     //キャラクター移動メソッド
     void CharactorMove(Vector3 pos)
     {
-        if (!isScroll)
+        if (!isTouch)
         {
             pos.x = 0.0f;
         }
@@ -324,6 +330,7 @@ public class Player : StatusController {
         if (c.gameObject.name == "GroundSlope")
         {
             onSlope = true;
+            rayPoint = 0.0f;
             // 止まっているなら滑る
             if (statusAnim.GetInteger("BluckAnim") == 0 || statusAnim.GetInteger("BluckAnim") == 9)
             {
@@ -356,6 +363,7 @@ public class Player : StatusController {
         if (c.gameObject.name == "GroundSlope")
         {
             onSlope = false;
+            rayPoint = 1.0f;
             myRigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
                     RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         }
@@ -429,20 +437,24 @@ public class Player : StatusController {
         // 線のRayを自キャラの水平方向に飛ばす 向きに応じて左右どちらに飛ばすか決定する
         var isHitH = Physics.Linecast(
             //this.transform.position, 
-            new Vector3(transform.position.x, transform.position.y - 1.0f, 0.0f),
+            new Vector3(transform.position.x, transform.position.y - rayPoint, 0.0f),
             new Vector3(isright == true ? this.transform.position.x + rayRangeH : this.transform.position.x - rayRangeH, 
-            this.transform.position.y - 1.0f, this.transform.position.z),
+            this.transform.position.y - rayPoint, this.transform.position.z),
             out hitH);
         // 水平方向のRayがオブジェクトに接触かつプレイヤーが移動中なら
-        if (isHitH && !onSlope && movePos.x != 0.0f || movePos.y != 0)
+        if (isHitH && !onSlope && movePos.x != 0.0f)
         {
             // スクロール不可能に
-            isScroll = false;
+            isTouch = false;
+            if(hitH.collider.gameObject != null && hitH.collider.gameObject.layer == 9)
+            {
+                isTouch = true;
+            }
         }
         else
         {
             // 条件に一致していなければスクロール可能
-            isScroll = true;
+            isTouch = true;
         }
 
         if (isHit) // 衝突していたら

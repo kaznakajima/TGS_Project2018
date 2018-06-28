@@ -65,8 +65,10 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
             Instantiate(mirrorObj, new Vector3((int)TreePos.x - 1, (int)TreePos.y, 0.0f), Quaternion.identity);
             foreach(var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
             {
-                if(Mathf.Abs(player.transform.position.x - (int)GoalObj.transform.position.x) <= 2)
+                if(Mathf.Abs(player.transform.position.x - (int)GoalObj.transform.position.x) <= 3)
                 {
+                    player.changeFlg = true;
+                    player.FormChange((int)ANIM_ENUMS.BLUCK.IDLE, StatusController.STATUS.NONE);
                     player.transform.position = new Vector3((int)GoalObj.transform.position.x - 3, (int)GoalObj.transform.position.y, 0.0f);
                 }
             }
@@ -83,6 +85,8 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
             {
                 if (Mathf.Abs(player.transform.position.x - (int)IvyObj.transform.position.x) <= 1)
                 {
+                    player.changeFlg = true;
+                    player.FormChange((int)ANIM_ENUMS.BLUCK.IDLE, StatusController.STATUS.NONE);
                     player.transform.position = new Vector3((int)IvyObj.transform.position.x - 2, (int)IvyObj.transform.position.y + 2.0f, 0.0f);
                 }
             }
@@ -106,6 +110,8 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
                 {
                     if (Mathf.Abs(player.transform.position.x - (int)TreeObj.transform.position.x) <= 2)
                     {
+                        player.changeFlg = true;
+                        player.FormChange((int)ANIM_ENUMS.BLUCK.IDLE, StatusController.STATUS.NONE);
                         player.transform.position = new Vector3((int)TreeObj.transform.position.x - 2,
                     (int)TreeObj.transform.position.y, 0.0f);
                     }
@@ -148,6 +154,7 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
 	void Start () {
         canReset = false;
         resetIsonFlg = false;
+        
     }
 	
 	// Update is called once per frame

@@ -49,7 +49,7 @@ public class Goal : MonoBehaviour
         if (clearFlg)
         {
             // 画面外まで移動していく
-            transform.position += new Vector3(1, 0, 0) * Time.deltaTime;
+            transform.position += new Vector3(2, 0, 0) * Time.deltaTime;
         }
 	}
 

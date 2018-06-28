@@ -5,12 +5,31 @@ using DG.Tweening;
 
 public class FireGimmick : GimmickController
 {
+    // 時間経過
+    float Interval = 0.0f;
+
+    // リセット可能判定
+    bool resetFlg = false;
+
     // ギミック処理
     public override void GimmickAction()
     {
+        Interval = 0.0f;
+        // 燃えるアニメーション再生
         Animator gimmickAnim = GetComponent<Animator>();
         gimmickAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.FOREST.FIRE);
-        Destroy(gameObject, 2.0f);
+
+        // ある程度時間がたったら削除
+        DOTween.To(() => Interval, time => Interval = time, 1.0f, 2.0f).OnComplete(() =>
+         {
+             // リセットが必要ならリセットアイコン表示
+             if (resetFlg)
+             {
+                 ResetController.resetIsonFlg = true;
+             }
+             Destroy(gameObject);
+         });
+        
     }
 
     // Ray判定
@@ -18,8 +37,6 @@ public class FireGimmick : GimmickController
     {
         Ray ray = new Ray(transform.position, direction);
         RaycastHit rayHit;
-        // デバッグ用の可視化
-        Debug.DrawRay(transform.position, direction * gimmickMaxRay, Color.red);
         if (Physics.Raycast(ray, out rayHit, gimmickMaxRay))
         {
             // 鏡の属性が炎だったらギミック作動
@@ -28,32 +45,29 @@ public class FireGimmick : GimmickController
                 Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
                 if (rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.FIRE)
                 {
+                    ResetController.resetIsonFlg = false;
+                    // ゴールだったらリセットが必要
                     if (gameObject.transform.parent.name == "GoalForest(Clone)")
                     {
                         SingletonMonoBehaviour<ResetController>.Instance.TreePos = gameObject.transform.parent.position;
-                        ResetController.resetIsonFlg = true;
                     }
+                    // ゴールじゃなかったらリセットしなくていい
                     else
                     {
-                        ResetController.resetIsonFlg = false;
-                        //mirror.isGimmick = true;
+                        resetFlg = false;
                     }
-
                     gimmickMaxRay = 0.0f;
                     GimmickAction();
                     // ミラーの消去コルーチン開始
                     StartCoroutine(mirror.DestroyAnimation(0.0f, 0.0f, 2.0f));
                 }
-                if(rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.WIND)
+                else if(rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.WIND)
                 {
+                    ResetController.resetIsonFlg = false;
+                    // ゴールだったらリセットしなくていい
                     if (gameObject.transform.parent.name == "GoalForest(Clone)")
                     {
-                        ResetController.resetIsonFlg = false;
-                        //mirror.isGimmick = true;
-                    }
-                    else
-                    {
-                        ResetController.resetIsonFlg = true;
+                        resetFlg = false;
                     }
                     gimmickMaxRay = 0.0f;
                     ForestBreak();
@@ -67,6 +81,7 @@ public class FireGimmick : GimmickController
     // 風できるアニメーション
     void ForestBreak()
     {
+        // 木を切るアニメーション再生
         Animator gimmickAnim = GetComponent<Animator>();
         gimmickAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.FOREST.BREAK);
         GameObject childTree = GetComponentInChildren<CapsuleCollider>().gameObject;
@@ -78,18 +93,25 @@ public class FireGimmick : GimmickController
     {
         yield return new WaitForSeconds(2.25f);
 
+        // 木の幹だけを残す
         childTree.transform.parent = null;
         childTree.AddComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX |  RigidbodyConstraints.FreezePositionZ 
             | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
         childTree.GetComponent<Rigidbody>().velocity = Vector2.zero;
+
         childTree.GetComponent<Goal>().isBreak = true;
+        // リセットが必要ならリセットアイコン表示
+        if (resetFlg)
+        {
+            ResetController.resetIsonFlg = true;
+        }
         Destroy(gameObject);
     }
 
     // Use this for initialization
     void Start () {
-		
-	}
+        resetFlg = true;
+    }
 	
 	// Update is called once per frame
 	void Update () {

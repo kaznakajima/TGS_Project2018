@@ -160,7 +160,6 @@ public class Mirror : StatusController
                 return;
             }
             myAudio.PlayOneShot(SE[(int)status]);
-
             ResetController.resetIsonFlg = true;
         });
     }
@@ -196,10 +195,10 @@ public class Mirror : StatusController
 
     public IEnumerator DestroyAnimation(float x, float y, float time)
     {
-        yield return new WaitForSeconds(0.5f);
-
         // レイヤーの変更
         gameObject.layer = 9;
+
+        yield return new WaitForSeconds(0.5f);
 
         DOTween.To(() => myAudio.volume, volume => myAudio.volume = volume, 0.0f, time);
 

@@ -63,7 +63,6 @@ public class RainGimmick : GimmickController
                 // ミラーの消去コルーチン開始
                 StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation(0.0f, 0.0f, 2.0f));
             }
-
         }
     }
 
