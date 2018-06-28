@@ -234,12 +234,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   status: 0
-  playerLife: 3
-  fallingCount: 0
-  damageHeightLimit: 0.75
+  statusSr: {fileID: 0}
+  statusAnim: {fileID: 0}
+  playerIcons: []
+  statusMaterial: []
+  statusAlpha: 0
+  resetIcon: {fileID: 0}
   playerSpeed: 100
-  statusSprite: []
-  statusTexture: []
+  playerMaxSpeed: 1.5
+  playerMinSpeed: -1.5
+  speed: 0
+  rayRange: 1
+  rayRangeH: 0.6
+  edgeJudgeOffset: 0.5
+  isright: 0
+  isScroll: 0
+  isGround: 0
+  climbFlg: 0
+  damageFlg: 0
+  changeFlg: 0
+  pageChangeFlg: 0
+  changePageName: 
+  myElement:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  movePos: {x: 0, y: 0, z: 0}
+  wayPointPos: {x: 0, y: 0, z: 0}
+  mySprite: {fileID: 0}
 --- !u!198 &198014118181032908
 ParticleSystem:
   m_ObjectHideFlags: 1
