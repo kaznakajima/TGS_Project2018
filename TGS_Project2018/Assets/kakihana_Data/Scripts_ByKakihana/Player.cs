@@ -25,6 +25,9 @@ public class Player : StatusController {
 
     public SpriteRenderer resetIcon; // リセット用のアイコン
 
+    // 坂道判定
+    bool onSlope = false;
+
     float Interval;
     [SerializeField] float playerSpeed = 1.0f; // キャラクターのスピード
     [SerializeField] float playerMaxSpeed = 1.5f; // プレイヤーの最大スピード
@@ -71,9 +74,9 @@ public class Player : StatusController {
 
     // Update is called once per frame
     void Update() {
-        if (Goal.clearFlg || gm.sketchBookValue <= 0)
+        if (gm.sketchBookValue <= 0)
         {
-            statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
+            statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.DAMAGE);
             return;
         }
 
@@ -320,8 +323,9 @@ public class Player : StatusController {
     {
         if (c.gameObject.name == "GroundSlope")
         {
+            onSlope = true;
             // 止まっているなら滑る
-            if (statusAnim.GetInteger("BluckAnim") == 0)
+            if (statusAnim.GetInteger("BluckAnim") == 0 || statusAnim.GetInteger("BluckAnim") == 9)
             {
                 myRigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
                     RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
@@ -351,6 +355,7 @@ public class Player : StatusController {
 
         if (c.gameObject.name == "GroundSlope")
         {
+            onSlope = false;
             myRigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
                     RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         }
@@ -429,7 +434,7 @@ public class Player : StatusController {
             this.transform.position.y - 1.0f, this.transform.position.z),
             out hitH);
         // 水平方向のRayがオブジェクトに接触かつプレイヤーが移動中なら
-        if (isHitH && movePos.x != 0.0f || movePos.y != 0)
+        if (isHitH && !onSlope && movePos.x != 0.0f || movePos.y != 0)
         {
             // スクロール不可能に
             isScroll = false;
@@ -484,11 +489,11 @@ public class Player : StatusController {
             // Ray確認用デバッグ
             if (isright)
             {
-                Debug.DrawRay(transform.position, Vector3.right * rayRangeH, Color.red);
+                Debug.DrawRay(new Vector3(transform.position.x, transform.position.y - 1.0f, 0.0f), Vector3.right * rayRangeH, Color.red);
             }
             else
             {
-                Debug.DrawRay(transform.position, Vector3.left * rayRangeH, Color.red);
+                Debug.DrawRay(new Vector3(transform.position.x, transform.position.y - 1.0f, 0.0f), Vector3.left * rayRangeH, Color.red);
             }
             return true; // 各条件に該当していなければ移動可能
         }

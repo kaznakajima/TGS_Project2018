@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4328953508808784}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Ground_45
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   - component: {fileID: 4516979906358556}
   - component: {fileID: 212462665309766754}
   - component: {fileID: 65314924556968440}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: GroundSlope
   m_TagString: Untagged
   m_Icon: {fileID: 0}

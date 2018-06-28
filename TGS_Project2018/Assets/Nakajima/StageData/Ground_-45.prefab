@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4464813054302842}
   - component: {fileID: 212578021315450242}
   - component: {fileID: 65598004635434446}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: GroundSlope
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4471006373565830}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Ground_-45
   m_TagString: Untagged
   m_Icon: {fileID: 0}

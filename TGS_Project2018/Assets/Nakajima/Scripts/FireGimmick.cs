@@ -25,10 +25,9 @@ public class FireGimmick : GimmickController
             // 鏡の属性が炎だったらギミック作動
             if (rayHit.collider.name == objName)
             {
+                Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
                 if (rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.FIRE)
                 {
-                    Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
-                    
                     if (gameObject.transform.parent.name == "GoalForest(Clone)")
                     {
                         SingletonMonoBehaviour<ResetController>.Instance.TreePos = gameObject.transform.parent.position;
@@ -59,7 +58,7 @@ public class FireGimmick : GimmickController
                     gimmickMaxRay = 0.0f;
                     ForestBreak();
                     // ミラーの消去コルーチン開始
-                    StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation(0.0f, 0.0f, 2.0f));
+                    StartCoroutine(mirror.DestroyAnimation(0.0f, 0.0f, 2.0f));
                 }
             }
         }
