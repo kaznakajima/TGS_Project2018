@@ -118,6 +118,16 @@ public class Select : MonoBehaviour
             onButton = true;
             Scene("Tutorial");
         }
+        else if (Input.GetButtonDown("Tutorial") && !flg && SceneManager.GetActiveScene().name == "Tutorial")
+        {
+            if (onButton || !canPush)
+            {
+                return;
+            }
+            myAudio.PlayOneShot(myAudio.clip);
+            onButton = true;
+            Scene("SelectScene");
+        }
 
         if (fadeFlg)
         {
