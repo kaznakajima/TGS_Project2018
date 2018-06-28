@@ -14,6 +14,8 @@ public class IceGimmick : GimmickController
     // 滑る判定
     [HideInInspector]
     public bool isSlope = true;
+    // true 右　false 左
+    bool direction = false;
 
     // 滑らせるためのオブジェクト
     Rigidbody playerRig;
@@ -75,6 +77,22 @@ public class IceGimmick : GimmickController
         RayHit(transform.up, "Enemy");
     }
 
+    void OnCollisionEnter(Collision c)
+    {
+        if (c.gameObject.name == "Character" && isSlope)
+        {
+            if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 1 && direction == false)
+            {
+                direction = true;
+                moveX = 3.0f;
+            }
+           else if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 2 && direction == true)
+            {
+                direction = false;
+                moveX = -3.0f;
+            }
+        }
+    }
     void OnCollisionStay(Collision c)
     {
         if (c.gameObject.name == "Character" && isSlope)

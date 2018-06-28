@@ -464,15 +464,11 @@ MonoBehaviour:
   playerSpeed: 1
   playerMaxSpeed: 1.5
   playerMinSpeed: -1.5
-  jumpSpeed: 7
   speed: 60
-  jumpCoolDownCount: 0
-  jumpCoolDownLimit: 0.5
   rayRange: 2
   rayRangeH: 0.6
-  defaultRayRange: 0
+  edgeJudgeOffset: 0.5
   isright: 0
-  jumpFlg: 0
   isScroll: 0
   isGround: 0
   climbFlg: 0

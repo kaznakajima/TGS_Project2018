@@ -42,6 +42,7 @@ public class Button : MonoBehaviour
                 DOTween.To(() => Interval, volume =>
                  Interval = volume, 1.0f, 1.0f).OnComplete(() =>
                  {
+                     SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.Play();
                      DOTween.To(() => SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume, volume =>
                      SingletonMonoBehaviour<ScreenShot>.Instance.bgmAudio.volume = volume, 1.0f, 2.0f);
                  });

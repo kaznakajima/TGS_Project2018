@@ -64,7 +64,7 @@ public class Player : StatusController {
             item.scrollSpeedX = 0.0f;
         }
         mySprite = gameObject.GetComponent<SpriteRenderer>();
-        pageChange = GameObject.Find(changePageName).GetComponent<PageChange>(); // ページ遷移のコンポーネント取得
+        pageChange = GameObject.FindObjectOfType<PageChange>(); // ページ遷移のコンポーネント取得
         myRigidbody = this.gameObject.GetComponent<Rigidbody>(); // RigidBodyコンポーネントを取得
         isright = true; // 初期位置では右を向いている
     }
@@ -266,8 +266,11 @@ public class Player : StatusController {
     //キャラクター移動メソッド
     void CharactorMove(Vector3 pos)
     {
-        //キャラクター移動
-        transform.position += movePos * Time.deltaTime;
+        if (isScroll)
+        {
+            transform.position += movePos * Time.deltaTime;
+        }
+
     }
 
     void OnCollisionEnter(Collision hit)
@@ -275,6 +278,10 @@ public class Player : StatusController {
         // ダメージオブジェクトに接触したら
         if (hit.gameObject.tag == "Needle" && damageFlg == false)
         {
+            // ダメージ音
+            hit.gameObject.GetComponent<AudioSource>().PlayOneShot(hit.gameObject.GetComponent<AudioSource>().clip);
+
+            SingletonMonoBehaviour<ResetController>.Instance.canReset = true;
             Interval = 0.0f;
 
             // ダメージアニメーション再生
@@ -294,9 +301,13 @@ public class Player : StatusController {
                   {
                       if (gm.sketchBookValue > 0 && Interval == 0.25f)
                       {
+                          FormChange((int)ANIM_ENUMS.BLUCK.IDLE, STATUS.NONE);
                           gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
                           statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
-                          transform.position = wayPointPos; // 保存された中間地点に移動する
+                          if (SingletonMonoBehaviour<ResetController>.Instance.canReset)
+                          {
+                              transform.position = wayPointPos; // 保存された中間地点に移動する
+                          }
                           damageFlg = false; // ダメージフラグOFF
                           Interval = 0.0f;
                       }
