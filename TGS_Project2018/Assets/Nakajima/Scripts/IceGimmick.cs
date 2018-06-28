@@ -69,7 +69,7 @@ public class IceGimmick : GimmickController
 
     // Use this for initialization
     void Start() {
-
+        direction = false;
     }
 
     // Update is called once per frame
