@@ -1381,7 +1381,7 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1104735368}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 360dd4f0190e1fa4c90f4043ca2cbf4a, type: 3}
   m_Name: 
@@ -1566,7 +1566,6 @@ MonoBehaviour:
   frameCount: 0
   endCount: 0
   endFlg: 0
-  cameraEndFlg: 0
   eventFlg: 0
   velocity: {x: 0, y: 0, z: 0}
   returnVelocity: {x: 0, y: 0, z: 0}
@@ -1578,7 +1577,6 @@ MonoBehaviour:
   edgeStartX: 0
   edgeEndX: 0
   height: 0
-  cameraHeight: 0
   heightOffset: 0
 --- !u!1 &1357609518
 GameObject:
@@ -1742,7 +1740,7 @@ MonoBehaviour:
   mapObj:
   - {fileID: 1594260757835426, guid: c9f4f596d9955314d941576f491b60ef, type: 2}
   - {fileID: 1504463264066390, guid: 198c57042998f1f43805bfc78a673799, type: 2}
-  - {fileID: 1956373238541394, guid: b6b4c93a7e6e93145ac8ad7ebeb95c7c, type: 2}
+  - {fileID: 1049556791764890, guid: b6b4c93a7e6e93145ac8ad7ebeb95c7c, type: 2}
   - {fileID: 1456967744725320, guid: 92763f8d280a01946b2ab5dc50af3a1b, type: 2}
   - {fileID: 1155802989207052, guid: 3ed665aec88f6e84ea24d8236c14a6ca, type: 2}
   - {fileID: 1997199408150208, guid: 44906381e1e25844dabbfb531568db34, type: 2}

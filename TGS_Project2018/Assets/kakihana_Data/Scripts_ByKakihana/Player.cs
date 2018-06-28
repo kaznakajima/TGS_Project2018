@@ -200,16 +200,14 @@ public class Player : StatusController {
 
         // 移動値を設定
         // ↓↓以下の行よりキー入力によりキャラクター書き換え処理を行う↓↓
-        if (changeFlg == false)
+        if (changeFlg == false && !climbFlg)
         {
             if (Input.GetKeyDown("joystick button 1") || Input.GetKeyDown(KeyCode.RightArrow)) // ゲームボタン「B」で炎属性に書き換え
             {
-                changeFlg = true;
                 StatusChenge(STATUS.FIRE);
             }
             if (Input.GetKeyDown("joystick button 2") || Input.GetKeyDown(KeyCode.LeftArrow)) // ゲームボタン「X」で水属性に書き換え
             {
-                changeFlg = true;
                 StatusChenge(STATUS.WATER);
             }
             if (Input.GetKeyDown("joystick button 0") && ResetController.resetIsonFlg == true || Input.GetKeyDown(KeyCode.DownArrow) && ResetController.resetIsonFlg == true) // リセット用
@@ -221,7 +219,6 @@ public class Player : StatusController {
             }
             if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.UpArrow)) // ゲームボタン「Y」で土属性に書き換え
             {
-                changeFlg = true;
                 StatusChenge(STATUS.WIND);
                 //changeFlg = true;
                 //StatusChenge(STATUS.EARTH);
@@ -241,6 +238,7 @@ public class Player : StatusController {
         // ページがめくり終わるまで変身できない
         if (status != _status && pageChange.pageFlip < -1)
         {
+            changeFlg = true;
             switch (_status)
             {
                 case STATUS.FIRE: // 炎属性に変身
@@ -259,6 +257,7 @@ public class Player : StatusController {
         }// 変更先のステータスが現在のステータスと同じなら元のキャラクターに戻る
         else if (status == _status && pageChange.pageFlip < -1)
         {
+            changeFlg = true;
             FormChange((int)ANIM_ENUMS.BLUCK.IDLE, STATUS.NONE);
         }
     }
@@ -266,11 +265,11 @@ public class Player : StatusController {
     //キャラクター移動メソッド
     void CharactorMove(Vector3 pos)
     {
-        if (isScroll)
+        if (!isScroll)
         {
-            transform.position += movePos * Time.deltaTime;
+            pos.x = 0.0f;
         }
-
+        transform.position += pos * Time.deltaTime;
     }
 
     void OnCollisionEnter(Collision hit)
@@ -470,7 +469,7 @@ public class Player : StatusController {
             // デバッグ用Rayを画面に出力
             Debug.DrawRay(transform.position, Vector3.down * rayRange,Color.red); // デバッグ用に画面にRayを出力
             // 水平方向のRayがオブジェクトに接触かつプレイヤーが移動中なら
-            if (isHitH && movePos != Vector3.zero)
+            if (isHitH && movePos.x != 0.0f)
             {
                 // スクロール不可能に
                 isScroll = false;
