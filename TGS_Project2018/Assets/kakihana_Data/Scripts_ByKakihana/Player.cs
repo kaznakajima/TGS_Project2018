@@ -423,10 +423,23 @@ public class Player : StatusController {
         var isHit = Physics.Linecast(this.transform.position, new Vector3(this.transform.position.x, this.transform.position.y - rayRange, this.transform.position.z), out hitV);
         // 線のRayを自キャラの水平方向に飛ばす 向きに応じて左右どちらに飛ばすか決定する
         var isHitH = Physics.Linecast(
-            this.transform.position, 
+            //this.transform.position, 
+            new Vector3(transform.position.x, transform.position.y - 1.0f, 0.0f),
             new Vector3(isright == true ? this.transform.position.x + rayRangeH : this.transform.position.x - rayRangeH, 
-            this.transform.position.y, this.transform.position.z),
+            this.transform.position.y - 1.0f, this.transform.position.z),
             out hitH);
+        // 水平方向のRayがオブジェクトに接触かつプレイヤーが移動中なら
+        if (isHitH && movePos.x != 0.0f || movePos.y != 0)
+        {
+            // スクロール不可能に
+            isScroll = false;
+        }
+        else
+        {
+            // 条件に一致していなければスクロール可能
+            isScroll = true;
+        }
+
         if (isHit) // 衝突していたら
         {
             // 中間地点と接触したら、座標と地面埋まり防止のため、y軸を＋１した値を変数に格納
@@ -468,17 +481,6 @@ public class Player : StatusController {
             }
             // デバッグ用Rayを画面に出力
             Debug.DrawRay(transform.position, Vector3.down * rayRange,Color.red); // デバッグ用に画面にRayを出力
-            // 水平方向のRayがオブジェクトに接触かつプレイヤーが移動中なら
-            if (isHitH && movePos.x != 0.0f)
-            {
-                // スクロール不可能に
-                isScroll = false;
-            }
-            else
-            {
-                // 条件に一致していなければスクロール可能
-                isScroll = true;
-            }
             // Ray確認用デバッグ
             if (isright)
             {
