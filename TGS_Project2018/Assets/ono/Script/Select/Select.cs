@@ -129,6 +129,18 @@ public class Select : MonoBehaviour
             Scene("SelectScene");
         }
 
+        // チュートリアルシーンへの移動
+        if (Input.GetButtonDown("Title") && !flg && SceneManager.GetActiveScene().name != "Tutorial")
+        {
+            if (onButton || !canPush)
+            {
+                return;
+            }
+            myAudio.PlayOneShot(myAudio.clip);
+            onButton = true;
+            Scene("TitleScene");
+        }
+
         if (fadeFlg)
         {
             if (SceneManager.GetActiveScene().name == "Tutorial")
