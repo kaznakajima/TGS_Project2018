@@ -31,7 +31,7 @@ public class Player : StatusController {
     public static bool isSlope;
 
     float Interval;
-    float rayPoint = 1.0f;
+    float rayPoint = 0.85f;
     [SerializeField] float playerSpeed = 1.0f; // キャラクターのスピード
     [SerializeField] float playerMaxSpeed = 1.5f; // プレイヤーの最大スピード
     [SerializeField] float playerMinSpeed = -1.5f; // プレイヤーの最小スピード
@@ -77,7 +77,7 @@ public class Player : StatusController {
 
     // Update is called once per frame
     void Update() {
-        if (Goal.clearFlg || isSlope)
+        if (Goal.clearFlg)
         {
             return;
         }
@@ -231,6 +231,7 @@ public class Player : StatusController {
                 {
                     return;
                 }
+                movePos.x = 0.0f;
                 Button.selectBack = false;
                 StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                 StartCoroutine(pageChange.ScreenShot());
@@ -253,10 +254,6 @@ public class Player : StatusController {
     // キャラクター描き換えメソッド
     public override void StatusChenge(STATUS _status)
     {
-        if(rayPoint == 0.0f)
-        {
-            return;
-        }
         // ページがめくり終わるまで変身できない
         if (status != _status && pageChange.pageFlip < -1)
         {
@@ -291,6 +288,10 @@ public class Player : StatusController {
         {
             pos.x = 0.0f;
         }
+        if (isSlope)
+        {
+            pos.x = IceGimmick.moveX;
+        }
         transform.position += pos * Time.deltaTime;
     }
 
@@ -302,9 +303,11 @@ public class Player : StatusController {
             GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
 
-            // ダメージオブジェクトに接触したら
-            if (hit.gameObject.tag == "Needle" && damageFlg == false)
+         // ダメージオブジェクトに接触したら
+         if (hit.gameObject.tag == "Needle" && damageFlg == false)
         {
+            ResetController.resetIsonFlg = false;
+
             // ダメージ音
             hit.gameObject.GetComponent<AudioSource>().PlayOneShot(hit.gameObject.GetComponent<AudioSource>().clip);
 
@@ -346,10 +349,6 @@ public class Player : StatusController {
     // プレイヤーが坂の上に立ったら
     void OnCollisionStay(Collision c)
     {
-        if(c.gameObject.tag == "Stone")
-        {
-            rayPoint = 0.0f;
-        }
         if (c.gameObject.name == "GroundSlope")
         {
             onSlope = true;
@@ -378,7 +377,7 @@ public class Player : StatusController {
 
     void OnCollisionExit(Collision c)
     {
-        if(c.gameObject.name == "Ground(Clone)" && isSlope == true)
+        if (c.gameObject.name == "Ground(Clone)" && isSlope == true)
         {
             wayPointPos = new Vector3(c.gameObject.transform.position.x, c.gameObject.transform.position.y + 2.0f, 0.0f);
         }
@@ -386,7 +385,7 @@ public class Player : StatusController {
         if (c.gameObject.name == "GroundSlope")
         {
             onSlope = false;
-            rayPoint = 1.0f;
+            rayPoint = 0.85f;
             myRigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
                     RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         }

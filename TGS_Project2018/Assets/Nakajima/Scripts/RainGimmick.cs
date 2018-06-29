@@ -20,7 +20,7 @@ public class RainGimmick : GimmickController
     public override void GimmickAction()
     {
         float nextPosition;
-        if(isHit)
+        if (isHit)
         {
             SingletonMonoBehaviour<ResetController>.Instance.IvyObj = gameObject;
             nextPosition = transform.position.y;
@@ -32,18 +32,14 @@ public class RainGimmick : GimmickController
             SingletonMonoBehaviour<ResetController>.Instance.IvyPos = transform.position;
         }
 
-        if (isHit)
+        transform.DOMove(new Vector3(transform.position.x, nextPosition, transform.position.z), 2.0f).OnComplete(() =>
         {
-            transform.DOMove(new Vector3(transform.position.x, nextPosition, transform.position.z), 2.0f).OnComplete(() =>
+            if (isHit)
             {
                 ResetController.resetIsonFlg = true;
-            });
-        }
-        else
-        {
-            transform.DOMove(new Vector3(transform.position.x, nextPosition, transform.position.z), 2.0f);
-        }
-        
+            }
+        });
+
         isMirror = false;
     }
 
