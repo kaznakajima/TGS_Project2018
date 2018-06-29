@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 127290670}
   - component: {fileID: 127290669}
   m_Layer: 5
-  m_Name: Space
+  m_Name: Escape
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -235,7 +235,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 69169a5cb96616c46b375e3fc948352f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 38f88e91a5822cb40a068519d3869fac, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2747,7 +2747,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 4b948126c5411de4cb3abfa2f3e62323, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 92e0d620a327c8b4e8f40eec7fb61622, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
