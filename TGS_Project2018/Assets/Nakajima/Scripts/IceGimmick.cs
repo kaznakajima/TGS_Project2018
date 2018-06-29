@@ -5,24 +5,18 @@ using DG.Tweening;
 
 public class IceGimmick : GimmickController
 {
-    // Playerの参照
-    Player player;
-
     [SerializeField]
     GameObject steam;
 
     // 滑る向き
-    float moveX = 3.0f;
+    public static float moveX = 3.0f;
 
     // 滑る判定
     [HideInInspector]
     public bool isSlope = true;
     // true 右　false 左
     [HideInInspector]
-    public static  bool direction = false;
-
-    // PlayerのRigidbody
-    Rigidbody playerRig;
+    public static bool direction = false;
 
     // ギミック処理
     public override void GimmickAction()
@@ -93,17 +87,14 @@ public class IceGimmick : GimmickController
                 c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 0)
             {
                 Player.isSlope = true;
-                moveX = 10.0f;
-                playerRig = c.gameObject.GetComponent<Rigidbody>();
-                playerRig.AddForce(transform.right * moveX * 50.0f);
+                moveX = 3.0f;
+
             }
            else if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 2 || 
                 c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 9)
             {
                 Player.isSlope = true;
-                moveX = -10.0f;
-                playerRig = c.gameObject.GetComponent<Rigidbody>();
-                playerRig.AddForce(transform.right * moveX * 50.0f);
+                moveX = -3.0f;
             }
         }
     }
