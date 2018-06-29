@@ -61,7 +61,7 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
         // 燃やされてもリセット
         if (TreePos != Vector3.zero)
         {
-            Instantiate(GoalObj, new Vector3((int)TreePos.x, (int)TreePos.x, 0.0f), Quaternion.identity);
+            Instantiate(GoalObj, new Vector3((int)TreePos.x, (int)TreePos.y, 0.0f), Quaternion.identity);
             Instantiate(mirrorObj, new Vector3((int)TreePos.x - 1, (int)TreePos.y, 0.0f), Quaternion.identity);
             foreach(var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
             {
