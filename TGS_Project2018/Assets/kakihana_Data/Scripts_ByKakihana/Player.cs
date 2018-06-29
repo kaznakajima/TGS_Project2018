@@ -77,7 +77,7 @@ public class Player : StatusController {
 
     // Update is called once per frame
     void Update() {
-        if (Goal.clearFlg)
+        if (Goal.clearFlg || isSlope)
         {
             return;
         }
@@ -300,7 +300,6 @@ public class Player : StatusController {
         if (hit.gameObject.name != "Ice(Clone)")
         {
             isSlope = false;
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
 
          // ダメージオブジェクトに接触したら
