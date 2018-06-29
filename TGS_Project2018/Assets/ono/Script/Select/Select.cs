@@ -134,6 +134,7 @@ public class Select : MonoBehaviour
             if (SceneManager.GetActiveScene().name == "Tutorial")
             {
                 StageNum = 0;
+                SingletonMonoBehaviour<ScreenShot>.Instance.stageNum = 0;
                 SingletonMonoBehaviour<ScreenShot>.Instance.csvName = SingletonMonoBehaviour<ScreenShot>.Instance.csvData[StageNum];
                 Scene(stageName);
                 return;

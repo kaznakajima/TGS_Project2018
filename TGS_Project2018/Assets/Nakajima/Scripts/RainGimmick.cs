@@ -31,13 +31,19 @@ public class RainGimmick : GimmickController
             nextPosition = transform.position.y + 10.18f;
             SingletonMonoBehaviour<ResetController>.Instance.IvyPos = transform.position;
         }
-        transform.DOMove(new Vector3(transform.position.x, nextPosition, transform.position.z), 2.0f).OnComplete(() =>
+
+        if (isHit)
         {
-            if (isHit)
+            transform.DOMove(new Vector3(transform.position.x, nextPosition, transform.position.z), 2.0f).OnComplete(() =>
             {
                 ResetController.resetIsonFlg = true;
-            }
-        });
+            });
+        }
+        else
+        {
+            transform.DOMove(new Vector3(transform.position.x, nextPosition, transform.position.z), 2.0f);
+        }
+        
         isMirror = false;
     }
 
