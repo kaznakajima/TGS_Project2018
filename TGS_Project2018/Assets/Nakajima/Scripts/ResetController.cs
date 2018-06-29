@@ -158,6 +158,9 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        if (SingletonMonoBehaviour<ScreenShot>.Instance.GetBreakForest().Length == 0)
+        {
+            resetIsonFlg = true;
+        }
+    }
 }
