@@ -9,7 +9,7 @@ public class IceGimmick : GimmickController
     GameObject steam;
 
     // 滑る向き
-    public static float moveX = 3.0f;
+    public static float moveX = 5.0f;
 
     // 滑る判定
     [HideInInspector]
@@ -66,7 +66,7 @@ public class IceGimmick : GimmickController
 
     // Use this for initialization
     void Start() {
-        direction = false;
+        moveX = 5.0f;
     }
 
     // Update is called once per frame
@@ -87,14 +87,12 @@ public class IceGimmick : GimmickController
                 c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 0)
             {
                 Player.isSlope = true;
-                moveX = 4.0f;
 
             }
            else if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 2 || 
                 c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 9)
             {
                 Player.isSlope = true;
-                moveX = -4.0f;
             }
         }
     }

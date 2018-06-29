@@ -77,7 +77,6 @@ public class Player : StatusController {
 
     // Update is called once per frame
     void Update() {
-
         if (Goal.clearFlg)
         {
             return;
@@ -100,6 +99,9 @@ public class Player : StatusController {
             // なめらかに移動させる
             movePos = Vector3.Lerp(oldVelocity, movePos, playerSpeed * Time.deltaTime);
             oldVelocity = movePos; // なめらかに移動させるために必要な一時保存用ベクトルを保存
+
+            // 入力判定
+            Vector3 inputVec;
 
             // スティックが右方向に倒れたら
             if (Input.GetAxisRaw("Horizontal") > 0)
@@ -303,6 +305,7 @@ public class Player : StatusController {
         if (hit.gameObject.name != "Ice(Clone)")
         {
             isSlope = false;
+            IceGimmick.moveX *= -1;
         }
 
          // ダメージオブジェクトに接触したら
@@ -351,6 +354,13 @@ public class Player : StatusController {
     // プレイヤーが坂の上に立ったら
     void OnCollisionStay(Collision c)
     {
+        if(c.gameObject.name == "Ice(Clone)")
+        {
+            isSlope = true;
+        }if(c.gameObject.name != "Ice(Clone)")
+        {
+            isSlope = false;
+        }
         if (c.gameObject.name == "GroundSlope")
         {
             onSlope = true;
@@ -368,12 +378,9 @@ public class Player : StatusController {
                     RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
             }
         }
-        if (c.gameObject.name == "Ice(Clone)")
+        if(c.gameObject.name == "Ice(Clone)")
         {
-            if (c.gameObject.GetComponent<IceGimmick>().isSlope)
-            {
-                speed = 0.0f;
-            }
+
         }
     }
 
@@ -390,13 +397,6 @@ public class Player : StatusController {
             rayPoint = 0.85f;
             myRigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
                     RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-        }
-        if (c.gameObject.name == "Ice(Clone)")
-        {
-            if (c.gameObject.GetComponent<IceGimmick>().isSlope)
-            {
-                speed = 70.0f;
-            }
         }
     }
 
@@ -427,15 +427,6 @@ public class Player : StatusController {
             }
         }
 
-    }
-
-    void OnTriggerStay(Collider hit)
-    {
-        if (hit.gameObject.tag == "Climb")
-        {
-            climbFlg = true;
-            myRigidbody.useGravity = false; // 重力ON
-        }
     }
 
     public void FormChange(int changeNum, STATUS _status)
