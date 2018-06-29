@@ -77,8 +77,14 @@ public class Player : StatusController {
 
     // Update is called once per frame
     void Update() {
-        if (Goal.clearFlg || isSlope)
+
+        if (Goal.clearFlg)
         {
+            return;
+        }
+        if (isSlope)
+        {
+            CharactorMove(movePos);
             return;
         }
 
@@ -94,9 +100,6 @@ public class Player : StatusController {
             // なめらかに移動させる
             movePos = Vector3.Lerp(oldVelocity, movePos, playerSpeed * Time.deltaTime);
             oldVelocity = movePos; // なめらかに移動させるために必要な一時保存用ベクトルを保存
-
-            // 入力判定
-            Vector3 inputVec;
 
             // スティックが右方向に倒れたら
             if (Input.GetAxisRaw("Horizontal") > 0)
@@ -424,6 +427,15 @@ public class Player : StatusController {
             }
         }
 
+    }
+
+    void OnTriggerStay(Collider hit)
+    {
+        if (hit.gameObject.tag == "Climb")
+        {
+            climbFlg = true;
+            myRigidbody.useGravity = false; // 重力ON
+        }
     }
 
     public void FormChange(int changeNum, STATUS _status)
