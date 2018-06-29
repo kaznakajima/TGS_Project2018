@@ -61,15 +61,15 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
         // 燃やされてもリセット
         if (TreePos != Vector3.zero)
         {
-            Instantiate(GoalObj, new Vector3((int)TreePos.x,(int)TreePos.y, 0.0f), Quaternion.identity);
+            Instantiate(GoalObj, new Vector3((int)TreePos.x, (int)TreePos.x, 0.0f), Quaternion.identity);
             Instantiate(mirrorObj, new Vector3((int)TreePos.x - 1, (int)TreePos.y, 0.0f), Quaternion.identity);
             foreach(var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
             {
-                if(Mathf.Abs(player.transform.position.x - (int)GoalObj.transform.position.x) <= 3)
+                if(Mathf.Abs(player.transform.position.x - (int)TreePos.x) <= 3)
                 {
                     player.changeFlg = true;
                     player.FormChange((int)ANIM_ENUMS.BLUCK.IDLE, StatusController.STATUS.NONE);
-                    player.transform.position = new Vector3((int)GoalObj.transform.position.x - 3, (int)GoalObj.transform.position.y, 0.0f);
+                    player.transform.position = new Vector3((int)TreePos.x - 3, (int)TreePos.y, 0.0f);
                 }
             }
             resetIsonFlg = false;
