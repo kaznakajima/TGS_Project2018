@@ -22,11 +22,6 @@ public class FireGimmick : GimmickController
         // ある程度時間がたったら削除
         DOTween.To(() => Interval, time => Interval = time, 1.0f, 2.0f).OnComplete(() =>
          {
-             // リセットが必要ならリセットアイコン表示
-             if (resetFlg)
-             {
-                 ResetController.resetIsonFlg = true;
-             }
              Destroy(gameObject);
          });
         
