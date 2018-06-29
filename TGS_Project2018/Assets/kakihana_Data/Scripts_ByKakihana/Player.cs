@@ -31,7 +31,7 @@ public class Player : StatusController {
     public static bool isSlope;
 
     float Interval;
-    float rayPoint = 1.0f;
+    float rayPoint = 0.85f;
     [SerializeField] float playerSpeed = 1.0f; // キャラクターのスピード
     [SerializeField] float playerMaxSpeed = 1.5f; // プレイヤーの最大スピード
     [SerializeField] float playerMinSpeed = -1.5f; // プレイヤーの最小スピード
@@ -378,7 +378,11 @@ public class Player : StatusController {
 
     void OnCollisionExit(Collision c)
     {
-        if(c.gameObject.name == "Ground(Clone)" && isSlope == true)
+        if (c.gameObject.tag == "Stone")
+        {
+            rayPoint = 0.85f;
+        }
+        if (c.gameObject.name == "Ground(Clone)" && isSlope == true)
         {
             wayPointPos = new Vector3(c.gameObject.transform.position.x, c.gameObject.transform.position.y + 2.0f, 0.0f);
         }
@@ -386,7 +390,7 @@ public class Player : StatusController {
         if (c.gameObject.name == "GroundSlope")
         {
             onSlope = false;
-            rayPoint = 1.0f;
+            rayPoint = 0.85f;
             myRigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
                     RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         }
