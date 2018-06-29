@@ -8,6 +8,8 @@ public class WindGimmick : GimmickController
     // ギミック処理
     public override void GimmickAction()
     {
+        gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX
+            | RigidbodyConstraints.FreezeRotationY;
         gameObject.GetComponent<Rigidbody>().AddForce(transform.right * 300.0f);
     }
 
