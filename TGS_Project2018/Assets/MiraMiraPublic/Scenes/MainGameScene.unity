@@ -1578,6 +1578,7 @@ MonoBehaviour:
   edgeEndX: 0
   height: 0
   heightOffset: 0
+  isScroll: 0
 --- !u!1 &1357609518
 GameObject:
   m_ObjectHideFlags: 0

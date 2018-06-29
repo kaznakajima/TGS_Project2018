@@ -20,6 +20,3 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MiraMiraPublic/Scenes/GameOver.unity
     guid: 00adcc45cb130a7428d7da79bd5852de
-  - enabled: 1
-    path: Assets/Tutorial.unity
-    guid: 89cf0c9fb3468c845948a7d7c8aaef5c
