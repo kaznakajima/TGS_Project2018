@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Needle
   - Climb
+  - Stone
   layers:
   - Default
   - TransparentFX

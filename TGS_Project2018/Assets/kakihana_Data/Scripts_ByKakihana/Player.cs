@@ -27,6 +27,8 @@ public class Player : StatusController {
 
     // 坂道判定
     bool onSlope = false;
+    // 滑る判定
+    public static bool isSlope;
 
     float Interval;
     float rayPoint = 1.0f;
@@ -75,7 +77,7 @@ public class Player : StatusController {
 
     // Update is called once per frame
     void Update() {
-        if (Goal.clearFlg)
+        if (Goal.clearFlg || isSlope)
         {
             return;
         }
@@ -92,6 +94,10 @@ public class Player : StatusController {
             // なめらかに移動させる
             movePos = Vector3.Lerp(oldVelocity, movePos, playerSpeed * Time.deltaTime);
             oldVelocity = movePos; // なめらかに移動させるために必要な一時保存用ベクトルを保存
+
+            // 入力判定
+            Vector3 inputVec;
+
             // スティックが右方向に倒れたら
             if (Input.GetAxisRaw("Horizontal") > 0)
             {
@@ -103,7 +109,7 @@ public class Player : StatusController {
                     movePos.x = playerMaxSpeed; // 移動スピードは最大スピード固定
                 }
             }// スティックが左方向に倒れたら
-            else if (Input.GetAxisRaw("Horizontal") < 0)
+            if (Input.GetAxisRaw("Horizontal") < 0)
             {
                 isright = false; // 右判定OFF
                 // 移動ベクトルに負のスピードを加算
@@ -221,6 +227,10 @@ public class Player : StatusController {
             }
             if (Input.GetKeyDown("joystick button 0") && ResetController.resetIsonFlg == true || Input.GetKeyDown(KeyCode.DownArrow) && ResetController.resetIsonFlg == true) // リセット用
             {
+                if (damageFlg)
+                {
+                    return;
+                }
                 Button.selectBack = false;
                 StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                 StartCoroutine(pageChange.ScreenShot());
@@ -243,7 +253,10 @@ public class Player : StatusController {
     // キャラクター描き換えメソッド
     public override void StatusChenge(STATUS _status)
     {
-        SpriteRenderer playerSprite = gameObject.GetComponent<SpriteRenderer>();
+        if(rayPoint == 0.0f)
+        {
+            return;
+        }
         // ページがめくり終わるまで変身できない
         if (status != _status && pageChange.pageFlip < -1)
         {
@@ -283,8 +296,14 @@ public class Player : StatusController {
 
     void OnCollisionEnter(Collision hit)
     {
-        // ダメージオブジェクトに接触したら
-        if (hit.gameObject.tag == "Needle" && damageFlg == false)
+        if (hit.gameObject.name != "Ice(Clone)")
+        {
+            isSlope = false;
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
+
+            // ダメージオブジェクトに接触したら
+            if (hit.gameObject.tag == "Needle" && damageFlg == false)
         {
             // ダメージ音
             hit.gameObject.GetComponent<AudioSource>().PlayOneShot(hit.gameObject.GetComponent<AudioSource>().clip);
@@ -312,7 +331,7 @@ public class Player : StatusController {
                           FormChange((int)ANIM_ENUMS.BLUCK.IDLE, STATUS.NONE);
                           gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
                           statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
-                          if (SingletonMonoBehaviour<ResetController>.Instance.canReset)
+                          if (SingletonMonoBehaviour<ResetController>.Instance.canReset && hit.collider.gameObject.layer != 8)
                           {
                               transform.position = wayPointPos; // 保存された中間地点に移動する
                           }
@@ -327,6 +346,10 @@ public class Player : StatusController {
     // プレイヤーが坂の上に立ったら
     void OnCollisionStay(Collision c)
     {
+        if(c.gameObject.tag == "Stone")
+        {
+            rayPoint = 0.0f;
+        }
         if (c.gameObject.name == "GroundSlope")
         {
             onSlope = true;
@@ -355,7 +378,7 @@ public class Player : StatusController {
 
     void OnCollisionExit(Collision c)
     {
-        if(c.gameObject.name == "Ground(Clone)")
+        if(c.gameObject.name == "Ground(Clone)" && isSlope == true)
         {
             wayPointPos = new Vector3(c.gameObject.transform.position.x, c.gameObject.transform.position.y + 2.0f, 0.0f);
         }
@@ -379,7 +402,7 @@ public class Player : StatusController {
     /*衝突判定メソッド*/
     void OnTriggerEnter(Collider hit)
     {
-        if (hit.gameObject.tag == "Climb") // 登れるオブジェクトに接触したら
+        if (hit.gameObject.tag == "Climb" && changeFlg == false) // 登れるオブジェクトに接触したら
         {
             climbFlg = true; // 登り判定ON
         }

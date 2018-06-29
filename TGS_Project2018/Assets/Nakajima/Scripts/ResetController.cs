@@ -154,7 +154,6 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
 	void Start () {
         canReset = false;
         resetIsonFlg = false;
-        
     }
 	
 	// Update is called once per frame

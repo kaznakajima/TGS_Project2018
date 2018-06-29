@@ -5,6 +5,9 @@ using DG.Tweening;
 
 public class IceGimmick : GimmickController
 {
+    // Playerの参照
+    Player player;
+
     [SerializeField]
     GameObject steam;
 
@@ -15,11 +18,11 @@ public class IceGimmick : GimmickController
     [HideInInspector]
     public bool isSlope = true;
     // true 右　false 左
-    bool direction = false;
+    [HideInInspector]
+    public static  bool direction = false;
 
-    // 滑らせるためのオブジェクト
+    // PlayerのRigidbody
     Rigidbody playerRig;
-    Vector3 playerVec;
 
     // ギミック処理
     public override void GimmickAction()
@@ -81,24 +84,32 @@ public class IceGimmick : GimmickController
     {
         if (c.gameObject.name == "Character" && isSlope)
         {
-            if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 1 && direction == false)
+            if (Player.isSlope)
             {
-                direction = true;
-                moveX = 3.0f;
+                return;
             }
-           else if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 2 && direction == true)
+
+            if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 1 || 
+                c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 0)
             {
-                direction = false;
-                moveX = -3.0f;
+                Player.isSlope = true;
+                moveX = 10.0f;
+                playerRig = c.gameObject.GetComponent<Rigidbody>();
+                playerRig.AddForce(transform.right * moveX * 50.0f);
+            }
+           else if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 2 || 
+                c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 9)
+            {
+                Player.isSlope = true;
+                moveX = -10.0f;
+                playerRig = c.gameObject.GetComponent<Rigidbody>();
+                playerRig.AddForce(transform.right * moveX * 50.0f);
             }
         }
     }
     void OnCollisionStay(Collision c)
     {
-        if (c.gameObject.name == "Character" && isSlope)
-        {
-            c.gameObject.transform.position += new Vector3(moveX, 0.0f, 0.0f) * Time.deltaTime;
-        }
+
     }
 
     void OnTriggerEnter(Collider c)

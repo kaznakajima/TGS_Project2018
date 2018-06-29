@@ -56,7 +56,7 @@ public class Button : MonoBehaviour
         // ポーズ中のみ実行
         if (isPause)
         {
-            if (Input.GetButtonDown("Pause"))
+            if (Input.GetButtonDown("Pause") && Goal.clearFlg == false)
             {
                 myAudio.PlayOneShot(myAudio.clip);
                 Resume();
@@ -161,7 +161,7 @@ public class Button : MonoBehaviour
         }
         else
         {
-            if (Input.GetButtonDown("Pause"))
+            if (Input.GetButtonDown("Pause") && Goal.clearFlg == false)
             {
                 myAudio.PlayOneShot(myAudio.clip);
                 Pause();
