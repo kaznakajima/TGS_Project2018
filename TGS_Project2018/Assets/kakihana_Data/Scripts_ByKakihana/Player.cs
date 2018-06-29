@@ -29,6 +29,7 @@ public class Player : StatusController {
     bool onSlope = false;
     // 滑る判定
     public static bool isSlope;
+    bool notOnIce = true;
 
     float Interval;
     float rayPoint = 0.85f;
@@ -293,23 +294,13 @@ public class Player : StatusController {
         {
             pos.x = 0.0f;
         }
-        if (isSlope)
-        {
-            pos.x = IceGimmick.moveX;
-        }
         transform.position += pos * Time.deltaTime;
     }
 
     void OnCollisionEnter(Collision hit)
     {
-        if (hit.gameObject.name != "Ice(Clone)")
-        {
-            isSlope = false;
-            IceGimmick.moveX *= -1;
-        }
-
-         // ダメージオブジェクトに接触したら
-         if (hit.gameObject.tag == "Needle" && damageFlg == false)
+        // ダメージオブジェクトに接触したら
+        if (hit.gameObject.tag == "Needle" && damageFlg == false)
         {
             ResetController.resetIsonFlg = false;
 
@@ -354,13 +345,6 @@ public class Player : StatusController {
     // プレイヤーが坂の上に立ったら
     void OnCollisionStay(Collision c)
     {
-        if(c.gameObject.name == "Ice(Clone)")
-        {
-            isSlope = true;
-        }if(c.gameObject.name != "Ice(Clone)")
-        {
-            isSlope = false;
-        }
         if (c.gameObject.name == "GroundSlope")
         {
             onSlope = true;
@@ -377,10 +361,6 @@ public class Player : StatusController {
                 myRigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
                     RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
             }
-        }
-        if(c.gameObject.name == "Ice(Clone)")
-        {
-
         }
     }
 

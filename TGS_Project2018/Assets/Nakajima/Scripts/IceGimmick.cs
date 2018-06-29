@@ -66,7 +66,7 @@ public class IceGimmick : GimmickController
 
     // Use this for initialization
     void Start() {
-        moveX = 5.0f;
+
     }
 
     // Update is called once per frame
@@ -76,25 +76,7 @@ public class IceGimmick : GimmickController
 
     void OnCollisionEnter(Collision c)
     {
-        if (c.gameObject.name == "Character" && isSlope)
-        {
-            if (Player.isSlope)
-            {
-                return;
-            }
-
-            if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 1 || 
-                c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 0)
-            {
-                Player.isSlope = true;
-
-            }
-           else if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 2 || 
-                c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 9)
-            {
-                Player.isSlope = true;
-            }
-        }
+        
     }
     void OnCollisionStay(Collision c)
     {
