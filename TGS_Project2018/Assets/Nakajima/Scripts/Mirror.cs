@@ -206,10 +206,6 @@ public class Mirror : StatusController
         transform.DOScale(new Vector3(x, y, 1.0f), time).OnComplete(() =>
         {
             SingletonMonoBehaviour<ResetController>.Instance.canReset = true;
-            if (SingletonMonoBehaviour<ScreenShot>.Instance.GetBreakForest().Length == 0)
-            {
-                resetIsonFlg = true;
-            }
             Destroy(gameObject);
         });
     }
