@@ -87,14 +87,14 @@ public class IceGimmick : GimmickController
                 c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 0)
             {
                 Player.isSlope = true;
-                moveX = 3.0f;
+                moveX = 4.0f;
 
             }
            else if(c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 2 || 
                 c.gameObject.GetComponent<Player>().statusAnim.GetInteger("BluckAnim") == 9)
             {
                 Player.isSlope = true;
-                moveX = -3.0f;
+                moveX = -4.0f;
             }
         }
     }

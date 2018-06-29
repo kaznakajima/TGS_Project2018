@@ -69,7 +69,7 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
                 {
                     player.changeFlg = true;
                     player.FormChange((int)ANIM_ENUMS.BLUCK.IDLE, StatusController.STATUS.NONE);
-                    player.transform.position = new Vector3((int)TreePos.x - 3, (int)TreePos.y, 0.0f);
+                    player.transform.position = new Vector3((int)TreePos.x - 2, (int)TreePos.y, 0.0f);
                 }
             }
             resetIsonFlg = false;
