@@ -101,19 +101,19 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
             // 壊されているならオブジェクトもリセット
             if(forest.isBreak == true)
             {
-                Instantiate(TreeObj, new Vector3((int)forest.gameObject.transform.parent.position.x - 1,
-                    (int)forest.gameObject.transform.parent.position.y, 0.0f), Quaternion.identity);
+                Instantiate(TreeObj, new Vector3((int)forest.gameObject.transform.position.x - 1,
+                    (int)forest.gameObject.transform.position.y, 0.0f), Quaternion.identity);
                 Instantiate(mirrorObj, new Vector3((int)forest.gameObject.transform.position.x - 2,
-                    (int)forest.gameObject.transform.parent.position.y, 0.0f), Quaternion.identity);
+                    (int)forest.gameObject.transform.position.y, 0.0f), Quaternion.identity);
 
                 foreach (var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
                 {
-                    if (Mathf.Abs(player.transform.position.x - (int)forest.gameObject.transform.parent.position.x) <= 2)
+                    if (Mathf.Abs(player.transform.position.x - (int)forest.gameObject.transform.position.x) <= 2)
                     {
                         player.changeFlg = true;
                         player.FormChange((int)ANIM_ENUMS.BLUCK.IDLE, StatusController.STATUS.NONE);
-                        player.transform.position = new Vector3((int)forest.gameObject.transform.parent.position.x - 2,
-                    (int)forest.gameObject.transform.parent.position.y, 0.0f);
+                        player.transform.position = new Vector3((int)forest.gameObject.transform.position.x - 3,
+                    (int)forest.gameObject.transform.position.y, 0.0f);
                     }
                 }
 
