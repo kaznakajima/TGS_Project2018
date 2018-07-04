@@ -80,6 +80,11 @@ public class Player : StatusController {
     void Update() {
         if (Goal.clearFlg)
         {
+            foreach (var item in uvScroll)
+            {
+                // スクロール移動の初期設定は0に
+                item.scrollSpeedX = 0.0f;
+            }
             return;
         }
         if (isSlope)

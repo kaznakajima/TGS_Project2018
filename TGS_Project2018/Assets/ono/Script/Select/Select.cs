@@ -118,7 +118,7 @@ public class Select : MonoBehaviour
             onButton = true;
             Scene("Tutorial");
         }
-        else if (Input.GetButtonDown("Tutorial") && !flg && SceneManager.GetActiveScene().name == "Tutorial")
+        else if (Input.GetButtonDown("Title") && !flg && SceneManager.GetActiveScene().name == "Tutorial")
         {
             if (onButton || !canPush)
             {
