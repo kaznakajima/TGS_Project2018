@@ -20,11 +20,13 @@ public class RainGimmick : GimmickController
     public override void GimmickAction()
     {
         float nextPosition;
+        // 何かに当たったらその時点でストップ
         if (isHit)
         {
             SingletonMonoBehaviour<ResetController>.Instance.IvyObj = gameObject;
             nextPosition = transform.position.y;
         }
+        // 当たっていないなら伸び続ける
         else
         {
             myAudio.PlayOneShot(myAudio.clip);
@@ -32,6 +34,7 @@ public class RainGimmick : GimmickController
             SingletonMonoBehaviour<ResetController>.Instance.IvyPos = transform.position;
         }
 
+        // 何かに当たっていたらリセット表示
         transform.DOMove(new Vector3(transform.position.x, nextPosition, transform.position.z), 2.0f).OnComplete(() =>
         {
             if (isHit)
@@ -48,8 +51,6 @@ public class RainGimmick : GimmickController
     {
         Ray ray = new Ray(transform.position, direction);
         RaycastHit rayHit;
-        // デバッグ用の可視化
-        Debug.DrawRay(transform.position, direction * gimmickMaxRay, Color.red);
         if (Physics.Raycast(ray, out rayHit, gimmickMaxRay))
         {
             // 鏡の属性が水だったらギミック作動

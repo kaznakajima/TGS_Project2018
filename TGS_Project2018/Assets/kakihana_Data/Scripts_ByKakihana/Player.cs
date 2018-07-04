@@ -294,6 +294,10 @@ public class Player : StatusController {
         {
             pos.x = 0.0f;
         }
+        if (isSlope)
+        {
+            pos.x = IceGimmick.moveX;
+        }
         transform.position += pos * Time.deltaTime;
     }
 
@@ -369,6 +373,11 @@ public class Player : StatusController {
         if (c.gameObject.name == "Ground(Clone)" && isSlope == true)
         {
             wayPointPos = new Vector3(c.gameObject.transform.position.x, c.gameObject.transform.position.y + 2.0f, 0.0f);
+        }
+
+        if(c.gameObject.name == "Ice(Clone)")
+        {
+            isSlope = false;
         }
 
         if (c.gameObject.name == "GroundSlope")

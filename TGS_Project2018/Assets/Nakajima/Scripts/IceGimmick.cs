@@ -14,9 +14,6 @@ public class IceGimmick : GimmickController
     // 滑る判定
     [HideInInspector]
     public bool isSlope = true;
-    // true 右　false 左
-    [HideInInspector]
-    public static bool direction = false;
 
     // ギミック処理
     public override void GimmickAction()
@@ -41,10 +38,9 @@ public class IceGimmick : GimmickController
     {
         Ray ray = new Ray(transform.position, direction);
         RaycastHit rayHit;
-        // デバッグ用の可視化
-        Debug.DrawRay(transform.position, direction * gimmickMaxRay, Color.red);
         if (Physics.Raycast(ray, out rayHit, gimmickMaxRay))
         {
+            // 鏡がのっているなら滑らない
             if (rayHit.collider.name == objName)
             {
                 isSlope = false;
@@ -76,11 +72,35 @@ public class IceGimmick : GimmickController
 
     void OnCollisionEnter(Collision c)
     {
-        
+        //if (c.gameObject.name == "Character")
+        //{
+        //    Player player = c.gameObject.GetComponent<Player>();
+        //    Player.isSlope = true;
+        //    if (player.statusAnim.GetInteger("BluckAnim") == 0 || player.statusAnim.GetInteger("BluckAnim") == 1)
+        //    {
+        //        moveX = 5.0f;
+        //    }
+        //    else if (player.statusAnim.GetInteger("BluckAnim") == 9 || player.statusAnim.GetInteger("BluckAnim") == 2)
+        //    {
+        //        moveX = -5.0f;
+        //    }
+        //}
     }
     void OnCollisionStay(Collision c)
     {
-
+        if (c.gameObject.name == "Character")
+        {
+            Player player = c.gameObject.GetComponent<Player>();
+            Player.isSlope = true;
+            if (player.statusAnim.GetInteger("BluckAnim") == 0 || player.statusAnim.GetInteger("BluckAnim") == 1)
+            {
+                moveX = 5.0f;
+            }
+            else if (player.statusAnim.GetInteger("BluckAnim") == 9 || player.statusAnim.GetInteger("BluckAnim") == 2)
+            {
+                moveX = -5.0f;
+            }
+        }
     }
 
     void OnTriggerEnter(Collider c)
