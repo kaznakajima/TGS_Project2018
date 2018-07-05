@@ -9,7 +9,7 @@ public class IceGimmick : GimmickController
     GameObject steam;
 
     // 滑る向き
-    public static float moveX = 5.0f;
+    public static float moveX = 3.0f;
 
     // 滑る判定
     [HideInInspector]
@@ -21,7 +21,7 @@ public class IceGimmick : GimmickController
         GameObject obj = Instantiate(steam) as GameObject;
         obj.transform.position = transform.position;
         // レイヤー変更
-        gameObject.layer = 9;
+        //gameObject.layer = 9;
 
         transform.DOScale(Vector3.zero, 3.0f).OnComplete(() =>
         {
@@ -72,33 +72,21 @@ public class IceGimmick : GimmickController
 
     void OnCollisionEnter(Collision c)
     {
-        //if (c.gameObject.name == "Character")
-        //{
-        //    Player player = c.gameObject.GetComponent<Player>();
-        //    Player.isSlope = true;
-        //    if (player.statusAnim.GetInteger("BluckAnim") == 0 || player.statusAnim.GetInteger("BluckAnim") == 1)
-        //    {
-        //        moveX = 5.0f;
-        //    }
-        //    else if (player.statusAnim.GetInteger("BluckAnim") == 9 || player.statusAnim.GetInteger("BluckAnim") == 2)
-        //    {
-        //        moveX = -5.0f;
-        //    }
-        //}
+        
     }
     void OnCollisionStay(Collision c)
     {
-        if (c.gameObject.name == "Character")
+        if (c.gameObject.name == "Character" && isSlope)
         {
             Player player = c.gameObject.GetComponent<Player>();
             Player.isSlope = true;
             if (player.statusAnim.GetInteger("BluckAnim") == 0 || player.statusAnim.GetInteger("BluckAnim") == 1)
             {
-                moveX = 5.0f;
+                moveX = 3.0f;
             }
             else if (player.statusAnim.GetInteger("BluckAnim") == 9 || player.statusAnim.GetInteger("BluckAnim") == 2)
             {
-                moveX = -5.0f;
+                moveX = -3.0f;
             }
         }
     }

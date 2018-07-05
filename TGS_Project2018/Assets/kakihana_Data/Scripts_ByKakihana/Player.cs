@@ -295,7 +295,7 @@ public class Player : StatusController {
     //キャラクター移動メソッド
     void CharactorMove(Vector3 pos)
     {
-        if (!isTouch)
+        if (!isTouch || damageFlg)
         {
             pos.x = 0.0f;
         }
@@ -481,6 +481,10 @@ public class Player : StatusController {
             if (hitV.collider.tag == "WayPoint")
             {
                 wayPointPos = hitV.collider.transform.position + new Vector3(0.0f, 1.75f, 0.0f);
+            }
+            if(hitV.collider.tag == "Needle")
+            {
+                return false;
             }
             // 変身中は動かない
             if (changeFlg)

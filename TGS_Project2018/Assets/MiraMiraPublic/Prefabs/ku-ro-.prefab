@@ -462,9 +462,9 @@ MonoBehaviour:
   statusAlpha: 0
   resetIcon: {fileID: 212827587419061964}
   playerSpeed: 1
-  playerMaxSpeed: 1.5
-  playerMinSpeed: -1.5
-  speed: 60
+  playerMaxSpeed: 2.5
+  playerMinSpeed: -2.5
+  speed: 100
   rayRange: 3
   rayRangeH: 0.6
   edgeJudgeOffset: 0.5

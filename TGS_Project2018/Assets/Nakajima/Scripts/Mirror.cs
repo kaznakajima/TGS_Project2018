@@ -52,6 +52,9 @@ public class Mirror : StatusController
         direction = -transform.right;
         // 自身のAudioSourceを取得
         myAudio = GetComponent<AudioSource>();
+        // 映っている状態のSpriteを不可視に
+        mirrorObj.GetComponent<SpriteRenderer>().color = new Color(mirrorObj.GetComponent<SpriteRenderer>().color.r, mirrorObj.GetComponent<SpriteRenderer>().color.g,
+            mirrorObj.GetComponent<SpriteRenderer>().color.b, 0.0f);
 	}
 	
 	// Update is called once per frame
@@ -196,7 +199,7 @@ public class Mirror : StatusController
     public IEnumerator DestroyAnimation(float x, float y, float time)
     {
         // レイヤーの変更
-        gameObject.layer = 9;
+        //gameObject.layer = 9;
 
         yield return new WaitForSeconds(0.5f);
 

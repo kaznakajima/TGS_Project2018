@@ -64,7 +64,7 @@ public class RainGimmick : GimmickController
                 // 重力を無視する
                 rayHit.collider.gameObject.GetComponent<Rigidbody>().useGravity = false;
                 // ミラーの消去コルーチン開始
-                StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation(0.0f, 0.0f, 2.0f));
+                StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation(0.0f, 1.0f, 2.0f));
             }
         }
     }
