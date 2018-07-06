@@ -482,11 +482,7 @@ public class Player : StatusController {
             {
                 wayPointPos = hitV.collider.transform.position + new Vector3(0.0f, 1.75f, 0.0f);
             }
-            if(hitV.collider.tag == "Needle")
-            {
-                return false;
-            }
-            if(hitV.collider.tag == "Water")
+            if(hitV.collider.tag == "Needle" || hitV.collider.tag == "Water")
             {
                 return false;
             }
