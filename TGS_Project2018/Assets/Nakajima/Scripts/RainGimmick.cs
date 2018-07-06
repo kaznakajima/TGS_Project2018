@@ -40,6 +40,7 @@ public class RainGimmick : GimmickController
             if (isHit)
             {
                 ResetController.resetIsonFlg = true;
+                SingletonMonoBehaviour<ResetController>.Instance.IvyObj = null;
             }
         });
 

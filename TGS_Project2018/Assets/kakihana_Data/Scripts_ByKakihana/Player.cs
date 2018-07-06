@@ -486,6 +486,10 @@ public class Player : StatusController {
             {
                 return false;
             }
+            if(hitV.collider.tag == "Water")
+            {
+                return false;
+            }
             // 変身中は動かない
             if (changeFlg)
             {

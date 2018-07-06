@@ -46,4 +46,12 @@ public class WindGimmick : GimmickController
 	void Update () {
         RayHit(-transform.right, "Enemy");
 	}
+
+    void OnCollisionEnter(Collision c)
+    {
+        if(c.gameObject.tag == "Needle")
+        {
+            c.gameObject.tag = "Untagged";
+        }
+    }
 }

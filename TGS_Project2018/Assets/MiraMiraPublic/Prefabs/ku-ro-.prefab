@@ -462,8 +462,8 @@ MonoBehaviour:
   statusAlpha: 0
   resetIcon: {fileID: 212827587419061964}
   playerSpeed: 1
-  playerMaxSpeed: 2.5
-  playerMinSpeed: -2.5
+  playerMaxSpeed: 2
+  playerMinSpeed: -2
   speed: 100
   rayRange: 3
   rayRangeH: 0.6
