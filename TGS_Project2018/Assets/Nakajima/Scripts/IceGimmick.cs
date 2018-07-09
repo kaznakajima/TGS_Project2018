@@ -51,6 +51,7 @@ public class IceGimmick : GimmickController
                 rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.FIRE)
             {
                 Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
+                mirror.isGimmick = true;
                 gimmickMaxRay = 0.0f;
                 GimmickAction();
                 ResetController.resetIsonFlg = false;

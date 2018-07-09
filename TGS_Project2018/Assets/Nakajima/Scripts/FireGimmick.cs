@@ -40,11 +40,13 @@ public class FireGimmick : GimmickController
                 Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
                 if (rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.FIRE)
                 {
+                    mirror.isGimmick = true;
                     ResetController.resetIsonFlg = false;
                     // ゴールだったらリセットが必要
                     if (gameObject.transform.parent.name == "GoalForest(Clone)")
                     {
                         SingletonMonoBehaviour<ResetController>.Instance.TreePos = gameObject.transform.parent.position;
+                        mirror.isGimmick = false;
                     }
                     // ゴールじゃなかったらリセットしなくていい
                     else
@@ -59,15 +61,17 @@ public class FireGimmick : GimmickController
                 else if(rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.WIND)
                 {
                     ResetController.resetIsonFlg = false;
+                    mirror.isGimmick = false;
                     // ゴールだったらリセットしなくていい
                     if (gameObject.transform.parent.name == "GoalForest(Clone)")
                     {
                         resetFlg = false;
+                        mirror.isGimmick = true;
                     }
                     gimmickMaxRay = 0.0f;
                     ForestBreak();
                     // ミラーの消去コルーチン開始
-                    StartCoroutine(mirror.DestroyAnimation(0.0f, 0.0f, 2.0f));
+                    StartCoroutine(mirror.DestroyAnimation(0.0f, 0.0f, 3.0f));
                 }
             }
         }

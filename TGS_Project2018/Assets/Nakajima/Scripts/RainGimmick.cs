@@ -41,6 +41,8 @@ public class RainGimmick : GimmickController
             {
                 ResetController.resetIsonFlg = true;
                 SingletonMonoBehaviour<ResetController>.Instance.IvyObj = null;
+                StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                StartCoroutine(SingletonMonoBehaviour<PageChange>.Instance.ScreenShot());
             }
         });
 

@@ -87,6 +87,7 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
         if (SceneManager.GetActiveScene().name == "MainGameScene")
         {
             GameMaster master = FindObjectOfType<GameMaster>();
+            master.sketchBookValue -= 1;
             if(master.sketchBookValue >= 0 && Button.selectBack == false)
             {
                 myAudio.PlayOneShot(myAudio.clip);

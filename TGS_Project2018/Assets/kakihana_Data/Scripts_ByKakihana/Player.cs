@@ -236,18 +236,18 @@ public class Player : StatusController {
             {
                 StatusChenge(STATUS.WATER);
             }
-            if (Input.GetKeyDown("joystick button 0") && ResetController.resetIsonFlg == true || Input.GetKeyDown(KeyCode.DownArrow) && ResetController.resetIsonFlg == true) // リセット用
-            {
-                if (damageFlg)
-                {
-                    return;
-                }
-                movePos.x = 0.0f;
-                Button.selectBack = false;
-                StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-                StartCoroutine(pageChange.ScreenShot());
-                gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
-            }
+            //if (Input.GetKeyDown("joystick button 0") && ResetController.resetIsonFlg == true || Input.GetKeyDown(KeyCode.DownArrow) && ResetController.resetIsonFlg == true) // リセット用
+            //{
+            //    if (damageFlg)
+            //    {
+            //        return;
+            //    }
+            //    movePos.x = 0.0f;
+            //    Button.selectBack = false;
+            //    StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+            //    StartCoroutine(pageChange.ScreenShot());
+            //    gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
+            //}
             if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.UpArrow)) // ゲームボタン「Y」で土属性に書き換え
             {
                 StatusChenge(STATUS.WIND);

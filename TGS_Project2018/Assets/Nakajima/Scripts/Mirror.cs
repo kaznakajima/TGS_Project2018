@@ -24,7 +24,7 @@ public class Mirror : StatusController
 
     // ギミックが作動したかどうか
     [HideInInspector]
-    public bool isGimmick;
+    public bool isGimmick = false;
 
     // 雨用のエフェクト
     [SerializeField]
@@ -209,6 +209,10 @@ public class Mirror : StatusController
         transform.DOScale(new Vector3(x, y, 1.0f), time).OnComplete(() =>
         {
             SingletonMonoBehaviour<ResetController>.Instance.canReset = true;
+            if (isGimmick == false)
+            {
+                SingletonMonoBehaviour<ResetController>.Instance.ResetExcution();
+            }
             Destroy(gameObject);
         });
     }

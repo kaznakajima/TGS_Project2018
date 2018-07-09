@@ -21,11 +21,6 @@ public class PageChange : PageController
     // 現在のキャンバス
     GameObject currentCanvas;
 
-    void Awake()
-    {
-
-    }
-
     // Use this for initialization
     void Start()
     {

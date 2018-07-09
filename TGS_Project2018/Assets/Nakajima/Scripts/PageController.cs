@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PageController : MonoBehaviour
+public class PageController : SingletonMonoBehaviour<PageChange>
 {
     // ページをめくるアニメーション
     public virtual IEnumerator PageAnimation(float flip, float pageSp)

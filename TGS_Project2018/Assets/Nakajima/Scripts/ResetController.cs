@@ -34,9 +34,16 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
     [SerializeField]
     GameObject GoalObj; // ゴール用オブジェクト
 
+    public void ResetExcution()
+    {
+        StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+        StartCoroutine(SingletonMonoBehaviour<PageChange>.Instance.ScreenShot());
+    }
+
     // オブジェクトのリセット
     public void CheckReset()
     {
+
         // Mirrorの取得
         foreach (Mirror mirror in SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror())
         {
