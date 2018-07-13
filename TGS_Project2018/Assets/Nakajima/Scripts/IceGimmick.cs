@@ -82,17 +82,21 @@ public class IceGimmick : GimmickController
 
     void OnCollisionStay(Collision c)
     {
-        if (c.gameObject.name == "Character" && isSlope)
+        if (c.gameObject.name == "Character")
         {
             Player player = c.gameObject.GetComponent<Player>();
-            player.isSlope = true;
-            if (player.statusAnim.GetInteger("BluckAnim") == 0 || player.statusAnim.GetInteger("BluckAnim") == 1)
+            player.rayPoint = 0.0f;
+            if (isSlope)
             {
-                moveX = 3.0f;
-            }
-            else if (player.statusAnim.GetInteger("BluckAnim") == 9 || player.statusAnim.GetInteger("BluckAnim") == 2)
-            {
-                moveX = -3.0f;
+                player.isSlope = true;
+                if (player.statusAnim.GetInteger("BluckAnim") == 0 || player.statusAnim.GetInteger("BluckAnim") == 1)
+                {
+                    moveX = 3.0f;
+                }
+                else if (player.statusAnim.GetInteger("BluckAnim") == 9 || player.statusAnim.GetInteger("BluckAnim") == 2)
+                {
+                    moveX = -3.0f;
+                }
             }
         }
     }

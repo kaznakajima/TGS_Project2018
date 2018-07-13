@@ -32,13 +32,14 @@ public class Player : StatusController {
     bool notOnIce = true;
 
     float Interval;
-    float rayPoint = 0.85f;
+    [HideInInspector]
+    public float rayPoint = 0.85f;
     [SerializeField] float playerSpeed = 1.0f; // キャラクターのスピード
     [SerializeField] float playerMaxSpeed = 1.5f; // プレイヤーの最大スピード
     [SerializeField] float playerMinSpeed = -1.5f; // プレイヤーの最小スピード
     [SerializeField] float speed; // 移動スピード
     [SerializeField] float rayRange; // 接地判定の距離 
-    [SerializeField] float rayRangeH = 075f; // 水平方向の接地判定距離
+    [SerializeField] float rayRangeH = 0.6f; // 水平方向の接地判定距離
     [SerializeField] float edgeJudgeOffset = 0.5f; // ステージ両端を取得するために必要なオフセット値
 
     [SerializeField] bool isright; // 右を向いているか
@@ -336,7 +337,6 @@ public class Player : StatusController {
                       if (gm.sketchBookValue > 0 && Interval == 0.25f)
                       {
                           FormChange((int)ANIM_ENUMS.BLUCK.IDLE, STATUS.NONE);
-                          gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
                           statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.IDLE);
                           if (SingletonMonoBehaviour<ResetController>.Instance.canReset && hit.collider.gameObject.layer != 8)
                           {

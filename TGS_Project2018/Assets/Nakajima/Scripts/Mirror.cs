@@ -104,6 +104,15 @@ public class Mirror : StatusController
 
         if(player.status == STATUS.TRADE)
         {
+            if(player.transform.position.x < transform.position.x)
+            {
+                StatusChenge(player.status);
+            }
+            else
+            {
+                StatusChenge(STATUS.NONE);
+            }
+            
             PositionChange(player);
             return;
         }
@@ -211,7 +220,7 @@ public class Mirror : StatusController
                 break;
             // 地
             case STATUS.TRADE:
-                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.MIRROR.STONE);
+                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.MIRROR.IDLE_RIGHT);
                 break;
         }
     }
