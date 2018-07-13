@@ -10,6 +10,8 @@
 		,Bluck_Stone = 7
 		,Clime = 8
 		,Idle_Left = 9
-		,SIZE = 10
+		,Question_Right = 10
+		,Question_Left = 11
+		,SIZE = 12
 	}
 }

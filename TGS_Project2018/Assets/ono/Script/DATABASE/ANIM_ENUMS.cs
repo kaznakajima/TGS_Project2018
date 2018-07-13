@@ -13,15 +13,17 @@ public class ANIM_ENUMS : MonoBehaviour {
         //Animator遷移方法
         //animator.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.〇〇); 〇〇は呼び出したいAnimatorの名前
         IDLE = 0,
-        RUN_RIGHT=1,
-        RUN_LEFT=2,
-        DAMAGE=3,
+        RUN_RIGHT=2,
+        RUN_LEFT=3,
+        DAMAGE=1,
         FIRE=4,
         WATER=5,
         WIND=6,
         STONE=7,
         CLIME=8,
         IDLE_LEFT=9,
+        QUESTION_RIGHT=10,
+        QUESTION_LEFT=11,
     }
 
     public enum MIRROR
