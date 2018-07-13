@@ -136,9 +136,12 @@ public class Select : MonoBehaviour
             {
                 return;
             }
-            myAudio.PlayOneShot(myAudio.clip);
+            //StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+            //StartCoroutine(SingletonMonoBehaviour<PageChange>.Instance.ScreenShot());
+            //myAudio.PlayOneShot(myAudio.clip);
             onButton = true;
-            Scene("TitleScene");
+            myAudio.PlayOneShot(myAudio.clip);
+            SceneManager.LoadScene("TitleScene");
         }
 
         if (fadeFlg)

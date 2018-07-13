@@ -60,6 +60,8 @@ public class RainGimmick : GimmickController
             if (rayHit.collider.name == objName &&
                 rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.WATER)
             {
+                Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
+                mirror.isGimmick = true;
                 isMirror = true;
                 mirrorObj = rayHit.collider.gameObject;
                 ResetController.resetIsonFlg = false;
@@ -67,7 +69,13 @@ public class RainGimmick : GimmickController
                 // 重力を無視する
                 rayHit.collider.gameObject.GetComponent<Rigidbody>().useGravity = false;
                 // ミラーの消去コルーチン開始
-                StartCoroutine(rayHit.collider.gameObject.GetComponent<Mirror>().DestroyAnimation(0.0f, 1.0f, 2.0f));
+                StartCoroutine(mirror.DestroyAnimation(0.0f, 1.0f, 2.0f));
+            }
+            else if (rayHit.collider.gameObject.GetComponent<Mirror>().status != StatusController.STATUS.WATER &&
+                rayHit.collider.gameObject.GetComponent<Mirror>().status != StatusController.STATUS.NONE)
+            {
+                StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                StartCoroutine(SingletonMonoBehaviour<PageChange>.Instance.ScreenShot());
             }
         }
     }

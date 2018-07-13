@@ -12,7 +12,7 @@ public class StatusController : MonoBehaviour
         FIRE,
         WATER,
         WIND,
-        EARTH
+        TRADE
     }
 
     // 現在のステータス

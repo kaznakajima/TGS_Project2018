@@ -34,6 +34,11 @@ public class WindGimmick : GimmickController
                 GimmickAction();
                 // ミラーの消去コルーチン開始
                 StartCoroutine(mirror.DestroyAnimation(0.0f, 1.0f, 1.0f));
+            }else if (rayHit.collider.gameObject.GetComponent<Mirror>().status != StatusController.STATUS.WIND &&
+                rayHit.collider.gameObject.GetComponent<Mirror>().status != StatusController.STATUS.NONE)
+            {
+                StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                StartCoroutine(SingletonMonoBehaviour<PageChange>.Instance.ScreenShot());
             }
         }
     }

@@ -28,7 +28,7 @@ public class Player : StatusController {
     // 坂道判定
     bool onSlope = false;
     // 滑る判定
-    public static bool isSlope;
+    public bool isSlope;
     bool notOnIce = true;
 
     float Interval;
@@ -38,7 +38,7 @@ public class Player : StatusController {
     [SerializeField] float playerMinSpeed = -1.5f; // プレイヤーの最小スピード
     [SerializeField] float speed; // 移動スピード
     [SerializeField] float rayRange; // 接地判定の距離 
-    [SerializeField] float rayRangeH = 0.6f; // 水平方向の接地判定距離
+    [SerializeField] float rayRangeH = 075f; // 水平方向の接地判定距離
     [SerializeField] float edgeJudgeOffset = 0.5f; // ステージ両端を取得するために必要なオフセット値
 
     [SerializeField] bool isright; // 右を向いているか
@@ -74,6 +74,7 @@ public class Player : StatusController {
         pageChange = GameObject.FindObjectOfType<PageChange>(); // ページ遷移のコンポーネント取得
         myRigidbody = this.gameObject.GetComponent<Rigidbody>(); // RigidBodyコンポーネントを取得
         isright = true; // 初期位置では右を向いている
+        isSlope = false;
     }
 
     // Update is called once per frame
@@ -105,9 +106,6 @@ public class Player : StatusController {
             // なめらかに移動させる
             movePos = Vector3.Lerp(oldVelocity, movePos, playerSpeed * Time.deltaTime);
             oldVelocity = movePos; // なめらかに移動させるために必要な一時保存用ベクトルを保存
-
-            // 入力判定
-            Vector3 inputVec;
 
             // スティックが右方向に倒れたら
             if (Input.GetAxisRaw("Horizontal") > 0)
@@ -152,37 +150,37 @@ public class Player : StatusController {
                 // 移動量は0にする
                 movePos.x = 0;
             }
-            if (climbFlg == true) // 登り判定がONなら
+        }
+
+        if (climbFlg == true) // 登り判定がONなら
+        {
+            statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.CLIME);
+            myRigidbody.useGravity = false; // 重力OFF
+            if (Input.GetAxisRaw("Vertical") > 0.0f)
             {
-                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.CLIME);
-                myRigidbody.useGravity = false; // 重力OFF
-                if (Input.GetAxisRaw("Vertical") > 0.0f)
+                movePos.y += speed;
+                if (movePos.y >= playerMaxSpeed)// 移動ベクトルが最小スピードを下回ったら
                 {
-                    
-                    movePos.y += speed;
-                    if (movePos.y >= playerMaxSpeed)// 移動ベクトルが最小スピードを下回ったら
-                    {
-                        movePos.y = playerMaxSpeed;// 移動スピードは最小スピード固定
-                    }
-                }
-                else if (Input.GetAxisRaw("Vertical") < 0.0f)
-                {
-                    movePos.y += -speed;
-                    if (movePos.y <= playerMinSpeed)// 移動ベクトルが最小スピードを下回ったら
-                    {
-                        movePos.y = playerMinSpeed;// 移動スピードは最小スピード固定
-                    }
-                }
-                else if (Input.GetAxisRaw("Vertical") == 0)
-                {
-                    movePos.y = 0; // 移動量は０に
+                    movePos.y = playerMaxSpeed;// 移動スピードは最小スピード固定
                 }
             }
-            else
+            else if (Input.GetAxisRaw("Vertical") < 0.0f)
             {
-                myRigidbody.useGravity = true; // 登り判定OFFで重力ON
-                movePos.y = 0;
+                movePos.y += -speed;
+                if (movePos.y <= playerMinSpeed)// 移動ベクトルが最小スピードを下回ったら
+                {
+                    movePos.y = playerMinSpeed;// 移動スピードは最小スピード固定
+                }
             }
+            else if (Input.GetAxisRaw("Vertical") == 0)
+            {
+                movePos.y = 0; // 移動量は０に
+            }
+        }
+        else
+        {
+            myRigidbody.useGravity = true; // 登り判定OFFで重力ON
+            movePos.y = 0;
         }
 
         // スクロール可能なら移動方向に応じて背景をスクロールさせる
@@ -236,18 +234,19 @@ public class Player : StatusController {
             {
                 StatusChenge(STATUS.WATER);
             }
-            //if (Input.GetKeyDown("joystick button 0") && ResetController.resetIsonFlg == true || Input.GetKeyDown(KeyCode.DownArrow) && ResetController.resetIsonFlg == true) // リセット用
-            //{
-            //    if (damageFlg)
-            //    {
-            //        return;
-            //    }
-            //    movePos.x = 0.0f;
-            //    Button.selectBack = false;
-            //    StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-            //    StartCoroutine(pageChange.ScreenShot());
-            //    gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
-            //}
+            if (Input.GetKeyDown("joystick button 0") || Input.GetKeyDown(KeyCode.DownArrow) ) // リセット用
+            {
+                status = STATUS.TRADE;
+                //if (damageFlg)
+                //{
+                //    return;
+                //}
+                //movePos.x = 0.0f;
+                //Button.selectBack = false;
+                //StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                //StartCoroutine(pageChange.ScreenShot());
+                //gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
+            }
             if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.UpArrow)) // ゲームボタン「Y」で土属性に書き換え
             {
                 StatusChenge(STATUS.WIND);
@@ -280,7 +279,7 @@ public class Player : StatusController {
                 case STATUS.WIND: // 風属性に変身
                     FormChange((int)ANIM_ENUMS.BLUCK.WIND, _status);
                     break;
-                case STATUS.EARTH: // 土属性に変身
+                case STATUS.TRADE: // 土属性に変身
                     FormChange((int)ANIM_ENUMS.BLUCK.STONE, _status);
                     break;
             }
@@ -309,7 +308,7 @@ public class Player : StatusController {
     void OnCollisionEnter(Collision hit)
     {
         // ダメージオブジェクトに接触したら
-        if (hit.gameObject.tag == "Needle" && damageFlg == false)
+        if (hit.gameObject.tag == "Needle" || hit.gameObject.tag == "Water" && damageFlg == false)
         {
             ResetController.resetIsonFlg = false;
 
@@ -371,11 +370,16 @@ public class Player : StatusController {
                     RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
             }
         }
+        if(c.gameObject.name == "Ground")
+        {
+            myRigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
+                   RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        }
     }
 
     void OnCollisionExit(Collision c)
     {
-        if (c.gameObject.name == "Ground(Clone)" && isSlope == true)
+        if (c.gameObject.name == "Ground" && isSlope == true)
         {
             wayPointPos = new Vector3(c.gameObject.transform.position.x, c.gameObject.transform.position.y + 2.0f, 0.0f);
         }
@@ -390,16 +394,17 @@ public class Player : StatusController {
             onSlope = false;
             rayPoint = 0.85f;
             myRigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
-                    RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                     RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         }
     }
 
     /*衝突判定メソッド*/
-    void OnTriggerEnter(Collider hit)
+    void OnTriggerStay(Collider hit)
     {
-        if (hit.gameObject.tag == "Climb" && changeFlg == false) // 登れるオブジェクトに接触したら
+        if (hit.gameObject.tag == "Climb") // 登れるオブジェクトに接触したら
         {
             climbFlg = true; // 登り判定ON
+            myRigidbody.useGravity = false;
         }
     }
     void OnTriggerExit(Collider hit)

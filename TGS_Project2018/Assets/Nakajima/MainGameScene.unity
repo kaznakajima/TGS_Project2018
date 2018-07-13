@@ -1578,6 +1578,7 @@ MonoBehaviour:
   edgeEndX: 0
   height: 0
   heightOffset: 0
+  isScroll: 0
 --- !u!1 &1357609518
 GameObject:
   m_ObjectHideFlags: 0
@@ -1738,7 +1739,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CSVName: Test_2
   mapObj:
-  - {fileID: 1594260757835426, guid: c9f4f596d9955314d941576f491b60ef, type: 2}
+  - {fileID: 1120880152261682, guid: c9f4f596d9955314d941576f491b60ef, type: 2}
   - {fileID: 1504463264066390, guid: 198c57042998f1f43805bfc78a673799, type: 2}
   - {fileID: 1049556791764890, guid: b6b4c93a7e6e93145ac8ad7ebeb95c7c, type: 2}
   - {fileID: 1456967744725320, guid: 92763f8d280a01946b2ab5dc50af3a1b, type: 2}
@@ -1750,7 +1751,7 @@ MonoBehaviour:
   - {fileID: 1637453510840102, guid: 26540f55fd9e95649a3099231ec196c3, type: 2}
   - {fileID: 1258899994022536, guid: 3729c4356707ddd49bf70b0f7c1739c1, type: 2}
   - {fileID: 1406256238568542, guid: c7b348a3c1d548342ba4f6fc8f6c6f20, type: 2}
-  - {fileID: 1216996513949806, guid: 562d8c337580d5c45b0ae3e9d055728d, type: 2}
+  - {fileID: 1284685864716672, guid: 562d8c337580d5c45b0ae3e9d055728d, type: 2}
   - {fileID: 1808971821536888, guid: 49b7f0204cf7b2742a1a3f36646a611c, type: 2}
   height: 0
   width: 0

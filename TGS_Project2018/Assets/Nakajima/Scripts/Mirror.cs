@@ -102,8 +102,28 @@ public class Mirror : StatusController
             return;
         }
 
+        if(player.status == STATUS.TRADE)
+        {
+            PositionChange(player);
+            return;
+        }
+
         // 姿を変える
         FormChangeBefore(player);
+    }
+
+    void PositionChange(Player player)
+    {
+        // playerの位置を保存し、playerの位置を変更
+        Vector3 playerPos = player.transform.position;
+        player.transform.position = transform.position;
+        player.status = STATUS.NONE;
+
+        // 自身の位置を変更
+        transform.position = playerPos;
+        playerPos.z = -1.0f;
+        mirrorObj.transform.position = playerPos;
+        direction *= -1;
     }
 
     // 姿を変える準備
@@ -190,7 +210,7 @@ public class Mirror : StatusController
                 statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.MIRROR.WIND);
                 break;
             // 地
-            case STATUS.EARTH:
+            case STATUS.TRADE:
                 statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.MIRROR.STONE);
                 break;
         }

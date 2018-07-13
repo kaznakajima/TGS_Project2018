@@ -37,8 +37,11 @@ public class IceGimmick : GimmickController
     public override void RayHit(Vector3 direction, string objName)
     {
         Ray ray = new Ray(transform.position, direction);
+        Ray rightRay = new Ray(transform.position + new Vector3(1.0f, 0.0f, 0.0f), direction);
+        Ray leftRay = new Ray(transform.position + new Vector3(-1.0f, 0.0f, 0.0f), direction);
         RaycastHit rayHit;
-        if (Physics.Raycast(ray, out rayHit, gimmickMaxRay))
+        if (Physics.Raycast(ray, out rayHit, gimmickMaxRay) || Physics.Raycast(rightRay, out rayHit, gimmickMaxRay) ||
+            Physics.Raycast(leftRay, out rayHit, gimmickMaxRay))
         {
             // 鏡がのっているなら滑らない
             if (rayHit.collider.name == objName)
@@ -57,6 +60,12 @@ public class IceGimmick : GimmickController
                 ResetController.resetIsonFlg = false;
                 // ミラーの消去コルーチン開始
                 StartCoroutine(mirror.DestroyAnimation(0.0f, 0.0f, 2.0f));
+            } else if (rayHit.collider.name == objName &&
+                rayHit.collider.gameObject.GetComponent<Mirror>().status != StatusController.STATUS.FIRE &&
+                rayHit.collider.gameObject.GetComponent<Mirror>().status != StatusController.STATUS.NONE)
+            {
+                StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                StartCoroutine(SingletonMonoBehaviour<PageChange>.Instance.ScreenShot());
             }
         }
     }
@@ -71,16 +80,12 @@ public class IceGimmick : GimmickController
         RayHit(transform.up, "Enemy");
     }
 
-    void OnCollisionEnter(Collision c)
-    {
-        
-    }
     void OnCollisionStay(Collision c)
     {
         if (c.gameObject.name == "Character" && isSlope)
         {
             Player player = c.gameObject.GetComponent<Player>();
-            Player.isSlope = true;
+            player.isSlope = true;
             if (player.statusAnim.GetInteger("BluckAnim") == 0 || player.statusAnim.GetInteger("BluckAnim") == 1)
             {
                 moveX = 3.0f;
@@ -100,10 +105,5 @@ public class IceGimmick : GimmickController
             rain.isHit = true;
             rain.GimmickAction();
         }
-    }
-
-    void OnCollisionExit(Collision c)
-    {
-
     }
 }
