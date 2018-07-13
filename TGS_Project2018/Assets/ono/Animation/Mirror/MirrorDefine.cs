@@ -5,6 +5,7 @@
 		,Stone = 2
 		,Wind = 3
 		,Water = 4
-		,SIZE = 5
+		,Idle_Right = 5
+		,SIZE = 6
 	}
 }

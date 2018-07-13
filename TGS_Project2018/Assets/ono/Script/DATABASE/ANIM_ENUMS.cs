@@ -32,7 +32,8 @@ public class ANIM_ENUMS : MonoBehaviour {
         FIRE=1,
         STONE=2,
         WIND=3,
-        WATER=4
+        WATER=4,
+        IDLE_RIGHT=5,
     }
 
     public enum FOREST
