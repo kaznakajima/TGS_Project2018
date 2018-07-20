@@ -33,8 +33,6 @@ public class ObjectAlphaController : MonoBehaviour
             {
                 Icons.color = new Color(Icons.color.r, Icons.color.g, Icons.color.b, playerIconAlpha);
             }
-
-            player.resetIcon.color = new Color(player.resetIcon.color.r, player.resetIcon.color.g, player.resetIcon.color.b, resetIconAlpha);
         }
         foreach (var mirror in SingletonMonoBehaviour<ScreenShot>.Instance.GetMirror())
         {
@@ -93,19 +91,6 @@ public class ObjectAlphaController : MonoBehaviour
             // 通常状態なら非表示
             if((int)playerStatus.status == 0)
             {
-                if (ResetController.resetIsonFlg)
-                {
-                    DOTween.To(() => resetIconAlpha, alpha => resetIconAlpha = alpha, 1.0f, 1.0f);
-                    playerStatus.resetIcon.color = new Color(playerStatus.resetIcon.color.r,
-                     playerStatus.resetIcon.color.g, playerStatus.resetIcon.color.b, resetIconAlpha);
-                }
-                else
-                {
-                    DOTween.To(() => resetIconAlpha, alpha => resetIconAlpha = alpha, 0.0f, 1.0f);
-                    playerStatus.resetIcon.color = new Color(playerStatus.resetIcon.color.r,
-                     playerStatus.resetIcon.color.g, playerStatus.resetIcon.color.b, resetIconAlpha);
-                }
-
                 comparison = 0.0f;
                 DOTween.To(() => playerIconAlpha, alpha => playerIconAlpha = alpha, comparison, 1.0f);
                 //playerIconAlpha = Mathf.Lerp(playerIconAlpha, comparison, 10.0f * Time.deltaTime);
@@ -125,20 +110,6 @@ public class ObjectAlphaController : MonoBehaviour
                 foreach (var Icons in playerStatus.playerIcons)
                 {
                     Icons.color = new Color(Icons.color.r, Icons.color.g, Icons.color.b, 0.0f);
-                }
-
-                // リセットアイコン表示
-                if(ResetController.resetIsonFlg)
-                {
-                    DOTween.To(() => resetIconAlpha, alpha => resetIconAlpha = alpha, 1.0f, 1.0f);
-                    playerStatus.resetIcon.color = new Color(playerStatus.resetIcon.color.r,
-                     playerStatus.resetIcon.color.g, playerStatus.resetIcon.color.b, resetIconAlpha);
-                }
-                else
-                {
-                    DOTween.To(() => resetIconAlpha, alpha => resetIconAlpha = alpha, 0.0f, 1.0f);
-                    playerStatus.resetIcon.color = new Color(playerStatus.resetIcon.color.r,
-                     playerStatus.resetIcon.color.g, playerStatus.resetIcon.color.b, resetIconAlpha);
                 }
 
                 // アイコン表示

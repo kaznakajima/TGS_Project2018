@@ -46,6 +46,9 @@ public class Mirror : StatusController
     [SerializeField]
     AudioClip[] SE;
 
+    // 判定時間
+    float Interval;
+
     // Use this for initialization
     void Start () {
         // 方向を決定
@@ -61,15 +64,6 @@ public class Mirror : StatusController
 	void Update () {
         // Ray判定
         RayHit(direction, "Character");
-
-        //if(!isGimmick && (int)status != 0)
-        //{
-        //    ResetController.resetIsonFlg = true;
-        //}
-        //else if(isGimmick && (int)status != 0)
-        //{
-        //    ResetController.resetIsonFlg = false;
-        //}
     }
 
     // Rayの判定
@@ -114,6 +108,7 @@ public class Mirror : StatusController
             }
             
             PositionChange(player);
+            maxRay = 0.0f;
             return;
         }
 
@@ -125,14 +120,23 @@ public class Mirror : StatusController
     {
         // playerの位置を保存し、playerの位置を変更
         Vector3 playerPos = player.transform.position;
-        player.transform.position = transform.position;
-        player.status = STATUS.NONE;
+        Vector3 mirrorPos = transform.position;
+        //player.transform.position = transform.position;
 
-        // 自身の位置を変更
-        transform.position = playerPos;
-        playerPos.z = -1.0f;
-        mirrorObj.transform.position = playerPos;
-        direction *= -1;
+        player.transform.DOMove(new Vector3(mirrorPos.x, mirrorPos.y, 0.0f), 1.0f).OnComplete(() =>
+        {
+            player.status = STATUS.NONE;
+        });
+
+        transform.DOMove(new Vector3(playerPos.x, playerPos.y, 0.0f), 1.0f).OnComplete(() =>
+        {
+            // 自身の位置を変更
+            //transform.position = playerPos;
+            playerPos.z = -1.0f;
+            mirrorObj.transform.position = playerPos;
+            direction *= -1;
+            maxRay = 3.0f;
+        });
     }
 
     // 姿を変える準備
@@ -189,10 +193,21 @@ public class Mirror : StatusController
                     myAudio.PlayOneShot(SE[(int)status]);
                     ResetController.resetIsonFlg = true;
                 }
-                return;
             }
-            myAudio.PlayOneShot(SE[(int)status]);
-            ResetController.resetIsonFlg = true;
+            else
+            {
+                myAudio.PlayOneShot(SE[(int)status]);
+                ResetController.resetIsonFlg = true;
+            }
+
+            DOTween.To(() => Interval, time =>
+             Interval = time, 0.25f, 1.5f).OnComplete(() =>
+             {
+                 if (isGimmick == false)
+                 {
+                     SingletonMonoBehaviour<ResetController>.Instance.ResetExcution();
+                 }
+             });
         });
     }
 
@@ -238,10 +253,7 @@ public class Mirror : StatusController
         transform.DOScale(new Vector3(x, y, 1.0f), time).OnComplete(() =>
         {
             SingletonMonoBehaviour<ResetController>.Instance.canReset = true;
-            if (isGimmick == false)
-            {
-                SingletonMonoBehaviour<ResetController>.Instance.ResetExcution();
-            }
+
             Destroy(gameObject);
         });
     }

@@ -21,6 +21,9 @@ public class Player : StatusController {
     CameraMove cameraMove; // カメラ移動クラス
     UVScroll[] uvScroll = new UVScroll[2]; // 背景スクロールクラス
 
+    ResetController reset;
+    ScreenShot sceneCon;
+
     AudioSource myAudio; // SE
 
     public SpriteRenderer resetIcon; // リセット用のアイコン
@@ -80,7 +83,7 @@ public class Player : StatusController {
 
     // Update is called once per frame
     void Update() {
-        if (Goal.clearFlg)
+        if (Goal.clearFlg || ResetController.resetIsonFlg)
         {
             foreach (var item in uvScroll)
             {
@@ -130,7 +133,8 @@ public class Player : StatusController {
                     movePos.x = playerMinSpeed;// 移動スピードは最小スピード固定
                 }
             }// 何も押されていなかったら
-            else if (Input.GetAxisRaw("Horizontal") == 0 && changeFlg == false && status == STATUS.NONE)
+            else if (Input.GetAxisRaw("Horizontal") == 0 && changeFlg == false 
+                && status == STATUS.NONE && ResetController.resetIsonFlg == false)
             {
                 movePos.x = 0.0f; // 移動量は０に
                  // 最後の入力キーに応じてアイドルアニメーションを変更
@@ -237,16 +241,7 @@ public class Player : StatusController {
             }
             if (Input.GetKeyDown("joystick button 0") || Input.GetKeyDown(KeyCode.DownArrow) ) // リセット用
             {
-                status = STATUS.TRADE;
-                //if (damageFlg)
-                //{
-                //    return;
-                //}
-                //movePos.x = 0.0f;
-                //Button.selectBack = false;
-                //StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-                //StartCoroutine(pageChange.ScreenShot());
-                //gm.sketchBookValue -= 1; // マスタークラスの残機を減らす
+                StatusChenge(STATUS.TRADE);
             }
             if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.UpArrow)) // ゲームボタン「Y」で土属性に書き換え
             {
@@ -281,7 +276,14 @@ public class Player : StatusController {
                     FormChange((int)ANIM_ENUMS.BLUCK.WIND, _status);
                     break;
                 case STATUS.TRADE: // 土属性に変身
-                    FormChange((int)ANIM_ENUMS.BLUCK.STONE, _status);
+                    if (statusAnim.GetInteger("BluckAnim") == 0 || statusAnim.GetInteger("BluckAnim") == 2)
+                    {
+                        FormChange((int)ANIM_ENUMS.BLUCK.QUESTION_RIGHT, _status);
+                    }
+                    else if (statusAnim.GetInteger("BluckAnim") == 3 || statusAnim.GetInteger("BluckAnim") == 9)
+                    {
+                        FormChange((int)ANIM_ENUMS.BLUCK.QUESTION_LEFT, _status);
+                    }
                     break;
             }
         }// 変更先のステータスが現在のステータスと同じなら元のキャラクターに戻る
@@ -384,7 +386,7 @@ public class Player : StatusController {
             wayPointPos = new Vector3(c.gameObject.transform.position.x, c.gameObject.transform.position.y + 2.0f, 0.0f);
         }
 
-        if(c.gameObject.name == "Ice(Clone)")
+        if(c.gameObject.name == "Ice")
         {
             isSlope = false;
         }

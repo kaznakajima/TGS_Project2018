@@ -72,12 +72,6 @@ public class FireGimmick : GimmickController
                     ForestBreak();
                     // ミラーの消去コルーチン開始
                     StartCoroutine(mirror.DestroyAnimation(0.0f, 0.0f, 3.0f));
-                }else if (rayHit.collider.gameObject.GetComponent<Mirror>().status != StatusController.STATUS.FIRE &&
-                    rayHit.collider.gameObject.GetComponent<Mirror>().status != StatusController.STATUS.WIND &&
-                rayHit.collider.gameObject.GetComponent<Mirror>().status != StatusController.STATUS.NONE)
-                {
-                    StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-                    StartCoroutine(SingletonMonoBehaviour<PageChange>.Instance.ScreenShot());
                 }
             }
         }

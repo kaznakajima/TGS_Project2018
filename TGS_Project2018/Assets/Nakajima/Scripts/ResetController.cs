@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 // ----------------リセットをするクラス-----------------------------------
 // ※参照の仕方
@@ -34,10 +35,34 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
     [SerializeField]
     GameObject GoalObj; // ゴール用オブジェクト
 
+    float Interval;
+
     public void ResetExcution()
     {
-        StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
-        StartCoroutine(SingletonMonoBehaviour<PageChange>.Instance.ScreenShot());
+        DOTween.To(() => Interval, time =>
+             Interval = time, 0.25f, 1.5f).OnComplete(() =>
+             {
+                 foreach (Player player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
+                 {
+                     if (player.statusAnim.GetInteger("BluckAnim") != 3 || player.statusAnim.GetInteger("BluckAnim") == 9)
+                     {
+                         player.statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.QUESTION_RIGHT);
+                         player.movePos = Vector3.zero;
+                     }
+                     else if (player.statusAnim.GetInteger("BluckAnim") != 0 || player.statusAnim.GetInteger("BluckAnim") != 2)
+                     {
+                         player.statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.QUESTION_LEFT);
+                         player.movePos = Vector3.zero;
+                     }
+                 }
+
+                 DOTween.To(() => Interval, time =>
+                    Interval = time, 0.5f, 1.5f).OnComplete(() =>
+                    {
+                        StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
+                        StartCoroutine(SingletonMonoBehaviour<PageChange>.Instance.ScreenShot());
+                    });
+             });
     }
 
     // オブジェクトのリセット
