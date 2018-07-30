@@ -16,6 +16,9 @@ public class RainGimmick : GimmickController
     // 自身のAudioSource
     AudioSource myAudio;
 
+    Vector3 movePos;
+    float nextPosition;
+
     // ギミック処理
     public override void GimmickAction()
     {
@@ -60,6 +63,7 @@ public class RainGimmick : GimmickController
             if (rayHit.collider.name == objName &&
                 rayHit.collider.gameObject.GetComponent<Mirror>().status == StatusController.STATUS.WATER)
             {
+                SingletonMonoBehaviour<ResetController>.Instance.IvyPos = transform.position;
                 Mirror mirror = rayHit.collider.gameObject.GetComponent<Mirror>();
                 mirror.isGimmick = true;
                 isMirror = true;
@@ -71,12 +75,23 @@ public class RainGimmick : GimmickController
                 // ミラーの消去コルーチン開始
                 StartCoroutine(mirror.DestroyAnimation(0.0f, 1.0f, 2.0f));
             }
+
+            if(rayHit.collider.name == "Ice")
+            {
+                gimmickMaxRay = 0.0f;
+                isMirror = false;
+                SingletonMonoBehaviour<ResetController>.Instance.IvyObj = gameObject;
+                ResetController.resetIsonFlg = true;
+                SingletonMonoBehaviour<ResetController>.Instance.ResetExcution();
+            }
         }
     }
 
     // Use this for initialization
     void Start () {
+        nextPosition = transform.position.y + 10.18f;
         myAudio = GetComponent<AudioSource>();
+        movePos.y = 5.0f;
 	}
 	
 	// Update is called once per frame
@@ -85,8 +100,16 @@ public class RainGimmick : GimmickController
 
         if (isMirror && mirrorObj == null)
         {
-            GimmickAction();
-            gimmickMaxRay = 2.0f;
+            if (!myAudio.isPlaying)
+            {
+                myAudio.PlayOneShot(myAudio.clip);
+            }
+            gimmickMaxRay = 0.5f;
+            if(transform.position.y >= nextPosition)
+            {
+                isMirror = false;
+            }
+            transform.position += movePos * Time.deltaTime;
         }
     }
 }

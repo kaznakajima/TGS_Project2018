@@ -18,6 +18,9 @@ public class Select : MonoBehaviour
     [SerializeField, Header("ステージ名")]
     public string stageName;
 
+    // ボタン表示
+    public GameObject button;
+
     public int StageNum = 0; //選択ステージ関数
 
     bool flg;
@@ -105,6 +108,7 @@ public class Select : MonoBehaviour
             myAudio.PlayOneShot(myAudio.clip);
             fadeFlg = true;
             onButton = true;
+            button.SetActive(false);
         }
 
         // チュートリアルシーンへの移動
@@ -159,7 +163,7 @@ public class Select : MonoBehaviour
                 alfa += 1.0f * Time.deltaTime;
                 Camera_Select.flg = true;
 
-                if (alfa >= 1.9)
+                if (alfa >= 1.5f)
                 {
                     Scene(stageName);
                     fadeFlg = false;

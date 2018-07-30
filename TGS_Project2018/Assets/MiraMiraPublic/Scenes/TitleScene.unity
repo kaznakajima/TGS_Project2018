@@ -152,38 +152,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 4336473707977656, guid: 488c9e3aeb29cb2468f64d4552f0e448, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4336473707977656, guid: 488c9e3aeb29cb2468f64d4552f0e448, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4336473707977656, guid: 488c9e3aeb29cb2468f64d4552f0e448, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4336473707977656, guid: 488c9e3aeb29cb2468f64d4552f0e448, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4418049695871664, guid: 488c9e3aeb29cb2468f64d4552f0e448, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4418049695871664, guid: 488c9e3aeb29cb2468f64d4552f0e448, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4418049695871664, guid: 488c9e3aeb29cb2468f64d4552f0e448, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4418049695871664, guid: 488c9e3aeb29cb2468f64d4552f0e448, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 488c9e3aeb29cb2468f64d4552f0e448, type: 2}
   m_IsPrefabParent: 0
@@ -978,6 +946,16 @@ Prefab:
     - target: {fileID: 224127222994245500, guid: bdc9090881afb7b48be451cfb64f49ee,
         type: 2}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114560066650377088, guid: bdc9090881afb7b48be451cfb64f49ee,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114038757610718168, guid: bdc9090881afb7b48be451cfb64f49ee,
+        type: 2}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -125,6 +125,7 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
             Instantiate(mirrorObj, new Vector3((int)IvyPos.x, (int)IvyPos.y + 1, 0.0f), Quaternion.identity);
             resetIsonFlg = false;
             canReset = false;
+            IvyObj = null;
         }
 
         // 木が壊されているか確認

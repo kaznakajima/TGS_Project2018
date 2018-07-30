@@ -98,16 +98,7 @@ public class Mirror : StatusController
 
         if(player.status == STATUS.TRADE)
         {
-            if(player.transform.position.x < transform.position.x)
-            {
-                StatusChenge(player.status);
-            }
-            else
-            {
-                StatusChenge(STATUS.NONE);
-            }
-            
-            PositionChange(player);
+            SingletonMonoBehaviour<FlashController>.Instance.Flash(player, this);
             maxRay = 0.0f;
             return;
         }
@@ -116,19 +107,19 @@ public class Mirror : StatusController
         FormChangeBefore(player);
     }
 
-    void PositionChange(Player player)
+    public void PositionChange(Player player)
     {
         // playerの位置を保存し、playerの位置を変更
         Vector3 playerPos = player.transform.position;
         Vector3 mirrorPos = transform.position;
         //player.transform.position = transform.position;
 
-        player.transform.DOMove(new Vector3(mirrorPos.x, mirrorPos.y, 0.0f), 1.0f).OnComplete(() =>
+        player.transform.DOMove(new Vector3(mirrorPos.x, mirrorPos.y, 0.0f), 0.01f).OnComplete(() =>
         {
             player.status = STATUS.NONE;
         });
 
-        transform.DOMove(new Vector3(playerPos.x, playerPos.y, 0.0f), 1.0f).OnComplete(() =>
+        transform.DOMove(new Vector3(playerPos.x, playerPos.y, 0.0f), 0.01f).OnComplete(() =>
         {
             // 自身の位置を変更
             //transform.position = playerPos;
@@ -136,6 +127,15 @@ public class Mirror : StatusController
             mirrorObj.transform.position = playerPos;
             direction *= -1;
             maxRay = 3.0f;
+
+            if (player.transform.position.x > transform.position.x)
+            {
+                StatusChenge(STATUS.TRADE);
+            }
+            else
+            {
+                StatusChenge(STATUS.NONE);
+            }
         });
     }
 

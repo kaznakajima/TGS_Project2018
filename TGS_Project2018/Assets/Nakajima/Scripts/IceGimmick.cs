@@ -134,16 +134,6 @@ public class IceGimmick : GimmickController
         }
     }
 
-    void OnTriggerEnter(Collider c)
-    {
-        if (c.gameObject.name == "Ivy")
-        {
-            RainGimmick rain = c.gameObject.GetComponent<RainGimmick>();
-            rain.isHit = true;
-            rain.GimmickAction();
-        }
-    }
-
     void OnCollisionExit()
     {
         // 何も触れていないなら動かない

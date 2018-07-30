@@ -32,7 +32,7 @@ public class Player : StatusController {
     bool onSlope = false;
     // 滑る判定
     public bool isSlope;
-    bool notOnIce = true;
+    bool touch = true;
 
     float Interval;
     [HideInInspector]
@@ -92,8 +92,9 @@ public class Player : StatusController {
             }
             return;
         }
-        if (isSlope)
+        if (isSlope && isTouch)
         {
+            isGround = GroundJudgment(); // 常に接地判定を取る
             CharactorMove(movePos);
             return;
         }
@@ -297,14 +298,21 @@ public class Player : StatusController {
     //キャラクター移動メソッド
     void CharactorMove(Vector3 pos)
     {
-        if (!isTouch || damageFlg)
-        {
-            pos.x = 0.0f;
-        }
         if (isSlope)
         {
-            pos.x = IceGimmick.moveX;
+            if(IceGimmick.moveX > 0)
+            {
+                pos.x = playerMaxSpeed;
+            }else if(IceGimmick.moveX < 0)
+            {
+                pos.x = playerMinSpeed;
+            }
         }
+        if (!isTouch || damageFlg)
+        { 
+            return;
+        }
+      
         transform.position += pos * Time.deltaTime;
     }
 
@@ -467,14 +475,14 @@ public class Player : StatusController {
             this.transform.position.y - rayPoint, this.transform.position.z),
             out hitH);
         // 水平方向のRayがオブジェクトに接触かつプレイヤーが移動中なら
-        if (isHitH && !onSlope && movePos.x != 0.0f)
+        if (isHitH && !onSlope)
         {
             // スクロール不可能に
             isTouch = false;
-            if(hitH.collider.gameObject != null && hitH.collider.gameObject.layer == 9)
-            {
-                isTouch = true;
-            }
+            //if(hitH.collider.gameObject != null && hitH.collider.gameObject.layer == 9)
+            //{
+            //    isTouch = true;
+            //}
         }
         else
         {
