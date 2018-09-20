@@ -1991,7 +1991,6 @@ MonoBehaviour:
   frameCount: 0
   endCount: 0
   endFlg: 0
-  cameraEndFlg: 0
   eventFlg: 0
   velocity: {x: 0, y: 0, z: 0}
   returnVelocity: {x: 0, y: 0, z: 0}
@@ -2003,8 +2002,8 @@ MonoBehaviour:
   edgeStartX: 0
   edgeEndX: 0
   height: 0
-  cameraHeight: 0
   heightOffset: 0
+  isScroll: 0
 --- !u!1 &1357609518
 GameObject:
   m_ObjectHideFlags: 0
@@ -2167,7 +2166,7 @@ MonoBehaviour:
   mapObj:
   - {fileID: 1594260757835426, guid: c9f4f596d9955314d941576f491b60ef, type: 2}
   - {fileID: 1504463264066390, guid: 198c57042998f1f43805bfc78a673799, type: 2}
-  - {fileID: 1956373238541394, guid: b6b4c93a7e6e93145ac8ad7ebeb95c7c, type: 2}
+  - {fileID: 0}
   - {fileID: 1456967744725320, guid: 92763f8d280a01946b2ab5dc50af3a1b, type: 2}
   - {fileID: 1155802989207052, guid: 3ed665aec88f6e84ea24d8236c14a6ca, type: 2}
   - {fileID: 1997199408150208, guid: 44906381e1e25844dabbfb531568db34, type: 2}
@@ -2177,7 +2176,7 @@ MonoBehaviour:
   - {fileID: 1637453510840102, guid: 26540f55fd9e95649a3099231ec196c3, type: 2}
   - {fileID: 1258899994022536, guid: 3729c4356707ddd49bf70b0f7c1739c1, type: 2}
   - {fileID: 1406256238568542, guid: c7b348a3c1d548342ba4f6fc8f6c6f20, type: 2}
-  - {fileID: 1216996513949806, guid: 562d8c337580d5c45b0ae3e9d055728d, type: 2}
+  - {fileID: 0}
   height: 0
   width: 0
 --- !u!4 &1367077395
@@ -2206,8 +2205,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canReset: 0
   TreePos: {x: 0, y: 0, z: 0}
+  IvyPos: {x: 0, y: 0, z: 0}
+  IvyObj: {fileID: 0}
   mirrorObj: {fileID: 1316615561819584, guid: 9c43ec6686544ca4c8aa39973c875a4c, type: 2}
   TreeObj: {fileID: 1456967744725320, guid: 92763f8d280a01946b2ab5dc50af3a1b, type: 2}
+  GoalObj: {fileID: 0}
 --- !u!1 &1399482306
 GameObject:
   m_ObjectHideFlags: 0

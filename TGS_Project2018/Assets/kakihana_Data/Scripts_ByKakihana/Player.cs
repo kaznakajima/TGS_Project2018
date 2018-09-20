@@ -41,6 +41,8 @@ public class Player : StatusController {
     [SerializeField] float rayRangeH = 0.6f; // 水平方向の接地判定距離
     [SerializeField] float edgeJudgeOffset = 0.5f; // ステージ両端を取得するために必要なオフセット値
 
+    public int charaWeight = 1; // 体重
+
     [SerializeField] bool isright; // 右を向いているか
     [SerializeField] bool isTouch = false; // 接触しているか
     [SerializeField] bool isGround; // 接地しているか
