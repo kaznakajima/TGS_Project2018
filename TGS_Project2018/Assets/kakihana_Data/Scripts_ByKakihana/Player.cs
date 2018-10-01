@@ -58,6 +58,7 @@ public class Player : StatusController {
     public SpriteRenderer[] myElement = new SpriteRenderer[3]; // 属性のアイコン
 
     public Vector3 movePos; // 移動用変数
+    Vector3 inputPos;
     [SerializeField] Vector3 wayPointPos; // リスポーン地点保存用変数
     Vector3 oldVelocity; // なめらかに移動させるために必要な一時保存用ベクトル
 
@@ -99,13 +100,15 @@ public class Player : StatusController {
             return;
         }
 
+        inputPos.x = Input.GetAxisRaw("Horizontal");
+
         if (gm.sketchBookValue <= 0)
         {
             statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.DAMAGE);
             return;
         }
 
-        isGround = GroundJudgment(); // 常に接地判定を取る
+            isGround = GroundJudgment(); // 常に接地判定を取る
         if (isGround || climbFlg) // プレイヤーが地面に設置しているか登り状態なら
         {
             // なめらかに移動させる
@@ -113,32 +116,40 @@ public class Player : StatusController {
             oldVelocity = movePos; // なめらかに移動させるために必要な一時保存用ベクトルを保存
 
             // スティックが右方向に倒れたら
-            if (Input.GetAxisRaw("Horizontal") > 0)
+            if (inputPos.x > 0)
             {
                 isright = true; // 右判定ON
-                movePos.x += speed; // 移動ベクトルにスピードを加算
                 statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.RUN_RIGHT); // 歩行アニメーションON
+                movePos.x += speed; // 移動ベクトルにスピードを加算
                 if (movePos.x >= playerMaxSpeed) // 移動ベクトルが最大スピードを超えたら
                 {
                     movePos.x = playerMaxSpeed; // 移動スピードは最大スピード固定
                 }
             }// スティックが左方向に倒れたら
-            if (Input.GetAxisRaw("Horizontal") < 0)
+            else if (inputPos.x < 0)
             {
+                if (statusAnim.GetInteger("BluckAnim") == 2)
+                {
+                    movePos.x = 0.0f;
+                }
+
                 isright = false; // 右判定OFF
+                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.RUN_LEFT);
                 // 移動ベクトルに負のスピードを加算
                 movePos.x += -speed;
-                statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.RUN_LEFT);
                 if (movePos.x <= playerMinSpeed)// 移動ベクトルが最小スピードを下回ったら
                 {
                     movePos.x = playerMinSpeed;// 移動スピードは最小スピード固定
                 }
-            }// 何も押されていなかったら
-            else if (Input.GetAxisRaw("Horizontal") == 0 && changeFlg == false 
+            }
+            // 何も押されていなかったら
+            else if (inputPos.x == 0 && changeFlg == false
                 && status == STATUS.NONE && ResetController.resetIsonFlg == false)
             {
                 movePos.x = 0.0f; // 移動量は０に
-                 // 最後の入力キーに応じてアイドルアニメーションを変更
+                oldVelocity = movePos; // なめらかに移動させるために必要な一時保存用ベクトルを保存
+
+                // 最後の入力キーに応じてアイドルアニメーションを変更
                 if (isright == true)
                 {
                     // 右を向いていたらアイドルアニメーションは右向き
@@ -160,8 +171,40 @@ public class Player : StatusController {
 
         if (climbFlg == true) // 登り判定がONなら
         {
+            RaycastHit hit, hitH, hitHreverse; // 水平方向の衝突判定
+            // 線のRayを自キャラの水平方向に飛ばす 向きに応じて左右どちらに飛ばすか決定する
+            var isHitH = Physics.Linecast(
+                this.transform.position, 
+                //new Vector3(isright == true ? this.transform.position.x + rayRangeH : this.transform.position.x - rayRangeH, transform.position.y + rayPoint, this.transform.position.z),
+                new Vector3(isright == true ? this.transform.position.x + rayRangeH : this.transform.position.x - rayRangeH,
+                this.transform.position.y, this.transform.position.z),
+                out hitH);
+            var isHitHReverse = Physics.Linecast(
+                //this.transform.position, 
+                new Vector3(transform.position.x,this.transform.position.y - rayPoint, this.transform.position.z),
+                new Vector3(isright == true ? this.transform.position.x + rayRangeH : this.transform.position.x - rayRangeH, transform.position.y - rayPoint, this.transform.position.z),
+                out hitHreverse);
+            var isHit = Physics.Linecast(
+                //this.transform.position, 
+                new Vector3(transform.position.x, transform.position.y + rayPoint, this.transform.position.z),
+                new Vector3(isright == true ? this.transform.position.x + rayRangeH : this.transform.position.x - rayRangeH,
+                this.transform.position.y + rayPoint, this.transform.position.z),
+                out hit);
+            Debug.DrawLine(new Vector3(isright == true ? this.transform.position.x + rayRangeH : this.transform.position.x - rayRangeH, transform.position.y + rayPoint, this.transform.position.z),
+                new Vector3(isright == true ? this.transform.position.x + rayRangeH : this.transform.position.x - rayRangeH,
+                this.transform.position.y - rayPoint, this.transform.position.z));
+            if ((isHitH || isHitHReverse || isHit) &&  !onSlope)
+            {
+                // スクロール不可能に
+                isTouch = false;
+            }
+            else if((!isHitH || !isHitHReverse) && !onSlope)
+            {
+                // 条件に一致していなければスクロール可能
+                isTouch = true;
+            }
+
             statusAnim.SetInteger("BluckAnim", (int)ANIM_ENUMS.BLUCK.CLIME);
-            myRigidbody.useGravity = false; // 重力OFF
             if (Input.GetAxisRaw("Vertical") > 0.0f)
             {
                 movePos.y += speed;
@@ -185,8 +228,7 @@ public class Player : StatusController {
         }
         else
         {
-            myRigidbody.useGravity = true; // 登り判定OFFで重力ON
-            movePos.y = 0;
+            movePos.y = 0.0f; // 移動量のリセット
         }
 
         // スクロール可能なら移動方向に応じて背景をスクロールさせる
@@ -240,10 +282,10 @@ public class Player : StatusController {
             {
                 StatusChenge(STATUS.WATER);
             }
-            if (Input.GetKeyDown("joystick button 0") || Input.GetKeyDown(KeyCode.DownArrow) ) // リセット用
-            {
-                StatusChenge(STATUS.TRADE);
-            }
+            //if (Input.GetKeyDown("joystick button 0") || Input.GetKeyDown(KeyCode.DownArrow) ) // リセット用
+            //{
+            //    StatusChenge(STATUS.TRADE);
+            //}
             if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.UpArrow)) // ゲームボタン「Y」で土属性に書き換え
             {
                 StatusChenge(STATUS.WIND);
@@ -261,6 +303,13 @@ public class Player : StatusController {
     // キャラクター描き換えメソッド
     public override void StatusChenge(STATUS _status)
     {
+        foreach (var IconAlpha in myElement)
+        {
+            if(IconAlpha.color.a <= 0)
+            {
+                return;
+            }
+        }
         // ページがめくり終わるまで変身できない
         if (status != _status && pageChange.pageFlip < -1)
         {
@@ -297,20 +346,25 @@ public class Player : StatusController {
 
     //キャラクター移動メソッド
     void CharactorMove(Vector3 pos)
-    {
+    {  
         if (isSlope)
         {
+            if(status != STATUS.NONE)
+            {
+                return;
+            }
+
             if(IceGimmick.moveX > 0)
             {
-                pos.x = playerMaxSpeed;
+                pos.x = 5.0f;
             }else if(IceGimmick.moveX < 0)
             {
-                pos.x = playerMinSpeed;
+                pos.x = -5.0f;
             }
         }
         if (!isTouch || damageFlg)
-        { 
-            return;
+        {
+            pos.x = 0.0f;
         }
       
         transform.position += pos * Time.deltaTime;
@@ -382,6 +436,7 @@ public class Player : StatusController {
         }
         if(c.gameObject.name == "Ground")
         {
+            movePos.y = 0.0f;
             myRigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX |
                    RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         }
@@ -409,7 +464,7 @@ public class Player : StatusController {
     }
 
     /*衝突判定メソッド*/
-    void OnTriggerStay(Collider hit)
+    void OnTriggerEnter(Collider hit)
     {
         if (hit.gameObject.tag == "Climb") // 登れるオブジェクトに接触したら
         {
@@ -423,7 +478,9 @@ public class Player : StatusController {
         if (hit.gameObject.tag == "Climb")
         {
             climbFlg = false; // 登り判定OFF
+            movePos.y = 0.0f; // 移動量のリセット
             myRigidbody.useGravity = true; // 重力ON
+
             // オブジェクトが離れた際の向きに応じてアニメーションの向きも変える
             if (isright == true)
             {
@@ -435,7 +492,6 @@ public class Player : StatusController {
                 movePos = Vector3.zero;
             }
         }
-
     }
 
     public void FormChange(int changeNum, STATUS _status)
@@ -463,15 +519,21 @@ public class Player : StatusController {
     /* 接地判定用メソッド */
     bool GroundJudgment()
     {
+        if (climbFlg)
+        {
+            return false;
+        }
+
         RaycastHit hitV; // 下方向の衝突判定
-        RaycastHit hitH; // 水平方向の衝突判定
         // 線のRayを自キャラの下方向に飛ばす
         var isHit = Physics.Linecast(this.transform.position, new Vector3(this.transform.position.x, this.transform.position.y - rayRange, this.transform.position.z), out hitV);
+
+        RaycastHit hitH; // 水平方向の衝突判定
         // 線のRayを自キャラの水平方向に飛ばす 向きに応じて左右どちらに飛ばすか決定する
         var isHitH = Physics.Linecast(
             //this.transform.position, 
             new Vector3(transform.position.x, transform.position.y - rayPoint, 0.0f),
-            new Vector3(isright == true ? this.transform.position.x + rayRangeH : this.transform.position.x - rayRangeH, 
+            new Vector3(isright == true ? this.transform.position.x + rayRangeH : this.transform.position.x - rayRangeH,
             this.transform.position.y - rayPoint, this.transform.position.z),
             out hitH);
         // 水平方向のRayがオブジェクトに接触かつプレイヤーが移動中なら
@@ -479,10 +541,6 @@ public class Player : StatusController {
         {
             // スクロール不可能に
             isTouch = false;
-            //if(hitH.collider.gameObject != null && hitH.collider.gameObject.layer == 9)
-            //{
-            //    isTouch = true;
-            //}
         }
         else
         {

@@ -1168,6 +1168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tex2D: {fileID: 0}
+  sceneName: 
   csvName: 
   csvData:
   - Test

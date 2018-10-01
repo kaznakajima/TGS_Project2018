@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TextController : MonoBehaviour
-{
+public class TextController : SingletonMonoBehaviour<TextController>
+{ 
     // テキストの格納
     public string[] scenarioTex;
     // uiTextへの参照
-    [SerializeField]
-    Text uiText;
+    public Text uiText;
     // 読み込むテキストファイル
     [SerializeField]
     TextAsset loadAsset;
@@ -21,7 +20,8 @@ public class TextController : MonoBehaviour
     float intervalDisplay = 0.05f;
 
     // 現在の行番号
-    int currentLine = 0;
+    [HideInInspector]
+    public int currentLine = 0;
     // 現在の文字列
     private string currentText = string.Empty;
     // 表示にかかる時間
@@ -39,28 +39,31 @@ public class TextController : MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
+        loadAsset = Resources.Load<TextAsset>("note");
         loadText = loadAsset.text;
         scenarioTex = loadText.Split(char.Parse("\n"));
-	}
+        //scenarioTex = loadText.Split(new string[] { "@br"}, System.StringSplitOptions.None);
+        SetNextText();
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        // 現在の行番号がラストまで行っていない状態でクリックすると、テキストを更新する
-        if (IsCompleteDisplayText)
-        {
-            if (currentLine < scenarioTex.Length && Input.GetButtonDown("Click"))
-            {
-                SetNextText();
-            }
-        }
-        else
-        {
-            // 完了していないなら文字をすべて表示する
-            if (Input.GetButtonDown("Click"))
-            {
-                timeDisplay = 0;
-            }
-        }
+        //// 現在の行番号がラストまで行っていない状態でクリックすると、テキストを更新する
+        //if (IsCompleteDisplayText)
+        //{
+        //    if (currentLine < scenarioTex.Length && Input.GetButtonDown("Click"))
+        //    {
+        //        SetNextText();
+        //    }
+        //}
+        //else
+        //{
+        //    // 完了していないなら文字をすべて表示する
+        //    if (Input.GetButtonDown("Click"))
+        //    {
+        //        timeDisplay = 0;
+        //    }
+        //}
         
 
         // クリックから経過した時間が想定表示時間の何%か確認し、表示文字数を出す
@@ -74,7 +77,7 @@ public class TextController : MonoBehaviour
         }
 	}
 
-    void SetNextText()
+    public void SetNextText()
     {
         // 現在のテキストをuiTextに流し込み、現在の行番号を一つ追加する
         currentText = scenarioTex[currentLine];

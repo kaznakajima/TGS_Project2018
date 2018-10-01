@@ -157,6 +157,52 @@ public class Button : MonoBehaviour
                         }
                     }
                     break;
+                case "Tutorial":
+                    // 選択状態の変更
+                    if (inputY > 0.0f && buttonState > 0)
+                    {
+                        buttonState -= 1;
+                        selectObj.anchoredPosition += new Vector2(0, 90);
+                        // 連続入力防止
+                        speed = 0.0f;
+                    }
+                    else if (inputY < 0.0f && buttonState < 2)
+                    {
+                        buttonState += 1;
+                        selectObj.anchoredPosition -= new Vector2(0, 90);
+                        // 連続入力防止
+                        speed = 0.0f;
+                    }
+                    // 再入力可能
+                    if (inputVec.y == 0.0f)
+                    {
+                        speed = 1.0f;
+                    }
+
+                    if (Input.GetButtonDown("Click"))
+                    {
+                        if (onButton)
+                        {
+                            return;
+                        }
+
+                        switch (buttonState)
+                        {
+                            case 0:
+                                myAudio.PlayOneShot(myAudio.clip);
+                                Resume();
+                                break;
+                            case 1:
+                                myAudio.PlayOneShot(myAudio.clip);
+                                SelectScene("SelectScene");
+                                break;
+                            case 2:
+                                myAudio.PlayOneShot(myAudio.clip);
+                                RetryScene();
+                                break;
+                        }
+                    }
+                    break;
             }
         }
         else

@@ -8,10 +8,11 @@ public class Goal : MonoBehaviour
     // クリア判定
     public static bool clearFlg;
     // 木が切られた判定
-    [SerializeField]
+    [HideInInspector]
     public bool isBreak;
     // 水の上かどうか
-    bool onWater;
+    [HideInInspector]
+    public bool onWater;
 
     // クリア表示
     public static GameObject clearObj;

@@ -120,6 +120,7 @@ public class Select : MonoBehaviour
             }
             myAudio.PlayOneShot(myAudio.clip);
             onButton = true;
+            SingletonMonoBehaviour<ScreenShot>.Instance.csvName = "Turtrial";
             Scene("Tutorial");
         }
         else if (Input.GetButtonDown("Title") && !flg && SceneManager.GetActiveScene().name == "Tutorial")

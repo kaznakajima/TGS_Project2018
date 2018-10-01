@@ -44,7 +44,7 @@ public class ObjectAlphaController : MonoBehaviour
 	// Update is called once per frame
 	void Update () {
         DistanceCheck();
-        IconsShow();
+        //IconsShow();
     }
 
     // 距離を見てアルファの調整

@@ -19,6 +19,10 @@ public class RainGimmick : GimmickController
     Vector3 movePos;
     float nextPosition;
 
+    // BoxColliderの参照
+    [SerializeField]
+    BoxCollider limitCollider;
+
     // ギミック処理
     public override void GimmickAction()
     {
@@ -89,7 +93,7 @@ public class RainGimmick : GimmickController
 
     // Use this for initialization
     void Start () {
-        nextPosition = transform.position.y + 10.18f;
+        nextPosition = transform.position.y + 10.0f;
         myAudio = GetComponent<AudioSource>();
         movePos.y = 5.0f;
 	}
@@ -107,6 +111,7 @@ public class RainGimmick : GimmickController
             gimmickMaxRay = 0.5f;
             if(transform.position.y >= nextPosition)
             {
+                limitCollider.enabled = true;
                 isMirror = false;
             }
             transform.position += movePos * Time.deltaTime;

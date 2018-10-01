@@ -19,12 +19,16 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
     [HideInInspector]
     public Texture2D tex2D;
 
+    // 現在のシーン名
+    [HideInInspector]
+    public string sceneName;
+
     // 現在のステージ名
     [HideInInspector]
     public string csvName;
 
     // ステージ名のデータ
-    public string[] csvData = { "1-1", "Test_2", "Test_3"};
+    public string[] csvData = { "1-1", "Test_2", "1-3"};
 
     // 現在のシーンのキャンバス
     [HideInInspector]
@@ -63,6 +67,12 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
         return bgmAudio = GameObject.Find("BGM").gameObject.GetComponent<AudioSource>();
     }
 
+    public void PlayerReset(Player player)
+    {
+        player.changeFlg = true;
+        player.FormChange((int)ANIM_ENUMS.BLUCK.IDLE, StatusController.STATUS.NONE);
+    }
+
     void Start()
     {
         myAudio = GetComponent<AudioSource>();
@@ -84,7 +94,7 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
         tex2D.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
         tex2D.Apply();
 
-        if (SceneManager.GetActiveScene().name == "MainGameScene")
+        if (SceneManager.GetActiveScene().name == "MainGameScene" || SceneManager.GetActiveScene().name == "Tutorial")
         {
             GameMaster master = FindObjectOfType<GameMaster>();
             master.sketchBookValue -= 1;
@@ -96,6 +106,9 @@ public class ScreenShot : SingletonMonoBehaviour<ScreenShot>
                 {
                     currentCnavas = GameObject.FindObjectOfType<Button>().gameObject;
                     currentCnavas.SetActive(false);
+                }else
+                {
+                    sceneName = SceneManager.GetActiveScene().name;
                 }
             }
             SingletonMonoBehaviour<ResetController>.Instance.CheckReset();

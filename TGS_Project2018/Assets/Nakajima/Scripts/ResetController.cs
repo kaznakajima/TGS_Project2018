@@ -59,6 +59,7 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
                  DOTween.To(() => Interval, time =>
                     Interval = time, 0.5f, 1.5f).OnComplete(() =>
                     {
+                        StatusReset();
                         StartCoroutine(SingletonMonoBehaviour<ScreenShot>.Instance.SceneChangeShot());
                         StartCoroutine(SingletonMonoBehaviour<PageChange>.Instance.ScreenShot());
                     });
@@ -112,6 +113,7 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
         if(IvyObj != null)
         {
             IvyObj.transform.position = IvyPos;
+            IvyObj.GetComponent<RainGimmick>().gimmickMaxRay = 3.0f;
             IvyObj.GetComponent<RainGimmick>().isHit = false;
             foreach (var player in SingletonMonoBehaviour<ScreenShot>.Instance.GetPlayer())
             {
@@ -172,6 +174,7 @@ public class ResetController : SingletonMonoBehaviour<ResetController>
             // Mirrorのステータスを通常に変更
             mirror.StatusChenge(StatusController.STATUS.NONE);
             mirror.status = StatusController.STATUS.NONE;
+            mirror.isGimmick = false;
             mirror.mirrorObj.SetActive(true);
             if(mirror.rainObjInstance != null)
             {

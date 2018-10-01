@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 
 public class Mirror : StatusController
@@ -201,11 +202,21 @@ public class Mirror : StatusController
             }
 
             DOTween.To(() => Interval, time =>
-             Interval = time, 0.25f, 1.5f).OnComplete(() =>
+             Interval = time, 0.25f, 1.0f).OnComplete(() =>
              {
                  if (isGimmick == false)
                  {
+                     if (SceneManager.GetActiveScene().name == "Tutorial" && 
+                     SingletonMonoBehaviour<TextController>.Instance.uiText.text == SingletonMonoBehaviour<TextController>.Instance.scenarioTex[2])
+                     {
+                         SingletonMonoBehaviour<TextController>.Instance.SetNextText();
+                     }
+
                      SingletonMonoBehaviour<ResetController>.Instance.ResetExcution();
+                 }
+                 else
+                 {
+                     SingletonMonoBehaviour<ScreenShot>.Instance.PlayerReset(player);
                  }
              });
         });

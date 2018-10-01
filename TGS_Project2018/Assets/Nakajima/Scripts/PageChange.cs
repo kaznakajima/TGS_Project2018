@@ -34,7 +34,7 @@ public class PageChange : PageController
         pageRenderer.material.SetFloat("_Flip", pageFlip);
 
         // キャンバスを不可視に
-        if(SceneManager.GetActiveScene().name == "MainGameScene")
+        if(SceneManager.GetActiveScene().name == "MainGameScene" || SceneManager.GetActiveScene().name == "Tutorial")
         {
             currentCanvas = GameObject.FindObjectOfType<Button>().gameObject;
             currentCanvas.SetActive(false);
@@ -61,14 +61,17 @@ public class PageChange : PageController
         if (pageFlip < -1 && pageChange || pageFlip > 1 && pageChange)
         {
             // キャンバスを可視に
-            if (SceneManager.GetActiveScene().name == "MainGameScene")
+            if (SceneManager.GetActiveScene().name == "MainGameScene" || SceneManager.GetActiveScene().name == "GameOver")
             {
                 currentCanvas.SetActive(true);
             }
-            // キャンバスを可視に
-            if (SceneManager.GetActiveScene().name == "GameOver")
+            if (SceneManager.GetActiveScene().name == "Tutorial")
             {
                 currentCanvas.SetActive(true);
+                if (SingletonMonoBehaviour<TextController>.Instance.uiText.text == SingletonMonoBehaviour<TextController>.Instance.scenarioTex[3])
+                {
+                    SingletonMonoBehaviour<TextController>.Instance.SetNextText();
+                }
             }
             pageChange = false;
             yield break;

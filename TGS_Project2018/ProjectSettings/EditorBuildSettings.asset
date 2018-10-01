@@ -9,9 +9,12 @@ EditorBuildSettings:
     path: Assets/MiraMiraPublic/Scenes/TitleScene.unity
     guid: a79829c3171b18c4aaa4d1e0d79fb7d3
   - enabled: 1
+    path: Assets/Nakajima/Tutorial.unity
+    guid: 9726fdbf9708e894cb16cd7636769af7
+  - enabled: 1
     path: Assets/MiraMiraPublic/Scenes/SelectScene.unity
     guid: 65d66d394b0e2704cb29d222b1578611
-  - enabled: 1
+  - enabled: 0
     path: Assets/Tutorial.unity
     guid: 89cf0c9fb3468c845948a7d7c8aaef5c
   - enabled: 1
